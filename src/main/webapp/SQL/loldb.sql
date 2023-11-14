@@ -1,10 +1,12 @@
 12345678
 테스트
-테스트테스트
+테스트테스트DQWDQW
 6787867876868678678678677876867
-1234
-이건형 테스트 해보기
-
+1234sdfdsafaASDAd
+sadfassffaf
+sdafsdfawe
+sdfffsdwfwa
+SDZFSZFSDFFFDZ
 --사이트 사용자 테이블
 create table lol_member(
 m_num number primary key,
