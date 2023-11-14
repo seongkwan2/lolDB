@@ -1,4 +1,5 @@
 12345678
+테스트
 
 --사이트 사용자 테이블
 create table lol_member(
