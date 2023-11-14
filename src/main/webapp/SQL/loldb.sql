@@ -4,6 +4,11 @@
 1234
 이건형 테스트 해보기
 
+핳이하이이잉
+마지막 이당이당이ㅏㄷ
+마지막미ㅏㅁㅈ디ㅓㅣㅏㅇㄴㅁ러
+ㅁㄴ아런미아러민아러ㅣㄴㅇ
+
 --사이트 사용자 테이블
 create table lol_member(
 m_num number primary key,
