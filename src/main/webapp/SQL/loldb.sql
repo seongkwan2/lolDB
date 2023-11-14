@@ -1,6 +1,9 @@
 12345678
 테스트
 
+1234
+이건형 테스트 해보기
+
 --사이트 사용자 테이블
 create table lol_member(
 m_num number primary key,
