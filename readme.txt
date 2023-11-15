@@ -1,8 +1,14 @@
 팀프로젝트 git 사용방법
 
-1. 각자 만든것 각자의 브런치에서 git push -u origin 브런치명
+1. 각자 만든것 각자의 브런치에서
+   -git add --all
+   -git commit -m "설명"
+   -git push -u origin 자신의 브런치명
 
-2. 마스터로 이동후 git merge sk (각자 테이블명)
+2. 마스터로 이동후 git merge 자신의 브런치명
+   -git add --all
+   -git commit -m "설명"
+   -git push -u origin 자신의 브런치명
 
 받을때
 1. git checkout master에서 github페이지에있는 데이터들을 git pull로 받음
