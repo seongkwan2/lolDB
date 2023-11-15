@@ -1,6 +1,7 @@
 package com.lol.Controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,34 +18,34 @@ import com.lol.vo.SummonerDTO;
 public class APIController {
 
     // HTTP 요청을 보낼수 있게 RestTemplate 의존 주입
-	@Autowired
-	private RiotGamesService riotGamesService;
+   @Autowired
+   private RiotGamesService riotGamesService;
 
-	@RequestMapping(value="/searchUser")
-	public String searchUser(@RequestParam(required = false) String id, Model model) {
-	    if (id != null && !id.isEmpty()) {
-	        try {
-	        	 SummonerDTO userInfo = riotGamesService.getUserAPI(id);
-	                if (userInfo != null && userInfo.getPuuid() != null) {
-	                    List<String> matchCodes = riotGamesService.getMatchCode(userInfo.getPuuid());
-	                    List<MatchDTO> matchList = new ArrayList<>();
+   @RequestMapping(value="/searchUser")
+   public String searchUser(@RequestParam(required = false) String id, Model model) {
+       if (id != null && !id.isEmpty()) {
+           try {
+               SummonerDTO userInfo = riotGamesService.getUserAPI(id);
+                   if (userInfo != null && userInfo.getPuuid() != null) {
+                       List<String> matchCodes = riotGamesService.getMatchCode(userInfo.getPuuid());
+                       List<MatchDTO> matchList = new ArrayList<>();
 
-	                    for (String matchCode : matchCodes) {
-	                        MatchDTO matchDetails = riotGamesService.getMatch(matchCode);
-	                        if (matchDetails != null) {
-	                            matchList.add(matchDetails);
-	                        }
-	                    }
-
-	                    model.addAttribute("UserInfo", userInfo);
-	                    model.addAttribute("MatchCodes", matchCodes);
-	                    model.addAttribute("MatchList", matchList);
-	                }
-	            } catch (Exception e) {
-	                e.printStackTrace(); // 로그 기록
-	            }
-	        }
-	        return "searchUser";
-	    }
-	}
-
+                       for (String matchCode : matchCodes) {
+                           MatchDTO matchDetails = riotGamesService.getMatch(matchCode);
+                           if (matchDetails != null) {
+                               matchList.add(matchDetails);
+                           }
+                       }
+                       // Unix 타임스탬프를 Date 객체로 변환
+                       model.addAttribute("UserInfo", userInfo);
+                       model.addAttribute("MatchCodes", matchCodes);
+                       model.addAttribute("MatchList", matchList);
+                   }
+               } catch (Exception e) {
+                   e.printStackTrace(); // 로그 기록
+                   System.err.print(">>>>>아이디가 존재하지 않음");
+               }
+           }
+           return "searchUser";
+       }
+   }

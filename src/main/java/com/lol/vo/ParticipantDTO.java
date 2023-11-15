@@ -1,11 +1,10 @@
 package com.lol.vo;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+//게임 참가자들의 정보
 @Getter
 @Setter
 @ToString
