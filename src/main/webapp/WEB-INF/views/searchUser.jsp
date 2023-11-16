@@ -125,7 +125,10 @@
             <ul class="team-list">
                 <c:forEach items="${match.info.participants}" var="participant">
                     <c:if test="${participant.teamId == 100}">
-                        <li>${participant.summonerName}</li>
+                         <li>${participant.summonerName} | 
+                         챔프: ${participant.championId} |
+                         KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
+                         </li>
                     </c:if>
                 </c:forEach>
             </ul>
@@ -137,7 +140,10 @@
             <ul class="team-list">
                 <c:forEach items="${match.info.participants}" var="participant">
                     <c:if test="${participant.teamId == 200}">
-                        <li>${participant.summonerName}</li>
+                         <li>${participant.summonerName} | 
+                         챔프: ${participant.championId} |
+                         KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
+                         </li>
                     </c:if>
                 </c:forEach>
             </ul>
