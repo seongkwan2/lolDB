@@ -54,7 +54,16 @@
     <p>레벨(summonerLevel): ${UserInfo.summonerLevel}</p>
 
     <hr>
-
+    
+    <h2>랭크 정보</h2>
+    <c:forEach items="${SummonerRank}" var="rank">
+      <p>큐 타입: ${rank.queueType}</p>
+      <p>티어: ${rank.tier}</p>
+      <p>계급: ${rank.rank}</p>
+      <p>리그 포인트: ${rank.leaguePoints}</p>
+    </c:forEach>
+    
+    <hr>
     <h2>최근 전적</h2>
     <c:forEach items="${MatchList}" var="match">
         <div class="game-header">
