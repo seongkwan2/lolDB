@@ -126,7 +126,8 @@
                 <c:forEach items="${match.info.participants}" var="participant">
                     <c:if test="${participant.teamId == 100}">
                          <li>${participant.summonerName} | 
-                         챔프: ${participant.championId} |
+                         챔프: ${participant.championId} | ${participant.championName}  |  
+                         이미지: <img src=https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/${participant.championName}.png alt='Champion Image'>
                          KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
                          </li>
                     </c:if>
@@ -141,7 +142,8 @@
                 <c:forEach items="${match.info.participants}" var="participant">
                     <c:if test="${participant.teamId == 200}">
                          <li>${participant.summonerName} | 
-                         챔프: ${participant.championId} |
+                         챔프: ${participant.championId} | ${participant.championName}  |  
+                         이미지: <img src=https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/${participant.championName}.png alt='Champion Image'>
                          KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
                          </li>
                     </c:if>

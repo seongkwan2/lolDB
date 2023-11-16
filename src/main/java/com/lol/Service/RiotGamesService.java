@@ -3,6 +3,7 @@ package com.lol.Service;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,9 @@ import com.lol.vo.SummonerDTO;
 public class RiotGamesService {
   private final RestTemplate restTemplate;
   private final String apiKey = "RGAPI-f7645bb0-7531-4651-9e58-7e9b312665af"; //api키
+
+  @Value("${riot.api.dataDragonUrl}")
+  private String dataDragonUrl;
 
   @Autowired
   public RiotGamesService(RestTemplate restTemplate) {
@@ -66,5 +70,8 @@ public class RiotGamesService {
 
     return Arrays.asList(response.getBody());
   }
+
+
+
 
 }
