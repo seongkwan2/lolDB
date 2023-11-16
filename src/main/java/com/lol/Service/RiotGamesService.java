@@ -17,7 +17,7 @@ import com.lol.vo.SummonerDTO;
 @Service
 public class RiotGamesService {
   private final RestTemplate restTemplate;
-  private final String apiKey = "RGAPI-04f7384e-4dd7-46a5-a107-1943ab3c7754"; //api키
+  private final String apiKey = "RGAPI-f7645bb0-7531-4651-9e58-7e9b312665af"; //api키
 
   @Autowired
   public RiotGamesService(RestTemplate restTemplate) {
@@ -58,6 +58,7 @@ public class RiotGamesService {
     return response.getBody();
   }
 
+  // 랭크 메서드
   public List<LeagueDTO> getSummonerRank(String summonerId) {
     String url = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId + "?api_key=" + apiKey;
 

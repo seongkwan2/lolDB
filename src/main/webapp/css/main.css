@@ -90,3 +90,12 @@ button {
 button:hover{
 	color: white;
 }
+
+.rank_session {
+	display: flex;
+	fles-direction: row;
+}
+
+.rank_div {
+	margin-right: 20px;
+}

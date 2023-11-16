@@ -56,13 +56,57 @@
     <hr>
     
     <h2>랭크 정보</h2>
-    <c:forEach items="${SummonerRank}" var="rank">
-      <p>큐 타입: ${rank.queueType}</p>
-      <p>티어: ${rank.tier}</p>
-      <p>계급: ${rank.rank}</p>
-      <p>리그 포인트: ${rank.leaguePoints}</p>
-    </c:forEach>
-    
+    <div class="rank_session">
+     
+	    <c:forEach items="${SummonerRank}" var="rank">
+		    <div class="rank_div">
+		    <c:choose>
+		        <c:when test="${rank.tier eq 'IRON'}">
+              <img src="/images/iron.png" alt="Iron" width="200" height="200">
+            </c:when>
+		        <c:when test="${rank.tier eq 'BRONZE'}">
+              <img src="/images/bronz.png" alt="Bronze" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'SILVER'}">
+              <img src="/images/silver.png" alt="Silver" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'GOLD'}">
+              <img src="/images/gold.png" alt="Gold" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'EMERALD'}">
+              <img src="/images/emerald.png" alt="Emerald" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'PLATINUM'}">
+              <img src="/images/platinum.png" alt="Platinum" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'DIAMOND'}">
+              <img src="/images/diamond.png" alt="Diamond" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'MASTER'}">
+              <img src="/images/master.png" alt="Master" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'GRANDMASTER'}">
+              <img src="/images/grandmaster.png" alt="Grandmaster" width="200" height="200">
+            </c:when>
+            <c:when test="${rank.tier eq 'CHALLENGER'}">
+              <img src="/images/challenger.png" alt="Challenger" width="200" height="200">
+            </c:when>
+            <c:otherwise>
+              <img src="/images/unlank.png" alt="Unranked" width="200" height="200">
+            </c:otherwise>
+        </c:choose>		    
+		      <p>큐 타입: 
+		      <c:choose>
+            <c:when test="${rank.queueType eq 'RANKED_FLEX_SR'}">자유 랭크</c:when>
+            <c:otherwise>솔로 랭크</c:otherwise>
+        </c:choose>
+		      </p>
+		      <p>티어: ${rank.tier}</p>
+		      <p>계급: ${rank.rank}</p>
+		      <p>리그 포인트: ${rank.leaguePoints}</p>
+		    </div>
+	    </c:forEach>
+    </div>
     <hr>
     <h2>최근 전적</h2>
     <c:forEach items="${MatchList}" var="match">
