@@ -52,7 +52,6 @@ public class APIController {
 
           List<LeagueDTO> summonerRank = riotGamesService.getSummonerRank(userInfo.getId());
 
-          // Unix 타임스탬프를 Date 객체로 변환
           model.addAttribute("UserInfo", userInfo);
           model.addAttribute("MatchCodes", matchCodes);
           model.addAttribute("MatchList", matchList);
