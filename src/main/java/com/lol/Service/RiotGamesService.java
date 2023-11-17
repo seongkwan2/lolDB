@@ -18,7 +18,7 @@ import com.lol.vo.SummonerDTO;
 @Service
 public class RiotGamesService {
   private final RestTemplate restTemplate;
-  private final String apiKey = "RGAPI-f7645bb0-7531-4651-9e58-7e9b312665af"; //api키
+  private final String apiKey = "RGAPI-65feacbb-19ea-43ce-9269-8384f6b0a3b4"; //api키
 
   @Value("${riot.api.dataDragonUrl}")
   private String dataDragonUrl;

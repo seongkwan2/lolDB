@@ -8,4 +8,6 @@ public class LeagueDTO {
   private String tier;
   private String rank;
   private int leaguePoints;
+  private int wins;
+  private int losses;
 }

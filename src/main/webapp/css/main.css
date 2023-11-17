@@ -53,8 +53,8 @@ form {
     .user_container  img {
         
         margin-right: 10px;
-        width: 200px;
-        height: 200px;
+        width: 100px;
+        height: 100px;
     }
 
     .user_container  p {
@@ -99,13 +99,31 @@ hr {
 	margin-bottom: 10px;
 }
 
-.team-list {
-	list-style: none;
-	padding: 0;
+
+.game-details table {
+	border-collapse: collapse;
+  width: 100%;
 }
 
-.team-list li {
-	margin-bottom: 5px;
+.game-details th, td {
+      border: 1px solid black;
+      padding: 4px;
+      text-align: center;
+      width: auto;
+    }
+#bar-item-image {
+	width: 25px;
+	height: 25px;
+}
+
+#record-champ-image {
+	width: 50px;
+	height: 50px;
+}
+
+#record-item-image {
+  width: 50px;
+  height: 50px;
 }
 
 .win {
@@ -164,7 +182,10 @@ button:hover{
   grid-area: sidebar;
 }
 
-
+.rankImages img {
+	width: 200px;
+	height: 200px;
+}
 
 .rank_div {
 	margin: 20px;

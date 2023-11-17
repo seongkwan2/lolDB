@@ -8,11 +8,13 @@
 </head>
 <body>
     <h2>챔피언 이미지 목록</h2>
-
+    <c:set var="imageBasePath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
+      
     <c:forEach var="champion" items="${champions}">
         <div>
             <p>${champion.name}</p>
-            <img src="${champion.image.full}" alt="${champion.name} Image">
+            <c:set var="imagePath" value="${imageBasePath}${champion.image.full}" />
+            <img src="${imagePath}" alt="${champion.name} Image">
         </div>
     </c:forEach>
 </body>
