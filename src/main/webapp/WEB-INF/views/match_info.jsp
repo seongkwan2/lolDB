@@ -73,6 +73,7 @@
                             <th>ID</th>
                             <th>Lv</th>
                             <th>KDA</th>
+                            <th>S/R</th>
                             <th>Item</th>
                             <th>G/CS</th>
                             <th>딜량</th>
@@ -92,6 +93,7 @@
                                 <td>${participant.summonerName}</td>
                                 <td> ${participant.champLevel} </td>
                                 <td>${participant.kills} / ${participant.deaths} / ${participant.assists}</td>
+                                <td>${participant.spell1Casts}</td>
                                 <td>
                                   <c:forEach var="item" items="${itemList}">
                                     <c:if test="${item ne '0'}">

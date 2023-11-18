@@ -27,6 +27,12 @@
             <label for="id">소환사 아이디:</label> <input type="text" id="id" name="id" placeholder="소환사 아이디 입력"> <input
               type="submit" value="검색">
           </form>
+          <%@ include file="mode_toggle.jsp" %>
+          <form action="/championImages" method="get">
+					  <a href="/championImages" class="button-link">
+					    <button type="button">champ</button>
+					  </a>
+					</form>
 
           <c:if test="${empty UserInfo}">
             <p>검색하신 아이디는 전적이 존재하지 않습니다.</p>
