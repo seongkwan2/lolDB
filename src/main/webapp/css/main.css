@@ -26,14 +26,68 @@ img {
        grid-template-rows: auto 1fr;
 }
 
-h1 {
-	text-align: center;
+
+.search-box {
+  display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+  
+}
+
+.search-box form {
+  width: 500px; /* 네모 칸의 너비 */
+  padding: 15px; /* 내부 여백 */
+  border: 1px solid #ccc; /* 테두리 스타일 및 색상 */
+  border-radius: 5px; /* 테두리 둥글게 */
+  display: flex; /* 요소들을 가로로 배열 */
+  flex-direction: row; /* 세로로 정렬 */
+  align-items: center;
+}
+
+/* 스타일링을 추가로 원하는 경우 여기에 추가 */
+.search-box label {
+  padding-right: 10px;
+}
+
+.search-box input {
+  padding: 8px; /* 내부 여백 */
+  box-sizing: border-box; /* 너비와 높이에 padding 및 border 포함 */
+}
+
+.search-box #id {
+  width: 400px;
+  text-align: center;
+}
+
+
+.search-button {
+  width: 32px; /* 이미지의 너비 */
+  height: 32px; /* 이미지의 높이 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 포인터 모양으로 변경 */
 }
 
 form {
 	text-align: center;
 	margin: 20px 0;
 }
+
+.head-content {
+	display: flex;
+  padding: 10px;
+}
+
+
+  /* 링크의 글자색 제거 */
+  a.button-link {
+	  text-decoration: none;
+	  font-size: 22px;
+    color: rgb(69, 64, 64);
+    font-weight: bolder;
+    padding-left: 20px;
+    vertical-align: middle;
+    line-height: 2;
+  }
 
 .user_container {
         display: flex;
@@ -148,17 +202,6 @@ hr {
   background-color: #FFD8D9;
 }
 
-button {
-	background-color: orange;
-	color: black;
-	border: none;
-	cursor: pointer;
-	padding: 5px 10px;
-}
-
-button:hover{
-	color: white;
-}
 
 .rank_container {
   display: flex;

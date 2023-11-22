@@ -26,9 +26,10 @@
     <div class="champion-container">
         <c:forEach var="champion" items="${champions}" varStatus="loop">
             <div class="champion-item">
-                <p>${champion.name}</p>
                 <c:set var="imagePath" value="${imageBasePath}${champion.image.full}" />
                 <img src="${imagePath}" alt="${champion.name} Image">
+                <p>${champion.name}</p>
+                <p>${champion.blurb}</p>
             </div>
             
             <%-- 매 5번째 아이템마다 새로운 행 시작 --%>

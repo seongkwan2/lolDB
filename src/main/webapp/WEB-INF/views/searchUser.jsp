@@ -8,7 +8,7 @@
 
         <head>
           <meta charset="UTF-8">
-          <title>전적 검색</title>
+          <title>LoL Search</title>
           <script src="/js/jquery.js"></script>
           <link href="/css/main.css" rel="stylesheet" />
           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21,18 +21,29 @@
 
           <c:set var="userIconPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/profileicon/" />
           <c:set var="champIconPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
-          <h1>소환사 전적 검색</h1>
-          <form action="/searchUser" method="get">
-            <!-- 받은 정보를 /searchUser로 보냄  -->
-            <label for="id">소환사 아이디:</label> <input type="text" id="id" name="id" placeholder="소환사 아이디 입력"> <input
-              type="submit" value="검색">
-          </form>
-          <%@ include file="mode_toggle.jsp" %>
+
+
+          <div class="head-content">
+          <h1>LoL Search</h1>
+          <div>
           <form action="/championImages" method="get">
-					  <a href="/championImages" class="button-link">
-					    <button type="button">champ</button>
-					  </a>
-					</form>
+            <a href="/championImages" class="button-link"> 챔피언 </a>
+          </form>
+          </div>
+            </div>
+
+
+            <div class="search-box">
+              <form action="/searchUser" method="get">
+                <label for="id">아이디</label>
+                <input type="text" id="id" name="id" placeholder="소환사 아이디 입력">
+                <input type="image" src="images/search.png" alt="검색" class="search-button">
+</form>
+              </form>
+            </div>
+
+          <%-- <%@ include file="mode_toggle.jsp" %>--%> <%-- 다크모드 라이트모드 주석처리 --%>
+          
 
           <c:if test="${empty UserInfo}">
             <p>검색하신 아이디는 전적이 존재하지 않습니다.</p>

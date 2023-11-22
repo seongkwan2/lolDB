@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import com.lol.Service.RiotGamesService;
+import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;
 import com.lol.vo.SummonerDTO;
+import com.lol.vo.SummonerSpellDTO;
 
 @Controller
 public class APIController {
@@ -51,7 +53,8 @@ public class APIController {
           }
 
           List<LeagueDTO> summonerRank = riotGamesService.getSummonerRank(userInfo.getId());
-
+          List<SummonerSpellDTO.SummonerSpell> spells = riotGamesService.getSpells();
+          List<ChampDTO.Champion> champions = riotGamesService.getChampions();
 
 
           // Unix 타임스탬프를 Date 객체로 변환
@@ -59,6 +62,8 @@ public class APIController {
           model.addAttribute("MatchCodes", matchCodes);
           model.addAttribute("MatchList", matchList);
           model.addAttribute("SummonerRank", summonerRank);
+          model.addAttribute("champions", champions);
+          model.addAttribute("spells", spells);
         }
       } catch (Exception e) {
         e.printStackTrace(); // 로그 기록

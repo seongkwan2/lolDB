@@ -1,7 +1,9 @@
 package com.lol.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,15 +13,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;
 import com.lol.vo.SummonerDTO;
+import com.lol.vo.SummonerSpellDTO;
 
 @Service
 public class RiotGamesService {
   private final RestTemplate restTemplate;
-  private final String apiKey = "RGAPI-65feacbb-19ea-43ce-9269-8384f6b0a3b4"; //api키
-
+  private final String apiKey = "RGAPI-64d41194-8c40-4fc4-a11f-10ce1a408679"; //api키
+  private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
+  private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
   @Value("${riot.api.dataDragonUrl}")
   private String dataDragonUrl;
 
@@ -72,6 +77,31 @@ public class RiotGamesService {
   }
 
 
+  // champ json 받기위한 메서드
+  public List<ChampDTO.Champion> getChampions() {
+    ResponseEntity<ChampDTO> response = restTemplate.getForEntity(championDataUrl, ChampDTO.class);
+    ChampDTO champData = response.getBody();
 
+    List<ChampDTO.Champion> champions = new ArrayList<>();
 
+    if(champData != null) {
+      Map<String, ChampDTO.Champion> championMap = champData.getData();
+      champions.addAll(championMap.values());
+    }
+    return champions;
+  }
+
+  // spell json
+  public List<SummonerSpellDTO.SummonerSpell> getSpells() {
+    ResponseEntity<SummonerSpellDTO> response = restTemplate.getForEntity(spellDataUrl, SummonerSpellDTO.class);
+    SummonerSpellDTO spellData = response.getBody();
+
+    List<SummonerSpellDTO.SummonerSpell> spells = new ArrayList<>();
+
+    if(spellData != null) {
+      Map<String, SummonerSpellDTO.SummonerSpell> spellMap = spellData.getData();
+      spells.addAll(spellMap.values());
+    }
+    return spells;
+  }
 }

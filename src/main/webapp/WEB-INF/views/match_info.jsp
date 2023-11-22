@@ -25,6 +25,8 @@
           </script>
 </head>
 <body>
+<c:set var="imageBasePath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
+<c:set var="spellPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/spell/" />
 <div class="record_container">
                 <h2>최근 전적</h2>
                 <c:forEach items="${MatchList}" var="match">
@@ -38,10 +40,25 @@
 
                     <c:forEach items="${match.info.participants}" var="participant">
                       <c:if test="${participant.summonerName eq UserInfo.name}">
-                        <c:set var="champPath" value="${champIconPath}${participant.championName}.png" />
                         <c:set var="itemList"
                           value="${participant.item0},${participant.item1},${participant.item2},${participant.item3},${participant.item4},${participant.item5},${participant.item6}" />
-                        <img src=${champPath} alt='Champion Image' id="record-champ-image">
+                        
+                        <c:forEach var="champion" items="${champions}">
+                        <c:if test="${participant.championId eq champion.key}">
+                          <c:set var="imagePath" value="${imageBasePath}${champion.image.full}" />
+                          <img src="${imagePath}" alt="${champion.name}" id="record-champ-image">
+                          </c:if>
+                        </c:forEach>
+                        
+                        <c:forEach var="spell" items="${spells}">
+												    <c:if test="${participant.summoner1Id eq spell.key or participant.summoner2Id eq spell.key}">
+												        <c:set var="spellPaths" value="${spellPath}${spell.image.full}" />
+												        <img src="${spellPaths}" alt="${spell.name}" id="record-champ-image">
+												    </c:if>
+												</c:forEach>
+
+                        
+                        
                         <c:forEach var="item" items="${itemList}">
                           <c:if test="${item ne '0'}">
                             <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${item}.png"
@@ -49,6 +66,8 @@
                           </c:if>
                         </c:forEach>
                         <span>${participant.kills} / ${participant.deaths} / ${participant.assists}</span>
+                       
+                        
                       </c:if>
                     </c:forEach>
                     | <span>플레이 시간: ${fn:substringBefore(match.info.gameDuration div 60, '.')}분
@@ -89,11 +108,23 @@
                                 <c:set var="itemList"
                                   value="${participant.item0},${participant.item1},${participant.item2},${participant.item3},${participant.item4},${participant.item5},${participant.item6}" />
 
-                                <td><img src="${champPath}" alt='Champion Image' id="record-champ-image"></td>
+                                <td>
+                                <c:forEach var="champion" items="${champions}">
+					                        <c:if test="${participant.championId eq champion.key}">
+					                          <c:set var="imagePath" value="${imageBasePath}${champion.image.full}" />
+					                          <img src="${imagePath}" alt="${champion.name}" id="record-champ-image">
+					                          </c:if>
+					                        </c:forEach>
+                                </td>
                                 <td>${participant.summonerName}</td>
                                 <td> ${participant.champLevel} </td>
                                 <td>${participant.kills} / ${participant.deaths} / ${participant.assists}</td>
-                                <td>${participant.spell1Casts}</td>
+                                <td><c:forEach var="spell" items="${spells}">
+                            <c:if test="${participant.summoner1Id eq spell.key or participant.summoner2Id eq spell.key}">
+                                <c:set var="spellPaths" value="${spellPath}${spell.image.full}" />
+                                <img src="${spellPaths}" alt="${spell.name}" id="record-champ-image">
+                            </c:if>
+                        </c:forEach></td>
                                 <td>
                                   <c:forEach var="item" items="${itemList}">
                                     <c:if test="${item ne '0'}">
@@ -125,6 +156,7 @@
                             <th>ID</th>
                             <th>Lv</th>
                             <th>KDA</th>
+                            <th>S/R</th>
                             <th>Item</th>
                             <th>G/CS</th>
                             <th>딜량</th>
@@ -140,10 +172,26 @@
                                 <c:set var="itemList"
                                   value="${participant.item0},${participant.item1},${participant.item2},${participant.item3},${participant.item4},${participant.item5},${participant.item6}" />
 
-                                <td><img src="${champPath}" alt='Champion Image' id="record-champ-image"></td>
+                                <td>
+                                <c:forEach var="champion" items="${champions}">
+                                  <c:if test="${participant.championId eq champion.key}">
+                                    <c:set var="imagePath" value="${imageBasePath}${champion.image.full}" />
+                                    <img src="${imagePath}" alt="${champion.name}" id="record-champ-image">
+                                    </c:if>
+                                  </c:forEach>
+                                </td>
                                 <td>${participant.summonerName}</td>
                                 <td> ${participant.champLevel} </td>
                                 <td>${participant.kills} / ${participant.deaths} / ${participant.assists}</td>
+                                <td>
+                                <c:forEach var="spell" items="${spells}">
+                            <c:if test="${participant.summoner1Id eq spell.key or participant.summoner2Id eq spell.key}">
+                                <c:set var="spellPaths" value="${spellPath}${spell.image.full}" />
+                                <img src="${spellPaths}" alt="${spell.name}" id="record-champ-image">
+                            </c:if>
+                        </c:forEach>
+                        </td>
+                                
                                 <td>
                                   <c:forEach var="item" items="${itemList}">
                                     <c:if test="${item ne '0'}">
