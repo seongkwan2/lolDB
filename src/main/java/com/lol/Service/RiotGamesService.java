@@ -1,7 +1,9 @@
 package com.lol.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,17 +13,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;
 import com.lol.vo.SummonerDTO;
+import com.lol.vo.SummonerSpellDTO;
 
 @Service
 public class RiotGamesService {
   private final RestTemplate restTemplate;
-  private final String apiKey = "RGAPI-f7645bb0-7531-4651-9e58-7e9b312665af"; //api키
-
-  @Value("${riot.api.dataDragonUrl}")
-  private String dataDragonUrl;
+  @Value("${riot.api.key}")	//api키를 src/main/resorces의 application.properties에서 관리하도록 함
+  private String apiKey;
+  private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
+  private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
+  private final String dataDragonUrl = "https://ddragon.leagueoflegends.com";
 
   @Autowired
   public RiotGamesService(RestTemplate restTemplate) {
@@ -40,7 +45,7 @@ public class RiotGamesService {
   }
 
   //전적을 보기위한 코드를 가져오는 메서드
-  public List<String> getMatchCode(String puuid) {                                    //전적 1개만 받아와보기로함
+  public List<String> getMatchCode(String puuid) {
     String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=20";
     HttpHeaders headers = new HttpHeaders();
     headers.set("X-Riot-Token", apiKey);
@@ -72,6 +77,31 @@ public class RiotGamesService {
   }
 
 
+  // champ json 받기위한 메서드
+  public List<ChampDTO.Champion> getChampions() {
+    ResponseEntity<ChampDTO> response = restTemplate.getForEntity(championDataUrl, ChampDTO.class);
+    ChampDTO champData = response.getBody();
 
+    List<ChampDTO.Champion> champions = new ArrayList<>();
 
+    if(champData != null) {
+      Map<String, ChampDTO.Champion> championMap = champData.getData();
+      champions.addAll(championMap.values());
+    }
+    return champions;
+  }
+
+  // spell json
+  public List<SummonerSpellDTO.SummonerSpell> getSpells() {
+    ResponseEntity<SummonerSpellDTO> response = restTemplate.getForEntity(spellDataUrl, SummonerSpellDTO.class);
+    SummonerSpellDTO spellData = response.getBody();
+
+    List<SummonerSpellDTO.SummonerSpell> spells = new ArrayList<>();
+
+    if(spellData != null) {
+      Map<String, SummonerSpellDTO.SummonerSpell> spellMap = spellData.getData();
+      spells.addAll(spellMap.values());
+    }
+    return spells;
+  }
 }

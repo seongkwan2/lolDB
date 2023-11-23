@@ -11,7 +11,7 @@ public class HomeController {
 	/*메인 페이지*/
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
-		return "home";
+		return "searchUser";
 	}
 	
 	/* 에러 페이지*/

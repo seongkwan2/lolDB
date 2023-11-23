@@ -1,218 +1,138 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+      <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-    <title>전적 검색</title>
-<script src="/js/jquery.js"></script>
-<link href="/css/main.css" rel="stylesheet"/>
+        <!DOCTYPE html>
+        <html>
 
-    <script>
-	    $(document).ready(function() {
-	        $(".game-header button").click(function() {
-	            var gameDetails = $(this).parent().next(".game-details");
-	            var buttonText = $(this).text();
-	            
-	            if (buttonText === "펼치기") {
-	                gameDetails.slideDown();
-	                $(this).text("접기");
-	            } else {
-	                gameDetails.slideUp();
-	                $(this).text("펼치기");
-	            }
-	        });
-	    });
-    </script>
-    
-</head>
-<body>
+        <head>
+          <meta charset="UTF-8">
+          <title>LoL Search</title>
+          <script src="/js/jquery.js"></script>
+          <link href="/css/main.css" rel="stylesheet" />
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+          
 
-<h1>소환사 전적 검색</h1>
-<form action="/searchUser" method="get">
-    <!-- 받은 정보를 /searchUser로 보냄  -->
-    <label for="id">소환사 아이디:</label> <input type="text" id="id" name="id" placeholder="소환사 아이디 입력"> <input type="submit" value="검색">
+        </head>
+
+        <body>
+
+          <c:set var="userIconPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/profileicon/" />
+          <c:set var="champIconPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
+
+
+          <div class="head-content">
+          <h1>LoL Search</h1>
+          <div>
+          <form action="/championImages" method="get">
+            <a href="/championImages" class="button-link"> 챔피언 </a>
+          </form>
+          </div>
+            </div>
+
+
+            <div class="search-box">
+              <form action="/searchUser" method="get">
+                <label for="id">아이디</label>
+                <input type="text" id="id" name="id" placeholder="소환사 아이디 입력">
+                <input type="image" src="images/search.png" alt="검색" class="search-button">
 </form>
+              </form>
+            </div>
 
-<hr>
+          <%-- <%@ include file="mode_toggle.jsp" %>--%> <%-- 다크모드 라이트모드 주석처리 --%>
+          
 
-<c:if test="${empty UserInfo}">
-    <p>검색하신 아이디는 전적이 존재하지 않습니다.</p>
-</c:if>
+          <c:if test="${empty UserInfo}">
+            <p>검색하신 아이디는 전적이 존재하지 않습니다.</p>
+          </c:if>
 
-<c:if test="${not empty UserInfo}">
+          <!-- User 아이디 레벨 정보 -->
+          <c:if test="${not empty UserInfo}">
+            <div class="container">
+              <div class="user_container">
+                <div>
+                  <c:set var="iconPath" value="${userIconPath}${UserInfo.profileIconId}.png" />
+                  <img src="${iconPath}">
+                  <p>${UserInfo.summonerLevel}</p>
+                  <div>
+                    ${UserInfo.name}
+                  </div>
+                </div>
 
-<div class="container">
-<div class="user_container">
-    <div>
-      <img src = "https://ddragon.leagueoflegends.com/cdn/13.22.1/img/profileicon/${UserInfo.profileIconId}.png">
-      <p>${UserInfo.summonerLevel}</p>
-    </div>
-    <div>
-      <p>${UserInfo.name}</p>
-    </div>
-</div>
+                <c:forEach items="${SummonerRank}" var="rankData" varStatus="loop">
+                  <div>
+                    <div>
+                      <c:choose>
+                        <c:when test="${rankData.queueType eq 'RANKED_FLEX_SR'}">5:5 RANK</c:when>
+                        <c:otherwise>SOLO RANK</c:otherwise>
+                      </c:choose>
+                    </div>
+                    <div style="width: 200px; height: 200px; margin: auto;">
+                      <canvas id="donutChart${loop.index}"></canvas>
+                    </div>
+                  </div>
+                  <script>
+                    // rankData에서 데이터 추출
+                    var wins = ${ rankData.wins };
+                    var losses = ${ rankData.losses };
+                    var totalGames = wins + losses;
 
+                    // 승리와 패배의 백분율 계산
+                    var winPercentage = (wins / totalGames * 100).toFixed(0);
+                    var lossPercentage = (losses / totalGames * 100).toFixed(0);
+                    // 차트 데이터
+                    var data = {
 
-    <hr>
-    
-    
-    <div class="rank_container">
-     
-	    <c:forEach items="${SummonerRank}" var="rank">
-		    <div class="rank_div">
-		    <p> 
-          <c:choose>
-            <c:when test="${rank.queueType eq 'RANKED_FLEX_SR'}">5:5 LANK</c:when>
-            <c:otherwise>SOLO LANK</c:otherwise>
-        </c:choose>
-          </p>
-		    <c:choose>
-		        <c:when test="${rank.tier eq 'IRON'}">
-              <img src="/images/iron.png" alt="Iron" width="200" height="200">
-            </c:when>
-		        <c:when test="${rank.tier eq 'BRONZE'}">
-              <img src="/images/bronz.png" alt="Bronze" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'SILVER'}">
-              <img src="/images/silver.png" alt="Silver" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'GOLD'}">
-              <img src="/images/gold.png" alt="Gold" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'EMERALD'}">
-              <img src="/images/emerald.png" alt="Emerald" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'PLATINUM'}">
-              <img src="/images/platinum.png" alt="Platinum" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'DIAMOND'}">
-              <img src="/images/diamond.png" alt="Diamond" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'MASTER'}">
-              <img src="/images/master.png" alt="Master" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'GRANDMASTER'}">
-              <img src="/images/grandmaster.png" alt="Grandmaster" width="200" height="200">
-            </c:when>
-            <c:when test="${rank.tier eq 'CHALLENGER'}">
-              <img src="/images/challenger.png" alt="Challenger" width="200" height="200">
-            </c:when>
-            <c:otherwise>
-              <img src="/images/unlank.png" alt="Unranked" width="200" height="200">
-            </c:otherwise>
-        </c:choose>		    
-		      
-		      <p style="font-weight: bold; font-size: 16px;">${rank.tier} ${rank.rank} </p>
-		      <p>${rank.leaguePoints} LP</p>
-		    </div>
-	    </c:forEach>
-    </div>
-    <hr>
-    
-    
-    <div class="record_container">
-    <h2>최근 전적</h2>
-    <c:forEach items="${MatchList}" var="match">
-        <div class="game-header" id="${match.info.teams[0].win ? 'winback' : 'lossback'}">
-            <span>게임코드: ${match.metadata.matchId}</span> |
-            <span>플레이 시간: ${fn:substringBefore(match.info.gameDuration div 60, '.')}분 ${match.info.gameDuration % 60}초</span> |
-            <span class="${match.info.teams[0].win ? 'win' : 'loss'}"> ${match.info.teams[0].win ? 'WIN' : 'LOSE'}</span>
-            <button>펼치기</button>
-        </div>
+                      datasets: [{
+                        data: [wins, losses],
+                        backgroundColor: ['blue', 'red']
+                      }]
+                    };
 
-        <!-- 숨겨져 있던 정보(펼치기를 눌러야 나오는 정보들) -->
-        <div class="game-details" style="display: none;">
-        
-        <!-- 블루 팀 -->
-            <h4>BLUD Team</h4>
-            <ul class="team-list">
-                <c:forEach items="${match.info.participants}" var="participant">
-                    <c:if test="${participant.teamId == 100}">
-                         <li>
-                         <img src=https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/${participant.championName}.png alt='Champion Image'>
-                         ${participant.summonerName} | 
-                         챔프: ${participant.championName}  |  
-                         KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
-                         피해량: ${participant.totalDamageDealt} | 
-                         받은피해량: ${participant.totalDamageTaken}                     
-                                                  <div>
-													<c:if test="${participant.item0 ne 0}">
-													  <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item0}.png" alt='item Image'>
-													</c:if>
-													<c:if test="${participant.item1 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item1}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item2 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item2}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item3 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item3}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item4 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item4}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item5 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item5}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item5 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item6}.png" alt='item Image'>
-                          </c:if>
-                          </div>
-                         </li>
-                    </c:if>
+                    // 차트 옵션
+                    var options = {
+                      cutoutPercentage: 70,
+                      legend: {
+                        display: false
+                      },
+                      tooltips: {
+                        enabled: false // 툴팁 비활성화
+                      },
+                      plugins: {
+                        datalabels: {
+                          formatter: (value, ctx) => {
+                            return value + ' (' + (ctx.dataset.data[ctx.dataIndex] / totalGames * 100).toFixed(2) + '%)';
+                          },
+                          color: '#fff',
+                          display: true,
+                          align: 'center',
+                          anchor: 'center'
+                        }
+                      }
+                    };
+
+                    // 차트 생성
+                    var myDonutChart = new Chart(document.getElementById("donutChart${loop.index}").getContext('2d'), {
+                      type: 'doughnut',
+                      data: data,
+                      options: options
+                    });
+                  </script>
                 </c:forEach>
-            </ul>
-            
-            <hr>
-         
-        <!-- 레드 팀 -->
-            <h4>RED Team</h4>
-            <ul class="team-list">
-                <c:forEach items="${match.info.participants}" var="participant">
-                    <c:if test="${participant.teamId == 200}">
-                         <li>
-                          <img src=https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/${participant.championName}.png alt='Champion Image'>
-                         ${participant.summonerName} | 
-                         챔프: ${participant.championName}  |  
-                         KDA: ${participant.kills} / ${participant.assists} / ${participant.deaths} | 
-                         피해량: ${participant.totalDamageDealt} | 
-                         받은피해량: ${participant.totalDamageTaken}
-                         <div>
-                         <c:if test="${participant.item0 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item0}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item1 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item1}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item2 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item2}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item3 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item3}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item4 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item4}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item5 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item5}.png" alt='item Image'>
-                          </c:if>
-                          <c:if test="${participant.item5 ne 0}">
-                            <img src="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/item/${participant.item6}.png" alt='item Image'>
-                          </c:if>
-                         </div>
-                                
-                         </li>
-                    </c:if>
-                </c:forEach>    
-            </ul>
-        </div>
-    </c:forEach>
-</c:if>
-</div>
-       </div>
-</body>
-</html>
+
+
+              </div>
+
+              <!-- User 랭크 정보 -->
+              <%@ include file="rank_info.jsp" %>
+
+              <!-- User 전적 드롭다운 데이터 -->
+              <%@ include file="match_info.jsp" %>
+          </c:if>
+          </div>
+        </body>
+
+        </html>
