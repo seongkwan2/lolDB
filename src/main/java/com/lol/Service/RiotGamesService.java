@@ -22,7 +22,7 @@ import com.lol.vo.SummonerSpellDTO;
 @Service
 public class RiotGamesService {
   private final RestTemplate restTemplate;
-  private final String apiKey = "RGAPI-64d41194-8c40-4fc4-a11f-10ce1a408679"; //api키
+  private final String apiKey = "RGAPI-56f9e7ea-9bf2-4946-8fdd-db517fc9e883"; //api키
   private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
   private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
   @Value("${riot.api.dataDragonUrl}")
@@ -104,4 +104,7 @@ public class RiotGamesService {
     }
     return spells;
   }
+
+
+
 }

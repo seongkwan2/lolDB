@@ -57,6 +57,7 @@ public class APIController {
           List<ChampDTO.Champion> champions = riotGamesService.getChampions();
 
 
+
           // Unix 타임스탬프를 Date 객체로 변환
           model.addAttribute("UserInfo", userInfo);
           model.addAttribute("MatchCodes", matchCodes);
@@ -64,6 +65,7 @@ public class APIController {
           model.addAttribute("SummonerRank", summonerRank);
           model.addAttribute("champions", champions);
           model.addAttribute("spells", spells);
+
         }
       } catch (Exception e) {
         e.printStackTrace(); // 로그 기록
@@ -82,4 +84,5 @@ public class APIController {
 
     return 0;
   }
+
 }
