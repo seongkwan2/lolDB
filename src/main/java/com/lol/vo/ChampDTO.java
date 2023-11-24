@@ -15,7 +15,6 @@ public class ChampDTO {
     private String title;
     private Image image;
     private String blurb;
-    // 그 외 필요한 필드들을 추가하세요.
 
     @Data
     public static class Image {
