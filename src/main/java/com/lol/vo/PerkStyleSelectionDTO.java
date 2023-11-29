@@ -1,19 +1,14 @@
 package com.lol.vo;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class PerkStyleSelectionDTO {
-	
-	private int perk;
-	private int var1;
-	private int var2;
-	private int var3;
-	
-	public PerkStyleSelectionDTO() {}
+
+
+  private int perk;
+  private int var1;
+  private int var2;
+  private int var3;
 
 }

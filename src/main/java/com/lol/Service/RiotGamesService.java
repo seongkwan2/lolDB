@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;
+import com.lol.vo.RuneStyleDTO;
 import com.lol.vo.SummonerDTO;
 import com.lol.vo.SummonerSpellDTO;
 
@@ -26,6 +27,7 @@ public class RiotGamesService {
   private String apiKey;
   private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
   private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
+  private final String runeDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/runesReforged.json";
   private final String dataDragonUrl = "https://ddragon.leagueoflegends.com";
 
   @Autowired
@@ -103,5 +105,20 @@ public class RiotGamesService {
       spells.addAll(spellMap.values());
     }
     return spells;
+  }
+
+  public List<RuneStyleDTO> getRuneStyles() {
+    ResponseEntity<RuneStyleDTO[]> response = restTemplate.getForEntity(runeDataUrl, RuneStyleDTO[].class);
+    RuneStyleDTO[] runeStyles = response.getBody();
+
+    List<RuneStyleDTO> runes = new ArrayList<>();
+
+    if (runeStyles != null) {
+      for (RuneStyleDTO runeStyle : runeStyles) {
+        runes.add(runeStyle);
+      }
+    }
+
+    return runes;
   }
 }

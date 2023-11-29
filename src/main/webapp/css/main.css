@@ -1,46 +1,57 @@
 body {
-	width: 1200px;
-	padding: 10px;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	margin-left: auto;
-	margin-right: auto;
-	background-color: #f5f5f5;
-	border-radius: 10px;
-	box-shadow: 0px 0px 15px #aaa;
+  width: auto;
+  padding: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px #aaa;
   display: grid;
-  
+
 }
+
 img {
-	border-radius: 20%;
+  border-radius: 20%;
 }
 
 .container {
-	display: grid;
+  display: grid;
   grid-template-rows: 1fr 1fr;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   grid-template-areas:
-       "header main"
-       "sidebar sidebar";
-       grid-template-rows: auto 1fr;
+    "header main"
+    "sidebar sidebar";
+  grid-template-rows: auto 1fr;
 }
 
-
+.navbar {
+	margin-bottom: 30px;
+}
 .search-box {
   display: flex;
-  justify-content: center; /* 가로 가운데 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
-  
+  justify-content: center;
+  /* 가로 가운데 정렬 */
+  align-items: center;
+  /* 세로 가운데 정렬 */
+  margin-bottom: 20px;
 }
 
 .search-box form {
-  width: 500px; /* 네모 칸의 너비 */
-  padding: 15px; /* 내부 여백 */
-  border: 1px solid #ccc; /* 테두리 스타일 및 색상 */
-  border-radius: 5px; /* 테두리 둥글게 */
-  display: flex; /* 요소들을 가로로 배열 */
-  flex-direction: row; /* 세로로 정렬 */
+  width: 500px;
+  /* 네모 칸의 너비 */
+  padding: 15px;
+  /* 내부 여백 */
+  border: 1px solid #ccc;
+  /* 테두리 스타일 및 색상 */
+  border-radius: 5px;
+  /* 테두리 둥글게 */
+  display: flex;
+  /* 요소들을 가로로 배열 */
+  flex-direction: row;
+  /* 세로로 정렬 */
   align-items: center;
 }
 
@@ -50,8 +61,10 @@ img {
 }
 
 .search-box input {
-  padding: 8px; /* 내부 여백 */
-  box-sizing: border-box; /* 너비와 높이에 padding 및 border 포함 */
+  padding: 8px;
+  /* 내부 여백 */
+  box-sizing: border-box;
+  /* 너비와 높이에 padding 및 border 포함 */
 }
 
 .search-box #id {
@@ -61,118 +74,200 @@ img {
 
 
 .search-button {
-  width: 32px; /* 이미지의 너비 */
-  height: 32px; /* 이미지의 높이 */
-  border: none; /* 테두리 제거 */
-  cursor: pointer; /* 포인터 모양으로 변경 */
+  width: 32px;
+  /* 이미지의 너비 */
+  height: 32px;
+  /* 이미지의 높이 */
+  border: none;
+  /* 테두리 제거 */
+  cursor: pointer;
+  /* 포인터 모양으로 변경 */
 }
 
-form {
-	text-align: center;
-	margin: 20px 0;
+/* 링크의 글자색 제거 */
+a.button-link {
+  text-decoration: none;
+  font-size: 22px;
+  color: rgb(69, 64, 64);
+  font-weight: bolder;
+  padding-left: 20px;
+  vertical-align: middle;
+  line-height: 2;
 }
-
-.head-content {
-	display: flex;
-  padding: 10px;
-}
-
-
-  /* 링크의 글자색 제거 */
-  a.button-link {
-	  text-decoration: none;
-	  font-size: 22px;
-    color: rgb(69, 64, 64);
-    font-weight: bolder;
-    padding-left: 20px;
-    vertical-align: middle;
-    line-height: 2;
-  }
 
 .user_container {
-        display: flex;
-        grid-area: header;
-        text-align: center;
-        background-color: #fff; /* 배경 색상 설정 */
-        padding: 20px; /* 내부 여백 설정 */
-        border-radius: 10px; /* 테두리 반경 설정 */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        height: auto;
-    }
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-area: header;
+  text-align: center;
+  background-color: #fff;
+  /* 배경 색상 설정 */
+  padding: 20px;
+  /* 내부 여백 설정 */
+  border-radius: 10px;
+  /* 테두리 반경 설정 */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  height: auto;
+}
 
-    .user_container > div {
-        margin-right: 20px; /* 각 div 간 간격을 조절할 수 있습니다. */
-    }
+#user_imo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: auto;
+}
 
-    .user_container  img {
-        
-        margin-right: 10px;
-        width: 100px;
-        height: 100px;
-    }
+.item:nth-child(2) {
+  /* 1번 라인에서 2칸 */
+  grid-column: 1 / span 5;
+  /* 1번 라인에서 3칸 */
+  grid-row: 2 / span 3;
+}
 
-    .user_container  p {
-        margin: 0;
-        font-weight: bold;
-        font-size: 40px;
-    }
+#topChampionsList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+#topChampionsList img {
+  margin-right: 50px;
+  /* 이미지 간의 간격 조절 */
+
+}
+
+.user_container>div {
+  margin-right: 20px;
+  /* 각 div 간 간격을 조절할 수 있습니다. */
+}
+
+.user_container img {
+
+  width: 100px;
+  height: 100px;
+}
+
+.user_container p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 40px;
+}
 
 label {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 input[type="text"] {
-	width: 200px;
-	padding: 5px;
-	font-size: 14px;
+  width: 200px;
+  padding: 5px;
+  font-size: 14px;
 }
 
 input[type="submit"] {
-	padding: 5px 10px;
-	font-size: 14px;
-	background-color: #007BFF;
-	color: white;
-	border: none;
-	cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 hr {
-	margin: 20px 0;
+  margin: 20px 0;
 }
 
 .game-header {
-	color: black;
-	padding: 10px;
-	margin-bottom: 5px;
+  color: black;
+  padding: 10px;
+  margin-bottom: 5px;
+  display: flex;
+  border-radius: 10px;
+}
+
+.game-header > div {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .game-details {
-	background-color: #F5F5F5;
-	padding: 10px;
-	border: 1px solid #E0E0E0;
-	margin-bottom: 10px;
+  background-color: #F5F5F5;
+  padding: 10px;
+  border: 1px solid #E0E0E0;
+  margin-bottom: 10px;
 }
 
 
 .game-details table {
-	border-collapse: collapse;
+  border-collapse: collapse;
   width: 100%;
 }
 
-.game-details th, td {
-      border: 1px solid black;
-      padding: 4px;
-      text-align: center;
-      width: auto;
-    }
+.game-details th,
+td {
+  border: 1px solid black;
+  padding: 4px;
+  text-align: center;
+  width: auto;
+}
+
 #bar-item-image {
-	width: 25px;
-	height: 25px;
+  width: 40px;
+  height: 40px;
+}
+
+#bar-champ {
+	margin-left: 100px;
+}
+
+#bar-level {
+	width: 35px;
+	margin-top: 20px;
+}
+
+#bar-item {
+	display: flex;
+	align-items: center;
+	width: 280px;
+}
+
+#bar-time{
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#bar-kda{
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  font-size: 15px;
+  font-weight: bold;
+}
+#bar-winloss {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#bar-goldcs, #bar-ward, #bar-winloss {
+	width: 60px;
+}
+
+#bar-arrow {
+	display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #record-champ-image {
-	width: 50px;
-	height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 #record-item-image {
@@ -180,26 +275,38 @@ hr {
   height: 50px;
 }
 
+#spell-image {
+  width: 25px;
+  height: 25px;
+}
+
+#rune-image {
+  width: 25px;
+  height: 25px;
+}
+
 .win {
-	background-color: #28A745;
-	color: white;
-	padding: 3px 5px;
-	border-radius: 3px;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 3px;
 }
 
 .loss {
-	background-color: #DC3545;
-	color: white;
-	padding: 3px 5px;
-	border-radius: 3px;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 3px;
 }
 
 #winback {
   background-color: #B3CDFF;
+    border-left: 5px solid blue;
+    border-right: 5px solid blue;
 }
 
 #lossback {
   background-color: #FFD8D9;
+  border-left: 5px solid red;
+  border-right: 5px solid red;
 }
 
 
@@ -207,30 +314,48 @@ hr {
   display: flex;
   fles-direction: row;
   text-align: center;
-  background-color: #fff; /* 배경 색상 설정 */
-  padding: 20px; /* 내부 여백 설정 */
-  border-radius: 10px; /* 테두리 반경 설정 */
+  background-color: #fff;
+  /* 배경 색상 설정 */
+  padding: 20px;
+  /* 내부 여백 설정 */
+  border-radius: 10px;
+  /* 테두리 반경 설정 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   grid-area: main;
   height: auto;
-  
+
 }
 
 .record_container {
-	text-align: center;
-  background-color: #fff; /* 배경 색상 설정 */
-  padding: 20px; /* 내부 여백 설정 */
-  border-radius: 10px; /* 테두리 반경 설정 */
+  text-align: center;
+  background-color: #fff;
+  /* 배경 색상 설정 */
+  padding: 20px;
+  /* 내부 여백 설정 */
+  border-radius: 10px;
+  /* 테두리 반경 설정 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   grid-area: sidebar;
 }
 
 .rankImages img {
-	width: 200px;
-	height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
 .rank_div {
-	margin: 20px;
-	margin-left: 40px;
+  margin: 20px;
+  margin-left: 40px;
+}
+
+#pinkward {
+	width: 15px;
+	height: 15px;
+	margin-right: 2px;
+}
+
+#down-image, #up-image {
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
 }

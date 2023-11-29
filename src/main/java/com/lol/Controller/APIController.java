@@ -2,7 +2,6 @@ package com.lol.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,11 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
-
 import com.lol.Service.RiotGamesService;
 import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;
+import com.lol.vo.RuneStyleDTO;
 import com.lol.vo.SummonerDTO;
 import com.lol.vo.SummonerSpellDTO;
 
@@ -26,8 +25,8 @@ public class APIController {
   private RiotGamesService riotGamesService; // RiotGamesService 의존성 주입
 
   @RequestMapping(value="/searchUser")
-  public String searchUser(@RequestParam String id, Model model) throws Exception {// 사용자가 입력한 ID로 사용자 정보 검색
-    
+  public String searchUser(@RequestParam(required = false) String id, Model model) throws Exception {// 사용자가 입력한 ID로 사용자 정보 검색
+    if (id != null && !id.isEmpty()) {
       try {
         // API를 통해 사용자 정보를 가져옴
         SummonerDTO userInfo = riotGamesService.getUserAPI(id);
@@ -60,6 +59,7 @@ public class APIController {
           List<LeagueDTO> summonerRank = riotGamesService.getSummonerRank(userInfo.getId());
           List<SummonerSpellDTO.SummonerSpell> spells = riotGamesService.getSpells();
           List<ChampDTO.Champion> champions = riotGamesService.getChampions();
+          List<RuneStyleDTO> runes = riotGamesService.getRuneStyles();
 
           model.addAttribute("UserInfo", userInfo);
           model.addAttribute("MatchCodes", matchCodes);
@@ -67,6 +67,8 @@ public class APIController {
           model.addAttribute("SummonerRank", summonerRank);
           model.addAttribute("champions", champions);
           model.addAttribute("spells", spells);
+          model.addAttribute("runes", runes);
+
         }
       } catch (HttpClientErrorException e) {
         // HTTP 클라이언트 예외 처리
@@ -78,6 +80,7 @@ public class APIController {
           e.printStackTrace();
         }
       }
+    }
     return "searchUser"; // 최종적으로 반환할 뷰 이름
   }
 
