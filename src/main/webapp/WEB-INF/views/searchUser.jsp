@@ -4,6 +4,7 @@
 			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 				<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 					<%@ page import="java.util.*" %>
+					
 
 
 
@@ -80,24 +81,24 @@
 										<c:if test="${not empty UserInfo}">
 											<div class="container">
 												<div class="user_container">
-													<div class="item" id="user_imo">
+												<div class="item12">
+													<div class="item" id="user-imo">
 														<c:set var="iconPath" value="${userIconPath}${UserInfo.profileIconId}.png" />
 														<img src="${iconPath}">
 														<p>${UserInfo.summonerLevel}</p>
-														<div>
-															${UserInfo.name}
+														
+													</div>
+													<div class="item" id="user-content">
+                            <h1>${UserInfo.name}</h1>
+													</div>
 														</div>
-													</div>
-													<div class="item" id="topChampionsList">
-
-													</div>
-
+														<div class="rank-chart">
 													<c:forEach items="${SummonerRank}" var="rankData" varStatus="loop">
 														<c:set var="winPercentage"
 															value="${Math.round(rankData.wins / (rankData.wins + rankData.losses) * 100)}" />
 														<c:set var="winPercentageInt" value="${Integer.parseInt(winPercentage)}" />
-
-														<div class="item">
+                        <div class="item34">
+													<div class="item" id="rank-donut">
 															<div>
 																<c:choose>
 																	<c:when test="${rankData.queueType eq 'RANKED_FLEX_SR'}">5:5 RANK</c:when>
@@ -111,6 +112,7 @@
 																	${winPercentageInt}%
 																</div>
 															</div>
+														</div>
 														</div>
 														<script>
 															// rankData에서 데이터 추출
@@ -165,7 +167,9 @@
 															});
 														</script>
 													</c:forEach>
+													</div>
 												</div>
+												
 
 
 												<!-- User 랭크 정보 -->

@@ -35,7 +35,6 @@
 <c:set var="spellPath" value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/spell/" />
 <c:set var="perkPath" value="https://ddragon.leagueoflegends.com/cdn/img/" />
 <div class="record_container">
-                <h2>최근 전적</h2>
                 <c:forEach items="${MatchList}" var="match">
                   <div class="game-header" id="${match.info.teams[0].win ? 'winback' : 'lossback'}">
 
@@ -123,7 +122,7 @@
 
                     <!-- 블루 팀 -->
 
-                    <div class="blue-team">
+                    <div class="blue-team" id="${match.info.teams[0].win ? 'winback' : 'lossback'}">
                       <h4>BLUE Team</h4>
                       <table>
                         <thead>
@@ -207,7 +206,7 @@
                     </div>
 
                     <!-- 레드 팀 -->
-                    <div class="red-team">
+                    <div class="red-team" id="${match.info.teams[1].win ? 'winback' : 'lossback'}">
                       <h4>RED Team</h4>
                       <table>
                         <thead>
@@ -292,6 +291,7 @@
                     </div>
                   </div>
                 </c:forEach>
+                <button>버튼</button>
               </div>
 </body>
 </html>

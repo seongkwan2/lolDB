@@ -41,17 +41,11 @@ img {
 
 .search-box form {
   width: 500px;
-  /* 네모 칸의 너비 */
   padding: 15px;
-  /* 내부 여백 */
   border: 1px solid #ccc;
-  /* 테두리 스타일 및 색상 */
   border-radius: 5px;
-  /* 테두리 둥글게 */
   display: flex;
-  /* 요소들을 가로로 배열 */
   flex-direction: row;
-  /* 세로로 정렬 */
   align-items: center;
 }
 
@@ -62,9 +56,7 @@ img {
 
 .search-box input {
   padding: 8px;
-  /* 내부 여백 */
   box-sizing: border-box;
-  /* 너비와 높이에 padding 및 border 포함 */
 }
 
 .search-box #id {
@@ -75,13 +67,9 @@ img {
 
 .search-button {
   width: 32px;
-  /* 이미지의 너비 */
   height: 32px;
-  /* 이미지의 높이 */
   border: none;
-  /* 테두리 제거 */
   cursor: pointer;
-  /* 포인터 모양으로 변경 */
 }
 
 /* 링크의 글자색 제거 */
@@ -96,34 +84,42 @@ a.button-link {
 }
 
 .user_container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-area: header;
   text-align: center;
   background-color: #fff;
-  /* 배경 색상 설정 */
   padding: 20px;
-  /* 내부 여백 설정 */
   border-radius: 10px;
-  /* 테두리 반경 설정 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   height: auto;
 }
 
-#user_imo {
+.item12 {
+	display: flex;
+}
+
+
+.rank-chart {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+}
+
+#user-content {
+	width:500px;
+}
+
+#user-imo {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: auto;
+  width: 200px;
 }
 
-.item:nth-child(2) {
-  /* 1번 라인에서 2칸 */
-  grid-column: 1 / span 5;
-  /* 1번 라인에서 3칸 */
-  grid-row: 2 / span 3;
+#rank-donut {
+	margin-right: 20px;
+	padding-left: 20px;
 }
 
 #topChampionsList {
@@ -135,13 +131,11 @@ a.button-link {
 
 #topChampionsList img {
   margin-right: 50px;
-  /* 이미지 간의 간격 조절 */
 
 }
 
 .user_container>div {
   margin-right: 20px;
-  /* 각 div 간 간격을 조절할 수 있습니다. */
 }
 
 .user_container img {
@@ -299,14 +293,18 @@ td {
 
 #winback {
   background-color: #B3CDFF;
-    border-left: 5px solid blue;
+    border-bottom: 5px solid blue;
     border-right: 5px solid blue;
 }
 
 #lossback {
   background-color: #FFD8D9;
-  border-left: 5px solid red;
+  border-bottom: 5px solid red;
   border-right: 5px solid red;
+}
+
+.blue-team {
+	margin-bottom: 30px;
 }
 
 
@@ -315,11 +313,8 @@ td {
   fles-direction: row;
   text-align: center;
   background-color: #fff;
-  /* 배경 색상 설정 */
   padding: 20px;
-  /* 내부 여백 설정 */
   border-radius: 10px;
-  /* 테두리 반경 설정 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   grid-area: main;
   height: auto;
@@ -329,11 +324,8 @@ td {
 .record_container {
   text-align: center;
   background-color: #fff;
-  /* 배경 색상 설정 */
   padding: 20px;
-  /* 내부 여백 설정 */
   border-radius: 10px;
-  /* 테두리 반경 설정 */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   grid-area: sidebar;
 }

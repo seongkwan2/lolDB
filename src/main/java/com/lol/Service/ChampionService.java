@@ -11,7 +11,7 @@ import com.lol.vo.ChampDTO;
 @Service
 public class ChampionService {
   private final RestTemplate restTemplate;
-  private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
+  private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/championFull.json";
 
   public ChampionService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;

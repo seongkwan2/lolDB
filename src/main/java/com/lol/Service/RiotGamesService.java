@@ -48,7 +48,7 @@ public class RiotGamesService {
 
   //전적을 보기위한 코드를 가져오는 메서드
   public List<String> getMatchCode(String puuid) {
-    String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=20";
+    String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=9";
     HttpHeaders headers = new HttpHeaders();
     headers.set("X-Riot-Token", apiKey);
 
