@@ -1,5 +1,10 @@
 package com.lol.vo;
 
-public class MemberVO {
+import lombok.Data;
 
+@Data
+public class MemberVO {
+  private int no;
+  private String id;
+  private String password;
 }
