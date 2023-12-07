@@ -1,0 +1,120 @@
+body {
+  width: auto;
+  padding: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px #aaa;
+  display: grid;
+}
+
+.navbar {
+	margin-bottom: 20px;
+}
+
+.champion-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.champion-item {
+  width: 250px;; /* 5개씩 나오도록 설정 */
+  padding: 0px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  transition: all 0.2s linear;
+  background-color: black;
+  color: white;
+ }
+  
+  
+  #champion-image {
+     width: 100%;
+     height: 200px;
+  }
+  
+  #champion-image:hover {
+     cursor: pointer;
+     
+  }
+  
+  
+  #champ-name {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+     height: 25%;
+  }
+  
+  #skill-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+.moodal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background-color: #fff;
+     padding: 20px;
+     text-align: center;
+ }
+        
+.modal-item {
+   display: flex;
+   flex-direction: row;
+}        
+
+.modal-skill-item {
+	display: flex;
+   flex-direction: row;
+   margin-bottom: 10px;
+}
+
+#modal-champ-name {
+	font-size: 50px;
+	margin-bottom: 30px;
+}
+
+ #modal-champ-image { 
+	  width: 700px;
+	  height: 600px;
+	  margin-right: 20px;
+ }
+ 
+ #close-icon {
+  font-size: 25px;
+  position: absolute; /* 이미지를 화면에 고정시킵니다. */
+  right: 1200px; /* 원하는 위치로 조절합니다. */
+  margin-top: 20px;
+  color: white;
+  right: 0;
+  margin-right: 50px;
+ }
+ 
+ #close-icon:hover {
+  cursor: pointer;
+ }
+ 
+ p {
+  text-align: left;
+ }
+ 
