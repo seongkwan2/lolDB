@@ -21,87 +21,87 @@ import com.lol.vo.SummonerSpellDTO;
 
 @Service
 public class RiotGamesService {
-  private final RestTemplate restTemplate;
-  @Value("${riot.api.key}")	//api키를 src/main/resorces의 application.properties에서 관리하도록 함
-  private String apiKey;
-  private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
-  private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
-  private final String dataDragonUrl = "https://ddragon.leagueoflegends.com";
+	private final RestTemplate restTemplate;
+	@Value("${riot.api.key}")	//api키를 src/main/resorces의 application.properties에서 관리하도록 함
+	private String apiKey;
+	private final String spellDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/en_US/summoner.json";
+	private final String championDataUrl = "https://ddragon.leagueoflegends.com/cdn/13.22.1/data/ko_KR/champion.json";
+	private final String dataDragonUrl = "https://ddragon.leagueoflegends.com";
 
-  @Autowired
-  public RiotGamesService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-  }
+	@Autowired
+	public RiotGamesService(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
-  //검색한 아이디의 정보를 가져오는 메서드
-  public SummonerDTO getUserAPI(String id) {
-    String url = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + id;
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("X-Riot-Token", apiKey);
+	//검색한 아이디의 정보를 가져오는 메서드
+	public SummonerDTO getUserAPI(String id) {
+		String url = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + id;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Riot-Token", apiKey);
 
-    HttpEntity<String> entity = new HttpEntity<>(headers);
-    ResponseEntity<SummonerDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, SummonerDTO.class);
-    return response.getBody();
-  }
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<SummonerDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, SummonerDTO.class);
+		return response.getBody();
+	}
 
-  //전적을 보기위한 코드를 가져오는 메서드
-  public List<String> getMatchCode(String puuid) {
-    String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=20";
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("X-Riot-Token", apiKey);
+	//전적을 보기위한 코드를 가져오는 메서드
+	public List<String> getMatchCode(String puuid) {
+		String url = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=20";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Riot-Token", apiKey);
 
-    HttpEntity<String> entity = new HttpEntity<>(headers);
-    ResponseEntity<List<String>> response = restTemplate.exchange(
-        url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<String>>() {});
-    return response.getBody();
-  }
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<List<String>> response = restTemplate.exchange(
+				url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<String>>() {});
+		return response.getBody();
+	}
 
-  //가져온 코드로 전적을 보기위한 메서드
-  public MatchDTO getMatch(String matchCode) {
-    String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchCode;
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("X-Riot-Token", apiKey);
+	//가져온 코드로 전적을 보기위한 메서드
+	public MatchDTO getMatch(String matchCode) {
+		String url = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchCode;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-Riot-Token", apiKey);
 
-    HttpEntity<String> entity = new HttpEntity<>(headers);
-    ResponseEntity<MatchDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, MatchDTO.class);
-    return response.getBody();
-  }
+		HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<MatchDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, MatchDTO.class);
+		return response.getBody();
+	}
 
-  // 랭크 메서드
-  public List<LeagueDTO> getSummonerRank(String summonerId) {
-    String url = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId + "?api_key=" + apiKey;
+	// 랭크 메서드
+	public List<LeagueDTO> getSummonerRank(String summonerId) {
+		String url = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId + "?api_key=" + apiKey;
 
-    ResponseEntity<LeagueDTO[]> response = restTemplate.getForEntity(url, LeagueDTO[].class);
+		ResponseEntity<LeagueDTO[]> response = restTemplate.getForEntity(url, LeagueDTO[].class);
 
-    return Arrays.asList(response.getBody());
-  }
+		return Arrays.asList(response.getBody());
+	}
 
 
-  // champ json 받기위한 메서드
-  public List<ChampDTO.Champion> getChampions() {
-    ResponseEntity<ChampDTO> response = restTemplate.getForEntity(championDataUrl, ChampDTO.class);
-    ChampDTO champData = response.getBody();
+	// champ json 받기위한 메서드
+	public List<ChampDTO.Champion> getChampions() {
+		ResponseEntity<ChampDTO> response = restTemplate.getForEntity(championDataUrl, ChampDTO.class);
+		ChampDTO champData = response.getBody();
 
-    List<ChampDTO.Champion> champions = new ArrayList<>();
+		List<ChampDTO.Champion> champions = new ArrayList<>();
 
-    if(champData != null) {
-      Map<String, ChampDTO.Champion> championMap = champData.getData();
-      champions.addAll(championMap.values());
-    }
-    return champions;
-  }
+		if(champData != null) {
+			Map<String, ChampDTO.Champion> championMap = champData.getData();
+			champions.addAll(championMap.values());
+		}
+		return champions;
+	}
 
-  // spell json
-  public List<SummonerSpellDTO.SummonerSpell> getSpells() {
-    ResponseEntity<SummonerSpellDTO> response = restTemplate.getForEntity(spellDataUrl, SummonerSpellDTO.class);
-    SummonerSpellDTO spellData = response.getBody();
+	// spell json
+	public List<SummonerSpellDTO.SummonerSpell> getSpells() {
+		ResponseEntity<SummonerSpellDTO> response = restTemplate.getForEntity(spellDataUrl, SummonerSpellDTO.class);
+		SummonerSpellDTO spellData = response.getBody();
 
-    List<SummonerSpellDTO.SummonerSpell> spells = new ArrayList<>();
+		List<SummonerSpellDTO.SummonerSpell> spells = new ArrayList<>();
 
-    if(spellData != null) {
-      Map<String, SummonerSpellDTO.SummonerSpell> spellMap = spellData.getData();
-      spells.addAll(spellMap.values());
-    }
-    return spells;
-  }
+		if(spellData != null) {
+			Map<String, SummonerSpellDTO.SummonerSpell> spellMap = spellData.getData();
+			spells.addAll(spellMap.values());
+		}
+		return spells;
+	}
 }

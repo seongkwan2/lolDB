@@ -15,6 +15,56 @@ img {
 	border-radius: 20%;
 }
 
+/*헤더*/
+header{
+	text-decoration: none;
+}
+header .login{
+	font-size:18px;
+	text-align: right;
+}
+header .login:hover{
+	color:orange;
+	cursor: pointer;
+}
+
+nav { /*가운데정렬 3종세트*/
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0px 5px;
+}
+
+nav a {
+  display: flex;
+  height: 20px;
+  padding: 10px;	/*글자 사이 간격*/
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none; /*하이퍼링크 밑줄 제거*/
+  color: #1c2b37;
+  text-align: center;
+}
+
+.menuTop a:hover {
+	color:orange;
+}
+
+.login_Link{
+	text-decoration: none;
+	padding: 10px;
+	color: #1c2b37;
+}
+
+.login_Link:hover{
+	color:lightblue;
+}
+
+
 .container {
 	display: grid;
   grid-template-rows: 1fr 1fr;
@@ -72,10 +122,11 @@ form {
 	margin: 20px 0;
 }
 
+/*
 .head-content {
 	display: flex;
   padding: 10px;
-}
+}*/
 
 
   /* 링크의 글자색 제거 */
