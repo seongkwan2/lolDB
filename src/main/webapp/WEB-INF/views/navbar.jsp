@@ -36,7 +36,7 @@
 							<a href="/championImages" class="nav-link">Champ</a>
 						</form>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Board</a></li>
+					<li class="nav-item"><a class="nav-link" href="/board/boardMain">Board</a></li>
 					<li class="nav-item"><a class="nav-link disabled"
 						aria-disabled="true">Disabled</a></li>
 				</ul>
