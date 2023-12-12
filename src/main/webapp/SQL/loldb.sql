@@ -111,13 +111,20 @@ UPDATE lol_board SET board_dislikes = board_dislikes + 1 WHERE board_id = :ê²Œì‹
 
 
 
+CREATE TABLE lol_member(
+    m_num number NOT NULL PRIMARY KEY,
+    m_id VARCHAR(15) UNIQUE NOT NULL,
+    m_pwd VARCHAR(30)
+);
+
+CREATE SEQUENCE lol_member_seq
+START WITH 1 INCREMENT BY 1 NOCACHE;
+
+COMMIT;
+
+SELECT * FROM lol_member;
 
 
-
-
-
-
-
-
+INSERT INTO lol_member VALUES(lol_member_seq.nextval,'zz3195','1');
 
 
