@@ -6,18 +6,26 @@ m_pwd varchar2(200),
 m_email varchar2(200)
 );
 
+SELECT * FROM lol_member;
+
 -- 게시판 테이블
 CREATE TABLE lol_board (
-  board_num number primary key,
-  board_id varchar2(30) REFERENCES lol_member(m_id), --작성자
-  board_title VARCHAR2(255),
-  board_content CLOB,
-  board_created TIMESTAMP,
-  board_category VARCHAR2(50),
-  board_views NUMBER DEFAULT 0, --조회수
-  board_likes NUMBER DEFAULT 0, -- 추천 수 필드 (기본값은 0)
-  board_dislikes NUMBER DEFAULT 0 -- 비추천 수 필드 (기본값은 0)
+  b_num number primary key,
+  b_id varchar2(30) REFERENCES lol_member(m_id), --작성자
+  b_title VARCHAR2(255),
+  b_cont CLOB,
+  b_time TIMESTAMP,
+  b_category VARCHAR2(50),
+  b_hits NUMBER DEFAULT 0, --조회수
+  b_likes NUMBER DEFAULT 0 -- 추천 수 필드 (기본값은 0)
 );
+
+--ㅡㅡㅡㅡㅡㅡㅡㅡㅡ게시판 데이터 추가 (테스트)ㅡㅡㅡ
+INSERT INTO lol_board values(lol_board_seq.nextval,'zz3195','테스트 제목 입니다','테스트 내용 입니다','2023-12-11','자유게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zz3195','두번째 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','자유게시판',1,0);
+
+SELECT * FROM lol_board;
+commit;
 
 -- 시퀀스
 CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;

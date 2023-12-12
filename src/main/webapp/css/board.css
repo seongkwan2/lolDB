@@ -1,0 +1,76 @@
+/* board 메인 페이지 메뉴 */
+body {
+    padding-left: 120px;
+}
+
+/* 질문 검색바 부모 컨테이너 */
+.search-container {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+/* 질문 검색바 */
+.search_bar {
+    display: flex; /* 수평 가운데 정렬을 위해 flex 컨테이너로 설정 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    border-radius: 7px;
+    background-color: #49557d;
+    height: 100px;
+    text-align: center;
+    width: 900px;
+    height: 50px;
+}
+
+.search_box {
+    width: 80%;
+    border: 1px solid #bbb;
+    font-size: 100%;
+    margin-left: 20px;
+}
+
+.box {
+    position: relative;
+    text-align: center;
+    width: auto;
+    margin: auto;
+}
+
+.search_word {
+    text-align: center;
+    list-style: none;
+    font-size: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+/*전체글, 개념글, 공지사항*/
+.interface{
+	font-size:20px;
+	margin-left:200px;
+}
+
+
+/*게시글 목록*/
+.board-container{
+	text-align: center;
+	justify-content: center;
+	display: flex;
+	
+}
+/* 전체 테이블의 스타일 */
+.board-container table {
+    width: 80%; /* 테이블의 너비를 부모 컨테이너의 80%로 설정 */
+    margin: auto; /* 가운데 정렬 */
+}
+
+/* 각 셀(td)의 스타일 */
+.board-container td {
+    padding: 10px; /* 셀 안에 여백 추가 */
+}
+
+.board-container td:hover{
+	background-color: lightgray;
+}
