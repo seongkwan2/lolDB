@@ -11,4 +11,6 @@ public interface BoardService {
 
 	int getListCount(PageVO p);
 
+	void writeBoard(BoardVO boardInfo);
+
 }

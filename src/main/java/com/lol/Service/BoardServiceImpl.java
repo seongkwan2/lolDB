@@ -24,4 +24,9 @@ public class BoardServiceImpl implements BoardService {
 	public int getListCount(PageVO p) {
 		return this.boardDao.getListCount(p);
 	}
+
+	@Override
+	public void writeBoard(BoardVO boardInfo) {
+		this.boardDao.writeBoard(boardInfo);
+	}
 }

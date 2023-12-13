@@ -6,36 +6,27 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>게시판 메인페이지</title>
 <script src="/js/jquery.js"></script>
 <link href="/css/main.css" rel="stylesheet"/>
 <link href="/css/board.css" rel="stylesheet"/>
 </head>
 <body>
 <%@ include file="../navbar.jsp"%>
+<%@ include file="boardHeader.jsp"%>
 
-<div class="clear"></div>
-
-<%-- 질문 검색바 --%>
-<div class="search-container">
-	<form>
-	
-	<div class="search_bar">
-	      <input type="search" name="find_name" id="find_name" 
-	      class="search_box" placeholder="&nbsp; 검색" value="${find_name}">
-	      
-	      <input type="submit" class="box" value="찾기">                                                                                                                                                                                
-	      <input type="button" class="box" value="설정">                                                                                                                                                                                
-	</div>
-	</form>
-</div>
-
-<br><br>
 
 <div class="interface">
 <input type="button" value="전체글">
 <input type="button" value="개념글">
 <input type="button" value="공지사항">
+<input type="button" value="글쓰기" style="float:right; margin-right: 200px" onclick = "goWrite()";>
+<script>
+	function goWrite(){
+		location = '/board/boardWrite';
+	}
+
+</script>
 </div>
 
 <br>
@@ -59,7 +50,8 @@
 </div>
 
 <%--페이징(쪽나누기)--%>
-<div id="page_control">
+<br>
+<div id="page_control" style="display: flex; align-items: center; justify-content: center; font-size:18px">
 	<%--검색전 페이징 --%>
 	<c:if test="${(empty find_field)&&(empty find_name)}">
 		<c:if test="${page <=1}">[이전]&nbsp;</c:if>

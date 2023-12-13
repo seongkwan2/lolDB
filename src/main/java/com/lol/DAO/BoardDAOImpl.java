@@ -24,6 +24,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getListCount(PageVO p) {
 		return this.sqlSession.selectOne("getListCount",p);
 	}
+
+	@Override
+	public void writeBoard(BoardVO boardInfo) {
+		this.sqlSession.insert("boardInfo",boardInfo);
+	}
 	
 	
 }

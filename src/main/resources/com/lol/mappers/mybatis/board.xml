@@ -16,4 +16,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(b_num) from lol_board
 	</select>
 	
+	<!-- 게시판 글쓰기 -->
+	<insert id="boardInfo" parameterType="board">
+		INSERT INTO lol_board values(lol_board_seq.nextval,#{b_id},#{b_title},#{b_cont},sysdate,#{b_category},0,0)
+	</insert>
+	
 </mapper>

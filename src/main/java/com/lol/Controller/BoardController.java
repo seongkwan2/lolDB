@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lol.Service.BoardService;
+import com.lol.Service.MemberService;
 import com.lol.vo.BoardVO;
 import com.lol.vo.PageVO;
 
@@ -20,6 +22,9 @@ public class BoardController {
 	//해야할것, 의존성 추가 게시판제작, 페이징, 조회수, 좋아요 처리
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	//보드 메인 화면
 	@RequestMapping(value="/boardMain")
@@ -50,11 +55,8 @@ public class BoardController {
 		int endpage=maxpage;
 		if(endpage>startpage+10-1) endpage=startpage+10-1;
 
-
 		ModelAndView mv = new ModelAndView();
 		List<BoardVO> boardList = this.boardService.getBoardList();
-
-		
       
 		mv.addObject("boardList", boardList);
 		mv.addObject("page",page);// 쪽번호
@@ -67,6 +69,34 @@ public class BoardController {
 		
 		mv.setViewName("/board/boardMain");
 
+		return mv;
+	}
+	
+	@RequestMapping(value="/boardWrite")
+	public ModelAndView boardWrite() {
+		ModelAndView mv = new ModelAndView();
+		
+		//세션을 이용하거나 어쨌거나 , 현재 로그인 정보를 가져옴 (글쓴이를 등록하기 위함)
+		//this.memberService.getMemberInfo(); 로그인 완성시 활성화 시키도록 함
+		
+		mv.setViewName("/board/boardWrite");
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
+	public ModelAndView boardWrite(BoardVO boardInfo) {
+		ModelAndView mv = new ModelAndView();
+		
+		//세션을 이용하거나 어쨌거나 , 현재 로그인 정보를 가져옴 (글쓴이를 등록하기 위함)
+		//this.memberService.getMemberInfo(); 로그인 완성시 활성화 시키도록 함
+		
+		//글쓴것을 DB에 저장
+		this.boardService.writeBoard(boardInfo);
+		
+		
+		mv.setViewName("/board/boardWrite");
+		
 		return mv;
 	}
 }
