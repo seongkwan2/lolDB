@@ -26,8 +26,23 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public void writeBoard(BoardVO boardInfo) {
-		this.sqlSession.insert("boardInfo",boardInfo);
+	public int writeBoard(BoardVO boardInfo) {
+		return this.sqlSession.insert("writeBoard",boardInfo);
+	}
+
+	@Override
+	public BoardVO getCont(long b_num) {
+		return this.sqlSession.selectOne("getCont",b_num);
+	}
+
+	@Override
+	public int boardDel(long b_num) {
+		return this.sqlSession.delete("boardDel",b_num);
+	}
+
+	@Override
+	public int boardUpdate(BoardVO boardInfo) {
+		return this.sqlSession.update("boardUpdate",boardInfo);
 	}
 	
 	

@@ -11,6 +11,12 @@ public interface BoardDAO {
 
 	int getListCount(PageVO p);
 
-	void writeBoard(BoardVO boardInfo);
+	int writeBoard(BoardVO boardInfo);
+
+	BoardVO getCont(long b_num);
+
+	int boardDel(long b_num);
+
+	int boardUpdate(BoardVO boardInfo);
 
 }

@@ -11,11 +11,10 @@ public class BoardVO {
 	private String b_id;
 	private String b_title;
 	private String b_cont;
-	private Date b_time;
+	private Date b_date;
 	private String b_category;
 	private int b_hits;
 	private int b_likes;
-
 }
 
 

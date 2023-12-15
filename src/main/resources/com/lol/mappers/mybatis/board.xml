@@ -17,8 +17,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 게시판 글쓰기 -->
-	<insert id="boardInfo" parameterType="board">
+	<insert id="writeBoard" parameterType="board">
 		INSERT INTO lol_board values(lol_board_seq.nextval,#{b_id},#{b_title},#{b_cont},sysdate,#{b_category},0,0)
 	</insert>
 	
+	<!-- 글번호로 글정보들을 가져오기 -->
+	<select id="getCont" resultType="board">
+		SELECT * FROM lol_board where b_num = #{b_num}
+	</select>
+	
+	<!-- 글 삭제 -->
+	<delete id="boardDel">
+		DELETE lol_board where b_num = #{b_num}
+	</delete>
+	
+	<!-- 글 수정 -->
+	<update id="boardUpdate" parameterType="board">
+		UPDATE lol_board SET b_title = #{b_title}, b_cont= #{b_cont}, b_date = sysdate WHERE b_num = #{b_num}
+	</update>
 </mapper>

@@ -25,7 +25,6 @@
 	function goWrite(){
 		location = '/board/boardWrite';
 	}
-
 </script>
 </div>
 
@@ -39,9 +38,9 @@
 		<c:forEach var="board" items="${boardList}">
 		<tr>
 				<td>${board.b_num}</td>
-				<td>${board.b_title}</td>
+				<td><a href = "boardCont?b_num=${board.b_num}">${board.b_title}</td></a>
 				<td>${board.b_id}</td>
-				<td><fmt:formatDate value="${board.b_time}" pattern="yyyy-MM-dd"/> </td>
+				<td><fmt:formatDate value="${board.b_date}" pattern="yyyy-MM-dd"/> </td>
 				<td>${board.b_hits}</td>
 				<td>${board.b_likes}</td>
 		</tr>
@@ -100,6 +99,15 @@
 	<input type="button" value="전체목록" onclick="location='boardMain?page=${page}';" />
 </c:if>
 </div>
+
+<%--alert 메시지에 반응하는 코드 --%>
+<c:if test="${not empty alert_message}">
+    <script>
+        alert('${alert_message}');	//addFlashAttribute로 생성한것은 1회사용후 사라지기에 삭제코드가 필요없음
+    </script>
+</c:if>
+
+
 
 </body>
 </html>

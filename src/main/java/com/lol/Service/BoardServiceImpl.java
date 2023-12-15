@@ -26,7 +26,22 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void writeBoard(BoardVO boardInfo) {
-		this.boardDao.writeBoard(boardInfo);
+	public int writeBoard(BoardVO boardInfo) {
+		return this.boardDao.writeBoard(boardInfo);
+	}
+
+	@Override
+	public BoardVO getCont(long b_num) {
+		return this.boardDao.getCont(b_num);
+	}
+
+	@Override
+	public int boardDel(long b_num) {
+		return this.boardDao.boardDel(b_num);
+	}
+
+	@Override
+	public int boardUpdate(BoardVO boardInfo) {
+		return this.boardDao.boardUpdate(boardInfo);
 	}
 }

@@ -14,19 +14,31 @@ CREATE TABLE lol_board (
   b_id varchar2(30) REFERENCES lol_member(m_id), --작성자
   b_title VARCHAR2(255),
   b_cont CLOB,
-  b_time TIMESTAMP,
+  b_date TIMESTAMP,
   b_category VARCHAR2(50),
   b_hits NUMBER DEFAULT 0, --조회수
   b_likes NUMBER DEFAULT 0 -- 추천 수 필드 (기본값은 0)
 );
+
+SELECT * FROM lol_board where b_num = 39;
 
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡ게시판 데이터 추가 (테스트)ㅡㅡㅡ
 INSERT INTO lol_board values(lol_board_seq.nextval,'zz3195','테스트 제목 입니다','테스트 내용 입니다','2023-12-11','자유게시판',1,0);
 INSERT INTO lol_board values(lol_board_seq.nextval,'zz3195','두번째 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','자유게시판',1,0);
 
 SELECT * FROM lol_board;
-commit;
 
+
+UPDATE lol_board where b_num = 1
+
+UPDATE lol_board SET b_title = '안녕하십니까', b_cont='테스트 내용작성', b_date = sysdate WHERE b_num = 7;
+
+DELETE lol_board where b_num = 40;
+
+drop table lol_board;
+drop sequence lol_board_seq;
+commit;
+delete lol_board;
 -- 시퀀스
 CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;
 CREATE SEQUENCE lol_board_seq START WITH 1 INCREMENT BY 1 NOCACHE;

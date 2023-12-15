@@ -1,14 +1,22 @@
 package com.lol.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lol.Service.BoardService;
 import com.lol.Service.MemberService;
@@ -26,8 +34,8 @@ public class BoardController {
 	@Autowired
 	private MemberService memberService;
 
-	//보드 메인 화면
-	@RequestMapping(value="/boardMain")
+	//게시판 메인 페이지
+	@GetMapping(value="/boardMain")
 	public ModelAndView boardMain(HttpServletRequest request, PageVO p) {
 		int page=1;
 		int limit=10;
@@ -72,31 +80,102 @@ public class BoardController {
 		return mv;
 	}
 	
+	//글쓰기 폼
 	@RequestMapping(value="/boardWrite")
-	public ModelAndView boardWrite() {
+	public String boardWrite() {
+	    // 현재 로그인 정보 가져오기 로직
+	    // this.memberService.getMemberInfo(); // 로그인 완성 시 활성화
+
+	    return "/board/boardWrite";
+	}
+	
+	//글쓰기 액션
+	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
+	public String boardWrite(@ModelAttribute BoardVO boardInfo, RedirectAttributes redirectAttributes) {
+	    int result = this.boardService.writeBoard(boardInfo);
+	    if (result == 1) {
+	        redirectAttributes.addFlashAttribute("alert_message", "글 쓰기 성공!");
+	        return "redirect:/board/boardMain";
+	    } else {
+	        redirectAttributes.addFlashAttribute("alert_message", "글 쓰기 실패!");
+	        return "redirect:/board/boardWrite";
+	    }
+	}
+
+
+	
+	//글확인 //Get매핑으로 바꾸면 에러가남
+	@RequestMapping(value="/boardCont")
+	public ModelAndView boardCont(@RequestParam("b_num") long b_num) {
 		ModelAndView mv = new ModelAndView();
 		
-		//세션을 이용하거나 어쨌거나 , 현재 로그인 정보를 가져옴 (글쓴이를 등록하기 위함)
-		//this.memberService.getMemberInfo(); 로그인 완성시 활성화 시키도록 함
+		//글번호를 기준으로 글의 정보를 가져오기
+		BoardVO boardInfo = this.boardService.getCont(b_num);
 		
-		mv.setViewName("/board/boardWrite");
-		
+		mv.addObject("boardInfo", boardInfo);
+		mv.setViewName("/board/boardCont");
 		return mv;
 	}
 	
-	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
-	public ModelAndView boardWrite(BoardVO boardInfo) {
+	
+	//글삭제
+	@GetMapping(value="/boardDel")
+	public String boardDel(@RequestParam("b_num") long b_num, RedirectAttributes redirectAttributes) {
+	    int result = this.boardService.boardDel(b_num);
+	    if (result == 1) {
+	        redirectAttributes.addFlashAttribute("alert_message", "글 삭제 성공!");
+	        return "redirect:/board/boardMain";
+	    } else {
+	        redirectAttributes.addFlashAttribute("alert_message", "글 삭제 실패!");
+	        return "redirect:/board/boardWrite";
+	    }
+	}
+	
+	//글수정 폼
+	@RequestMapping(value="/boardUpdate")
+	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num) {
 		ModelAndView mv = new ModelAndView();
 		
-		//세션을 이용하거나 어쨌거나 , 현재 로그인 정보를 가져옴 (글쓴이를 등록하기 위함)
-		//this.memberService.getMemberInfo(); 로그인 완성시 활성화 시키도록 함
+		BoardVO boardInfo = this.boardService.getCont(b_num);
 		
-		//글쓴것을 DB에 저장
-		this.boardService.writeBoard(boardInfo);
-		
-		
-		mv.setViewName("/board/boardWrite");
-		
+		mv.addObject("boardInfo", boardInfo);
+		mv.setViewName("/board/boardUpdate");
 		return mv;
 	}
+	
+	
+	//글수정 액션
+	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> boardUpdate(@RequestBody BoardVO boardInfo) {
+	    Map<String, String> resultMap = new HashMap<>();
+	    
+	    int result = this.boardService.boardUpdate(boardInfo);
+	    if (result == 1) {
+	        resultMap.put("result", "success");
+	    } else {
+	        resultMap.put("result", "fail");
+	    }
+	    
+	    return resultMap;
+	}
+	
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
