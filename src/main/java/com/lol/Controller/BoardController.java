@@ -104,13 +104,14 @@ public class BoardController {
 
 
 	
-	//글확인 //Get매핑으로 바꾸면 에러가남
-	@RequestMapping(value="/boardCont")
+	//글확인
+	@GetMapping(value="/boardCont")
 	public ModelAndView boardCont(@RequestParam("b_num") long b_num) {
 		ModelAndView mv = new ModelAndView();
 		
 		//글번호를 기준으로 글의 정보를 가져오기
 		BoardVO boardInfo = this.boardService.getCont(b_num);
+		this.boardService.plusHits(b_num);	//조회수 증가
 		
 		mv.addObject("boardInfo", boardInfo);
 		mv.setViewName("/board/boardCont");

@@ -48,15 +48,15 @@
             추천수
             <input type="text" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" ><br> 
             
-            <input type="submit" id="editButton" value="수정완료">
-            <input type="button" value="목록으로" onclick="goBoardMain();">
+            <input type="submit" class="button" id="editButton" value="수정완료">
+            <input type="button" class="button" value="이전으로" onclick="goBack();">
+            <input type="button" class="button" value="목록으로" onclick="goBoardMain();">
             
         </form>
     </div>
 
 <script>
 
-//@RequestBody와 JSON으로 전달되지 않는 문제 해결할것 자꾸 415에러가 나타남 
 $("#editButton").click(function(event) {
     event.preventDefault(); // 폼 기본 제출 방지
 
@@ -91,6 +91,10 @@ $("#editButton").click(function(event) {
         }
     });
 });
+
+function goBack(){
+	window.history.back();
+}
 </script>
 
 

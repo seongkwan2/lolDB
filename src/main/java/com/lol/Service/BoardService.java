@@ -19,4 +19,6 @@ public interface BoardService {
 
 	int boardUpdate(BoardVO boardInfo);
 
+	void plusHits(long b_num);
+
 }

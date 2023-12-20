@@ -44,4 +44,9 @@ public class BoardServiceImpl implements BoardService {
 	public int boardUpdate(BoardVO boardInfo) {
 		return this.boardDao.boardUpdate(boardInfo);
 	}
+
+	@Override
+	public void plusHits(long b_num) {
+		this.boardDao.plusHits(b_num);
+	}
 }

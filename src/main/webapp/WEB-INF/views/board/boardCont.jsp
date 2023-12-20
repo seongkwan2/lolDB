@@ -17,7 +17,7 @@
     <div class="board_con">
         <h2 style="text-align: center;">글 확인</h2><br>
         
-        <form action="/board/boardUpdate?b_num=${boardInfo.b_num}" method="post">
+        <form action="/board/boardUpdate?b_num=${boardInfo.b_num}">
            	<!-- 글 번호 -->
             글번호 : ${boardInfo.b_num}
             <input type="hidden" name="b_num" id="b_num" value="${boardInfo.b_num}" readOnly><br>
@@ -39,15 +39,15 @@
             
             <!-- 글 제목 -->
             제목
-            <input type="text" name="b_title" id="b_title" value="${boardInfo.b_title}" ><br>
+            <input type="text" name="b_title" id="b_title" value="${boardInfo.b_title}" readOnly><br>
             
             <!-- 글 내용 -->
             내용
-            <textarea name="b_cont" rows="5" id="b_cont">${boardInfo.b_cont}</textarea><br>
+            <textarea name="b_cont" rows="5" id="b_cont" readOnly>${boardInfo.b_cont}</textarea><br>
             
             <!-- 추천수-->
             추천수 : ${boardInfo.b_likes}
-            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" ><br> 
+            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" readOnly><br> 
             
             <!-- 추천버튼 -->
             <input type = "button" value="추천하기"> <br><br><br><br>

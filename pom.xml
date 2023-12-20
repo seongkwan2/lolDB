@@ -19,6 +19,18 @@
 	</properties>
 	<dependencies>
 	
+	
+		<!-- 로깅 라이브러리 (로그확인) -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+			</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		</dependency>
+		
+	
 		<!--  jsp 실행 가능하게 함. -->
        <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
@@ -30,7 +42,6 @@
        <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
-         <version>1.2</version>
        </dependency>
 	
         <dependency> 
@@ -43,7 +54,6 @@
       <dependency>
           <groupId>commons-codec</groupId>
           <artifactId>commons-codec</artifactId>
-          <version>1.15</version> 
       </dependency>
 	
 		<!-- cos 이진파일(파일첨부 -> 자료실 기능) 업로드 라이브러리 추가 -->

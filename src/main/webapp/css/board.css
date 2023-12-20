@@ -74,3 +74,21 @@ body {
 .board-container td:hover{
 	background-color: lightgray;
 }
+
+.button {
+	background-color: gray;
+	border: none;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+ .button:hover {
+	background-color: darkgray;
+ }

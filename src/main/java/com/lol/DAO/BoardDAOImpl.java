@@ -44,6 +44,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public int boardUpdate(BoardVO boardInfo) {
 		return this.sqlSession.update("boardUpdate",boardInfo);
 	}
+
+	@Override
+	public void plusHits(long b_num) {
+		this.sqlSession.update("plusHits",b_num);
+	}
 	
 	
 }
