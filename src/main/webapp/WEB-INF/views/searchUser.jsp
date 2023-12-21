@@ -23,7 +23,7 @@
 	<c:set var="champIconPath"
 		value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
 	<%-- ∥ 네비바부분 입니다. ∥ --%>
-	<%@ include file="navbar.jsp"%>
+	<%@ include file="./include/header.jsp" %>
 
 	<%-- ∥ 아이디 검색부분 입니다. ∥ --%>
 	<div class="search-box">

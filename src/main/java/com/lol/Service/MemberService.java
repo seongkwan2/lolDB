@@ -4,6 +4,9 @@ import com.lol.vo.MemberVO;
 
 public interface MemberService {
 
-	void signTest(MemberVO m);
+	MemberVO findMemberId(String m_id);
+
+	//회원가입
+	void registerMember(MemberVO memberInfo);
 
 }

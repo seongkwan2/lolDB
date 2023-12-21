@@ -9,13 +9,14 @@
 <html>
 <head>
 <link rel="stylesheet" href="/css/championimages.css">
+<link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
 <title>챔피언 이미지 목록</title>
 </head>
 <body>
 
-	<%@ include file="navbar.jsp" %>
+	<%@ include file="./include/header.jsp" %>
 	<c:set var="imageBasePath"
 		value="https://ddragon.leagueoflegends.com/cdn/13.22.1/img/champion/" />
 	<c:set var="champImagePath"

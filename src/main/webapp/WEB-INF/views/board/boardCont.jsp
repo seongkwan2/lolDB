@@ -7,11 +7,11 @@
     <title>글 수정</title>
     <script src="/js/jquery.js"></script>
     <link href="/css/main.css" rel="stylesheet"/>
-    <link href="/css/board.css" rel="stylesheet"/>
-    <link href="/css/boardWrite.css" rel="stylesheet"/>
+    <link href="/css/board/board.css" rel="stylesheet"/>
+    <link href="/css/board/boardWrite.css" rel="stylesheet"/>
 </head>
 <body>
-    <%@ include file="../navbar.jsp"%>
+    <%@ include file="../include/header.jsp" %>
     <%@ include file="boardHeader.jsp"%>
 
     <div class="board_con">

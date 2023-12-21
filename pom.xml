@@ -19,7 +19,6 @@
 	</properties>
 	<dependencies>
 	
-	
 		<!-- 로깅 라이브러리 (로그확인) -->
 		<dependency>
 		    <groupId>org.slf4j</groupId>

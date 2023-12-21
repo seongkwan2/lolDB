@@ -1,0 +1,150 @@
+@charset "UTF-8";
+#wrap {
+	width: 500px;
+	height: 700px;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	margin: 0 auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+#logo {
+	font-family: 'Inter', sans-serif;
+	width: 400px;
+	height: 100px;
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 auto;
+	margin-top: 50px;
+	letter-spacing: 8px;
+}
+
+#logo>hr {
+	width: 300px;
+	color: #dcdcdc;
+}
+
+#idform, #pwdform, #maintain, #form3, #another_form, #social, #ano {
+	width: 400px;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+input:focus {
+	outline: 2px solid #dcdcdc;
+}
+
+#id_form, #pwd_form, #button_form, #another_form, #social, #ano {
+	text-align: center;
+}
+
+#m_id, #m_pwd, #m_name, #m_birth, #m_phone, #m_email {
+	background-image: url('../../imgs/member/people.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 20px center;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	text-indent: 3em;
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
+	margin-top: 20px;
+}
+
+#password {
+	background-image: url('../../imgs/member/lock_icon.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 20px center;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	text-indent: 3em;
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
+	margin-top: 20px;
+}
+
+#btn1 {
+	width: 400px;
+	height: 50px;
+	background-color: #dcdcdc;
+	border: none;
+	border-radius: 10px;
+	color: #505050;
+	font-size: 20px;
+	letter-spacing: 15px;
+	cursor: pointer;
+}
+
+a {
+	text-decoration: none;
+	color: #bebebe;
+}
+
+#another_form>a {
+	color: #8c8c8c;
+}
+
+/*로그인 상태 체크*/
+#maintain {
+	font-size: 15px;
+	color: #8c8c8c;
+}
+
+input[id="remember-me"] {
+	position: relative;
+	top: 3px;
+	cursor: pointer;
+}
+
+label[for="remember-me"] {
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+/*버튼의 색상과 타입*/
+input[type="checkbox"] {
+	width: 1rem;
+	height: 1rem;
+	border-radius: 50%;
+	border: 1px solid #999;
+	appearance: none;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+input[type="checkbox"]:checked {
+	background-color: gray;
+	border: none;
+}
+
+#another_form {
+	margin-top: 20px;
+	padding: 10px;
+	font-size: 15px;
+	color: #8c8c8c;
+}
+
+#social {
+	margin: auto;
+	text-align: center;
+	margin: 10px;
+	margin-left: 70px;
+}
+
+#social>a>img {
+	margin-right: 50px;
+	width: 60px;
+	height: 60px;
+}
+
+#ano {
+	margin-top: 30px;
+	padding: 20px;
+}

@@ -4,6 +4,10 @@ import com.lol.vo.MemberVO;
 
 public interface MemberDAO {
 
-	void signTest(MemberVO memberInfo);
+	MemberVO findMemberId(String m_id);
+
+	void insertMember(MemberVO memberInfo);
+
+	void insertMemberRole(MemberVO memberInfo);
 
 }

@@ -94,10 +94,10 @@ public class BoardController {
 	public String boardWrite(@ModelAttribute BoardVO boardInfo, RedirectAttributes redirectAttributes) {
 	    int result = this.boardService.writeBoard(boardInfo);
 	    if (result == 1) {
-	        redirectAttributes.addFlashAttribute("alert_message", "글 쓰기 성공!");
+	        redirectAttributes.addFlashAttribute("message", "글 쓰기 성공!");
 	        return "redirect:/board/boardMain";
 	    } else {
-	        redirectAttributes.addFlashAttribute("alert_message", "글 쓰기 실패!");
+	        redirectAttributes.addFlashAttribute("message", "글 쓰기 실패!");
 	        return "redirect:/board/boardWrite";
 	    }
 	}
@@ -124,10 +124,10 @@ public class BoardController {
 	public String boardDel(@RequestParam("b_num") long b_num, RedirectAttributes redirectAttributes) {
 	    int result = this.boardService.boardDel(b_num);
 	    if (result == 1) {
-	        redirectAttributes.addFlashAttribute("alert_message", "글 삭제 성공!");
+	        redirectAttributes.addFlashAttribute("message", "글 삭제 성공!");
 	        return "redirect:/board/boardMain";
 	    } else {
-	        redirectAttributes.addFlashAttribute("alert_message", "글 삭제 실패!");
+	        redirectAttributes.addFlashAttribute("message", "글 삭제 실패!");
 	        return "redirect:/board/boardWrite";
 	    }
 	}

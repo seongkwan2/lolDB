@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+#wrap {
+	width: 500px;
+	min-height: 700px;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	margin: 0 auto;
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+#logo {
+	font-family: 'Inter', sans-serif;
+	width: 400px;
+	height: 100px;
+	font-size: 30px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 auto;
+	margin-top: 50px;
+	letter-spacing: 8px;
+}
+
+#logo>hr {
+	width: 300px;
+	color: #dcdcdc;
+}
+
+#form1 #form2 #form3 {
+	border-radius: 10px;
+}
+
+#form1 {
+    width: 400px;
+    margin: 0 auto;
+}
+
+
+/*입력 폼의 크기, 위치*/
+#idform,#pwdform, #nameform, #birthform, #phoneform, #emailform,
+	#genderform, #pwdCKform, #zipform{
+	width: 400px;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+
+/*중복확인, 주소검색, 가입하기 버튼 자체의 크기*/
+#checkid, #address, #sign{
+	width: 400px;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+/*중복확인, 주소검색, 가입하기 버튼 내부 글씨 */
+#ckidbtn, #addrbtn, #sign {
+	width: 400px;
+	height: 50px;
+	text-align: center;
+	font-size: 20px;
+	margin-top: 20px;
+	letter-spacing: 10px;
+	border-radius: 10px;
+	cursor: pointer;
+	background-color: #dcdcdc;
+	border: none;
+	color: #464646;
+}
+
+input:focus {
+	outline: 2px solid #dcdcdc;
+}
+
+#m_id, #m_pwd, #m_name, #m_birth, #m_phone, #m_email, #m_gender, #m_pwd2, #m_zipCode, #m_addr, #m_addr2
+	{
+	background-image: url('/imgs/member/people.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: 20px center;
+	border-radius: 10px;
+	border: 1px solid #dcdcdc;
+	text-indent: 3em;
+	width: 400px;
+	height: 50px;
+	font-size: 20px;
+	margin-top: 20px;
+}
+
+#m_pwd, #m_pwd2 {
+	background-image: url('/imgs/member/lock_icon.png');
+}
+
+#m_name {
+	background-image: url('/imgs/member/people.png');
+}
+
+#m_birth {
+	background-image: url('/imgs/member/calender.png');
+}
+
+#m_phone {
+	background-image: url('/imgs/member/phone.png');
+}
+
+#m_email {
+	background-image: url('/imgs/member/email.png');
+}
+
+#form3 {
+	margin: 0 auto;
+	text-align: center;
+	margin-top: 20px;
+	width: 400px;
+	height: 50px;
+}

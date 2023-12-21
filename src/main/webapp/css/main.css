@@ -29,11 +29,28 @@ header .login:hover{
 	cursor: pointer;
 }
 
-nav { /*가운데정렬 3종세트*/
-  display: flex;
-  justify-content: center;
-  text-align: center;
+.header_menu {
+    display: flex;
+    justify-content: flex-end;
 }
+
+.header_menu button {
+    margin-left: auto;
+    background-color: darkorange; 
+    color: #fff; 
+    padding: 10px 10px; 
+    border: none; 
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.header_menu button:hover {
+    background-color: #0056b3;
+}
+
+
 
 nav ul li {
   display: inline-block;
@@ -421,4 +438,8 @@ td {
 	width: 15px;
 	height: 15px;
 	cursor: pointer;
+}
+/*간섭 방지 css코드*/
+.clear {
+    clear: both;
 }

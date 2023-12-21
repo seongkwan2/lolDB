@@ -1,4 +1,4 @@
-package com.lol.Service.impl;
+package com.lol.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.lol.Service.RiotGamesService;
+
 import com.lol.vo.ChampDTO;
 import com.lol.vo.LeagueDTO;
 import com.lol.vo.MatchDTO;

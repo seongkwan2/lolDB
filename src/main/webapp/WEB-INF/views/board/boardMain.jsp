@@ -9,10 +9,10 @@
 <title>게시판 메인페이지</title>
 <script src="/js/jquery.js"></script>
 <link href="/css/main.css" rel="stylesheet"/>
-<link href="/css/board.css" rel="stylesheet"/>
+<link href="/css/board/board.css" rel="stylesheet"/>
 </head>
 <body>
-<%@ include file="../navbar.jsp"%>
+<%@ include file="../include/header.jsp" %>
 <%@ include file="boardHeader.jsp"%>
 
 
@@ -101,9 +101,9 @@
 </div>
 
 <%--alert 메시지에 반응하는 코드 --%>
-<c:if test="${not empty alert_message}">
+<c:if test="${not empty message}">
     <script>
-        alert('${alert_message}');	//addFlashAttribute로 생성한것은 1회사용후 사라지기에 삭제코드가 필요없음
+        alert('${message}');	//addFlashAttribute로 생성한것은 1회사용후 사라지기에 삭제코드가 필요없음
     </script>
 </c:if>
 

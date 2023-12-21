@@ -5,10 +5,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="member">
+	
+	<!-- 아이디 검색 -->
+	<select id="findMemberId" resultType="member">
+		SELECT * FROM lol_member WHERE m_id = #{m_id}
+	</select>
+	
+	<!-- 회원 정보 저장(회원가입) -->
+	<insert id="insertMember" parameterType="member">
+	    <selectKey keyProperty="m_num" resultType="long" order="BEFORE">
+	        SELECT lol_member_seq.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO lol_member (m_num, m_id, m_pwd, m_name, m_birth, m_email, m_phone, m_regdate)
+	    VALUES (#{m_num}, #{m_id}, #{m_pwd}, #{m_name}, #{m_birth}, #{m_email}, #{m_phone}, sysdate)
+	</insert>
 
-	<!-- 회원가입 -->
-	<insert id="memberInfo"> 
-		INSERT INTO lol_member VALUES(lol_member_seq.nextval, #{m_id}, #{m_pwd})
-	</insert>	
+
+	<!-- 권한 추가 (기본 권한 USER 부여) -->
+	<insert id="insertMemberRole" parameterType="member">
+    INSERT INTO lol_member_authorities (authority_id, m_num, authority)	VALUES (lol_member_authorities_seq.nextval, #{m_num}, 'USER')
+	</insert>
 
 </mapper>
