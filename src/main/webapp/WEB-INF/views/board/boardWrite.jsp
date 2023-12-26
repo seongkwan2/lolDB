@@ -23,8 +23,7 @@
                 <option value="자유게시판">자유게시판</option>
                 <option value="팁게시판">팁게시판</option>
             </select><br><br>
-            
-            <input type="text" name="b_id" placeholder="작성자 아이디" ><br> <%--나중엔 여기에 readonly로 로그인정보를 삽입 --%>
+            <input type="text" name="b_id" value="${memberInfo.m_id}" readonly> <br>
             <input type="text" name="b_title" placeholder="글 제목" ><br>
             <textarea name="b_cont" placeholder="글 내용" rows="5" ></textarea><br>
             

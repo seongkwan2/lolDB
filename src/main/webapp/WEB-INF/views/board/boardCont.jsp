@@ -52,7 +52,7 @@
             <!-- 추천버튼 -->
             <input type = "button" value="추천하기"> <br><br><br><br>
             
-            <input type="submit" value="글수정">
+            <input type="submit" value="글수정"> <%--글수정 버튼을 세션의 아이디값과 작성자의 아이디값을 비교해서 버튼을 보이게 만듬 --%>
             <input type="button" value="목록으로" onclick="goBoardMain();">
             
             <a href="boardDel?b_num=${boardInfo.b_num}"> <%-- boardDel메서드에 b_num값을 전달해서 동작시킴 --%>

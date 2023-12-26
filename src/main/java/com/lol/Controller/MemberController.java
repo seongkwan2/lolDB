@@ -102,9 +102,9 @@ public class MemberController {
 		// 사용자 정보를 데이터베이스에서 가져오는 서비스 메서드 호출 (아래는 예시)
 		MemberVO memberInfo = memberService.findMemberId(m_id);
 
-		if (memberInfo != null && memberInfo.getM_pwd().equals(m_pwd)) {
+		if (memberInfo != null && memberInfo.getM_pwd().equals(m_pwd)) {//로그인이 되었을 때
 			session = request.getSession();
-			session.setAttribute("memberInfo", memberInfo); // 사용자 정보를 세션에 저장
+			session.setAttribute("loginInfo", memberInfo); // 사용자 정보를 세션에 저장
 
 			boolean isAdmin = isAdminUser(memberInfo); // 사용자가 관리자인지 확인
 
@@ -122,14 +122,7 @@ public class MemberController {
 			return "/member/login";
 		}
 	}
-/*
-	// 특정 사용자가 관리자인지 확인하는 메서드 (예시)
-	private boolean isAdminUser(MemberVO memberInfo) {
-		// 사용자의 권한을 확인하고, 관리자 권한이 있다면 true를 반환
-		// 여기에서는 단순 예시이며, 실제로는 데이터베이스에서 사용자의 권한 정보를 확인해야 합니다.
-		return memberInfo.getRoles().contains("ADMIN");
-	}
-*/	
+
 	private boolean isAdminUser(MemberVO memberInfo) {
 	    // 사용자 정보가 null이면 관리자 권한이 없다고 간주
 	    if (memberInfo == null) {
