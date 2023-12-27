@@ -9,9 +9,9 @@ public class HomeController {
 	
 
 	/*메인 페이지*/
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home() {
-		return "searchUser";
+		return "/home";
 	}
 	
 	/* 에러 페이지*/

@@ -40,4 +40,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="plusHits">
 		UPDATE lol_board SET b_hits = b_hits +1 WHERE b_num = #{b_num}
 	</update>
+	
+	  <!-- 기존 맵퍼 정의 ... -->
+    <resultMap id="boardResultMap" type="board">
+        <id property="b_num" column="b_num" />
+        <!-- 기타 필드 매핑 ... -->
+        <result property="b_title" column="b_title" />
+        <result property="b_id" column="b_id" />
+        <result property="b_date" column="b_date" />
+        <result property="b_hits" column="b_hits" />
+        <result property="b_likes" column="b_likes" />
+        <result property="replyCount" column="reply_count" />	
+    </resultMap>	<!-- BoardVO 클래스의 replyCount 프로퍼티와 데이터베이스의 reply_count 컬럼을 서로 연결 -->
+    
+    <!-- 게시글과 댓글수를 가져옴 -->
+    <select id="getBoardListWithReplyCount" resultMap="boardResultMap">		<!--SQL 쿼리의 결과로 반환되는 컬럼의 이름 reply_count-->
+        SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes, COUNT(r.r_num) AS reply_count 
+        FROM lol_board b
+        LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+        GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+        ORDER BY b.b_num DESC
+    </select>
 </mapper>

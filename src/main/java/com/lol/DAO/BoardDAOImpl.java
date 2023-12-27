@@ -49,6 +49,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public void plusHits(long b_num) {
 		this.sqlSession.update("plusHits",b_num);
 	}
+
+	@Override
+	public List<BoardVO> getBoardListWithReplyCount() {
+		return this.sqlSession.selectList("getBoardListWithReplyCount");
+	}
 	
 	
 }

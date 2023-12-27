@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lol.Service.MemberService;
 import com.lol.vo.MemberVO;
@@ -124,14 +126,14 @@ public class MemberController {
 	}
 
 	private boolean isAdminUser(MemberVO memberInfo) {
-	    // 사용자 정보가 null이면 관리자 권한이 없다고 간주
-	    if (memberInfo == null) {
-	        return false;
-	    }
+		// 사용자 정보가 null이면 관리자 권한이 없다고 간주
+		if (memberInfo == null) {
+			return false;
+		}
 
-	    // 사용자의 권한을 확인하고, 관리자 권한이 있다면 true를 반환
-	    // 여기에서는 단순 예시이며, 실제로는 데이터베이스에서 사용자의 권한 정보를 확인해야 합니다.
-	    return memberInfo.getRoles() != null && memberInfo.getRoles().contains("ADMIN");
+		// 사용자의 권한을 확인하고, 관리자 권한이 있다면 true를 반환
+		// 여기에서는 단순 예시이며, 실제로는 데이터베이스에서 사용자의 권한 정보를 확인해야 합니다.
+		return memberInfo.getRoles() != null && memberInfo.getRoles().contains("ADMIN");
 	}
 
 
@@ -141,24 +143,17 @@ public class MemberController {
 		//memberService.addAdminRole(userId);
 		return "redirect:/admin/user-list";
 	}
-	
-	/*
-	    //로그아웃
-	    @RequestMapping("/m_logout")
-	    public String m_logout(HttpServletResponse response,
-	    		HttpSession session) throws Exception{
-	    	response.setContentType("text/html;charset=UTF-8");
-	    	PrintWriter out=response.getWriter();
 
-	    	session.invalidate();//세션 만료 => 로그아웃
 
-	    	out.println("<script>");
-	    	out.println("alert('로그아웃 되었습니다!');");
-	    	out.println("</script>");
+	//로그아웃
+	@GetMapping("/logout")
+	public String logout(HttpSession session, RedirectAttributes redirectAttributes) throws Exception{
+	    session.invalidate(); // 세션 만료 => 로그아웃
+	    redirectAttributes.addFlashAttribute("message", "로그아웃 되었습니다!");
+	    return "redirect:/member/login";
+	}
 
-	    	return "main/index";
-	    }//m_logout()
-	 */
+
 
 
 }

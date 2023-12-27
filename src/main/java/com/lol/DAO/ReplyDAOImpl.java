@@ -18,5 +18,10 @@ public class ReplyDAOImpl implements ReplyDAO {
 	public List<ReplyVO> getReplyList(long b_num) {
 		return this.sqlSession.selectList("getReplyList",b_num);
 	}
+
+	@Override
+	public int writeReply(ReplyVO replyInfo) {
+		return this.sqlSession.insert("writeReply",replyInfo);
+	}
 	
 }

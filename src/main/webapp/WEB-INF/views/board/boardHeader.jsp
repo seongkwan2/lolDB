@@ -6,7 +6,6 @@
 <title>boardHeader</title>
 </head>
 <body>
-<div class="clear"></div>
 
 <%-- 질문 검색바 --%>
 <div class="search-container">

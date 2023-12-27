@@ -15,6 +15,7 @@ public class BoardVO {
 	private String b_category;
 	private int b_hits;
 	private int b_likes;
+	private int replyCount;	//해당 게시판의 댓글 수
 }
 
 

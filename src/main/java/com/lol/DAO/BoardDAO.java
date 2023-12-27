@@ -21,4 +21,6 @@ public interface BoardDAO {
 
 	void plusHits(long b_num);
 
+	List<BoardVO> getBoardListWithReplyCount();
+
 }

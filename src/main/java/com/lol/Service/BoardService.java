@@ -21,4 +21,6 @@ public interface BoardService {
 
 	void plusHits(long b_num);
 
+	List<BoardVO> getBoardListWithReplyCount();
+
 }

@@ -49,4 +49,9 @@ public class BoardServiceImpl implements BoardService {
 	public void plusHits(long b_num) {
 		this.boardDao.plusHits(b_num);
 	}
+
+	@Override
+	public List<BoardVO> getBoardListWithReplyCount() {
+		return this.boardDao.getBoardListWithReplyCount();
+	}
 }

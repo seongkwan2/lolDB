@@ -1,189 +1,147 @@
-body {
-  width: auto;
-  padding: 10px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px #aaa;
-  display: grid;
-
-}
-
 img {
-  border-radius: 20%;
+	border-radius: 20%;
 }
-
 /*헤더*/
-header{
-	text-decoration: none;
-}
-header .login{
-	font-size:18px;
-	text-align: right;
-}
-header .login:hover{
-	color:orange;
-	cursor: pointer;
+
+.navbar-custom .navbar-nav {
+	flex-grow: 1;
+	justify-content: center;
 }
 
 .header_menu {
-    display: flex;
-    justify-content: flex-end;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .header_menu button {
-    margin-left: auto;
-    background-color: darkorange; 
-    color: #fff; 
-    padding: 10px 10px; 
-    border: none; 
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    margin-right: 5px;
+	margin-left: auto;
+	background-color: darkorange;
+	color: #fff;
+	padding: 10px 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+	margin-right: 5px;
 }
 
 .header_menu button:hover {
-    background-color: #0056b3;
-}
-
-
-
-nav ul li {
-  display: inline-block;
-  margin: 0px 5px;
-}
-
-nav a {
-  display: flex;
-  height: 20px;
-  padding: 10px;	/*글자 사이 간격*/
-  font-size: 22px;
-  font-weight: bold;
-  text-decoration: none; /*하이퍼링크 밑줄 제거*/
-  color: #1c2b37;
-  text-align: center;
+	background-color: #0056b3;
 }
 
 .menuTop a:hover {
-	color:orange;
+	color: orange;
 }
 
-.login_Link{
+.login_Link {
 	text-decoration: none;
 	padding: 10px;
 	color: #1c2b37;
 }
 
-.login_Link:hover{
-	color:lightblue;
+.login_Link:hover {
+	color: lightblue;
 }
 
-
 .container {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  grid-template-areas:
-    "header main"
-    "sidebar sidebar";
-  grid-template-rows: auto 1fr;
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+	grid-template-areas: "header main" "sidebar sidebar";
+	grid-template-rows: auto 1fr;
 }
 
 .navbar {
 	margin-bottom: 30px;
 }
+
 .search-box {
-  display: flex;
-  justify-content: center;
-  /* 가로 가운데 정렬 */
-  align-items: center;
-  /* 세로 가운데 정렬 */
-  margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	/* 가로 가운데 정렬 */
+	align-items: center;
+	/* 세로 가운데 정렬 */
+	margin-bottom: 20px;
 }
 
 .search-box form {
-  width: 500px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	width: 500px;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 /* 스타일링을 추가로 원하는 경우 여기에 추가 */
 .search-box label {
-  padding-right: 10px;
+	padding-right: 10px;
 }
 
 .search-box input {
-  padding: 8px;
-  box-sizing: border-box;
+	padding: 8px;
+	box-sizing: border-box;
 }
 
 .search-box #id {
-  width: 400px;
-  text-align: center;
+	width: 400px;
+	text-align: center;
 }
 
-
 .search-button {
-  width: 32px;
-  height: 32px;
-  border: none;
-  cursor: pointer;
+	width: 32px;
+	height: 32px;
+	border: none;
+	cursor: pointer;
 }
 
 /* 링크의 글자색 제거 */
 a.button-link {
-  text-decoration: none;
-  font-size: 22px;
-  color: rgb(69, 64, 64);
-  font-weight: bolder;
-  padding-left: 20px;
-  vertical-align: middle;
-  line-height: 2;
+	text-decoration: none;
+	font-size: 22px;
+	color: rgb(69, 64, 64);
+	font-weight: bolder;
+	padding-left: 20px;
+	vertical-align: middle;
+	line-height: 2;
 }
 
-<<<<<<< HEAD
-/*
+<<<<<<<
+HEAD /*
 .head-content {
 	display: flex;
   padding: 10px;
 }*/
-
-
-  /* 링크의 글자색 제거 */
+	/* 링크의 글자색 제거 */
   a.button-link {
-	  text-decoration: none;
-	  font-size: 22px;
-    color: rgb(69, 64, 64);
-    font-weight: bolder;
-    padding-left: 20px;
-    vertical-align: middle;
-    line-height: 2;
-  }
+	text-decoration: none;
+	font-size: 22px;
+	color: rgb(69, 64, 64);
+	font-weight: bolder;
+	padding-left: 20px;
+	vertical-align: middle;
+	line-height: 2;
+}
 
 =======
->>>>>>> 1d85e170fecb7aac3ec72562da46cfd243291db9
+>>>>>>>
+1d85e170fecb7aac3ec72562da46cfd243291db9
+
+
 .user_container {
-  text-align: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  height: auto;
+	text-align: center;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	height: auto;
 }
 
 .item12 {
 	display: flex;
 }
-
 
 .rank-chart {
 	display: flex;
@@ -193,16 +151,16 @@ a.button-link {
 }
 
 #user-content {
-	width:500px;
+	width: 500px;
 }
 
 #user-imo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: auto;
-  width: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: auto;
+	width: 200px;
 }
 
 #rank-donut {
@@ -211,93 +169,88 @@ a.button-link {
 }
 
 #topChampionsList {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #topChampionsList img {
-  margin-right: 50px;
-
+	margin-right: 50px;
 }
 
 .user_container>div {
-  margin-right: 20px;
+	margin-right: 20px;
 }
 
 .user_container img {
-
-  width: 100px;
-  height: 100px;
+	width: 100px;
+	height: 100px;
 }
 
 .user_container p {
-  margin: 0;
-  font-weight: bold;
-  font-size: 40px;
+	margin: 0;
+	font-weight: bold;
+	font-size: 40px;
 }
 
 label {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 input[type="text"] {
-  width: 200px;
-  padding: 5px;
-  font-size: 14px;
+	width: 200px;
+	padding: 5px;
+	font-size: 14px;
 }
 
 input[type="submit"] {
-  padding: 5px 10px;
-  font-size: 14px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  cursor: pointer;
+	padding: 5px 10px;
+	font-size: 14px;
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	cursor: pointer;
 }
 
 hr {
-  margin: 20px 0;
+	margin: 20px 0;
 }
 
 .game-header {
-  color: black;
-  padding: 10px;
-  margin-bottom: 5px;
-  display: flex;
-  border-radius: 10px;
+	color: black;
+	padding: 10px;
+	margin-bottom: 5px;
+	display: flex;
+	border-radius: 10px;
 }
 
-.game-header > div {
-  margin-right: 10px;
-  margin-left: 10px;
+.game-header>div {
+	margin-right: 10px;
+	margin-left: 10px;
 }
 
 .game-details {
-  background-color: #F5F5F5;
-  padding: 10px;
-  border: 1px solid #E0E0E0;
-  margin-bottom: 10px;
+	background-color: #F5F5F5;
+	padding: 10px;
+	border: 1px solid #E0E0E0;
+	margin-bottom: 10px;
 }
-
 
 .game-details table {
-  border-collapse: collapse;
-  width: 100%;
+	border-collapse: collapse;
+	width: 100%;
 }
 
-.game-details th,
-td {
-  border: 1px solid black;
-  padding: 4px;
-  text-align: center;
-  width: auto;
+.game-details th, td {
+	border: 1px solid black;
+	padding: 4px;
+	text-align: center;
+	width: auto;
 }
 
 #bar-item-image {
-  width: 40px;
-  height: 40px;
+	width: 40px;
+	height: 40px;
 }
 
 #bar-champ {
@@ -315,117 +268,117 @@ td {
 	width: 280px;
 }
 
-#bar-time{
+#bar-time {
 	display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 90px;
-  font-size: 15px;
-  font-weight: bold;
+	align-items: center;
+	justify-content: center;
+	width: 90px;
+	font-size: 15px;
+	font-weight: bold;
 }
 
-#bar-kda{
+#bar-kda {
 	display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  font-size: 15px;
-  font-weight: bold;
+	align-items: center;
+	justify-content: center;
+	width: 100px;
+	font-size: 15px;
+	font-weight: bold;
 }
+
 #bar-winloss {
 	display: flex;
-  align-items: center;
-  justify-content: center;
+	align-items: center;
+	justify-content: center;
 }
+
 #bar-goldcs, #bar-ward, #bar-winloss {
 	width: 60px;
 }
 
 #bar-arrow {
 	display: flex;
-  align-items: center;
-  justify-content: center;
+	align-items: center;
+	justify-content: center;
 }
 
 #record-champ-image {
-  width: 50px;
-  height: 50px;
+	width: 50px;
+	height: 50px;
 }
 
 #record-item-image {
-  width: 50px;
-  height: 50px;
+	width: 50px;
+	height: 50px;
 }
 
 #spell-image {
-  width: 25px;
-  height: 25px;
+	width: 25px;
+	height: 25px;
 }
 
 #rune-image {
-  width: 25px;
-  height: 25px;
+	width: 25px;
+	height: 25px;
 }
 
 .win {
-  color: white;
-  padding: 3px 5px;
-  border-radius: 3px;
+	color: white;
+	padding: 3px 5px;
+	border-radius: 3px;
 }
 
 .loss {
-  color: white;
-  padding: 3px 5px;
-  border-radius: 3px;
+	color: white;
+	padding: 3px 5px;
+	border-radius: 3px;
 }
 
 #winback {
-  background-color: #B3CDFF;
-    border-bottom: 5px solid blue;
-    border-right: 5px solid blue;
+	background-color: #B3CDFF;
+	border-bottom: 5px solid blue;
+	border-right: 5px solid blue;
 }
 
 #lossback {
-  background-color: #FFD8D9;
-  border-bottom: 5px solid red;
-  border-right: 5px solid red;
+	background-color: #FFD8D9;
+	border-bottom: 5px solid red;
+	border-right: 5px solid red;
 }
 
 .blue-team {
 	margin-bottom: 30px;
 }
 
-
 .rank_container {
-  display: flex;
-  fles-direction: row;
-  text-align: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  grid-area: main;
-  height: auto;
-
+	display: flex;
+	fles-direction: row;
+	text-align: center;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	grid-area: main;
+	height: auto;
 }
 
 .record_container {
-  text-align: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  grid-area: sidebar;
+	text-align: center;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	grid-area: sidebar;
 }
 
 .rankImages img {
-  width: 200px;
-  height: 200px;
+	width: 200px;
+	height: 200px;
 }
 
 .rank_div {
-  margin: 20px;
-  margin-left: 40px;
+	margin: 20px;
+	margin-left: 40px;
 }
 
 #pinkward {
@@ -439,7 +392,15 @@ td {
 	height: 15px;
 	cursor: pointer;
 }
+
+.footer {
+	width: 100%;
+}
+
+.footer_text {
+	text-align: center;
+}
 /*간섭 방지 css코드*/
 .clear {
-    clear: both;
+	clear: both;
 }

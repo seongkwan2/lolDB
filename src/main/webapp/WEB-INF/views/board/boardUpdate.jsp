@@ -14,30 +14,25 @@
     <%@ include file="../include/header.jsp" %>
     <%@ include file="boardHeader.jsp"%>
 
+<div class="big-container">
     <div class="board_con">
         <h2 style="text-align: center;">글 수정</h2><br>
         
         <form id="boardUpdateForm" method="post" onsubmit="return boardWriteCheck();">
            	<!-- 글 번호 -->
-            글번호<input type="text" name="b_num" id="b_num" value="${boardInfo.b_num}" readOnly><br>
+            <input type="hidden" name="b_num" id="b_num" value="${boardInfo.b_num}">
             
-            조회수
             <!-- 글 조회수 -->
-            <input type="text" name="b_hit" id="b_hit" value="${boardInfo.b_hits}" ><br>
+            <input type="hidden" name="b_hit" id="b_hit" value="${boardInfo.b_hits}">
 
         	<!-- 카테고리 -->
-        	카테고리
-        	<select id="b_category" name="b_category">
-                <option value="자유게시판" ${boardInfo.b_category == '자유게시판' ? 'selected' : ''}>자유게시판</option>
-                <option value="팁게시판" ${boardInfo.b_category == '팁게시판' ? 'selected' : ''}>팁게시판</option>
-            </select><br><br>
-            
+        	<input type="hidden" name="b_category" id="b_category" value="${boardInfo.b_category}">
+        	
             <!-- 글 작성자 -->
-            작성자
-            <input type="text" name="b_id" id="b_id" value="${boardInfo.b_id}" readOnly><br>
+            <input type="hidden" name="b_id" id="b_id" value="${boardInfo.b_id}">
             
             <!-- 글 제목 -->
-            제목
+            제목<br>
             <input type="text" name="b_title" id="b_title" value="${boardInfo.b_title}" ><br>
             
             <!-- 글 내용 -->
@@ -45,8 +40,7 @@
             <textarea name="b_cont" rows="5" id="b_cont">${boardInfo.b_cont}</textarea><br>
             
             <!-- 추천수-->
-            추천수
-            <input type="text" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" ><br> 
+            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" ><br> 
             
             <input type="submit" class="button" id="editButton" value="수정완료">
             <input type="button" class="button" value="이전으로" onclick="goBack();">
@@ -54,7 +48,7 @@
             
         </form>
     </div>
-
+</div>
 <script>
 
 $("#editButton").click(function(event) {
@@ -98,6 +92,6 @@ function goBack(){
 </script>
 
 
-
+<%@ include file="../include/footer.jsp" %>
 </body>
 </html>

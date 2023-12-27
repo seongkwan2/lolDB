@@ -147,5 +147,6 @@
 			</c:if>
 		</c:otherwise>
 	</c:choose>
+<%@ include file="./include/footer.jsp" %>
 </body>
 </html>

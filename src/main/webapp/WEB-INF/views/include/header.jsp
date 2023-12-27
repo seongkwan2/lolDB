@@ -8,48 +8,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-<meta charset="UTF-8">
-<title>header</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <title>header</title>
 </head>
 <body>
-	<header>
-		<div class ="header_menu">
-			<a href="/member/login"><button>로그인</button></a>
-			<a href="/member/sign"><button>회원가입</button></a>
-		</div>
-		<nav class="navbar navbar-expand-lg bg-body-tertiary"
-			style="background-color: #e3f2fd !important;">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#">LoL Search</a>
-				<button class="navbar-toggler" type="button"
-					data-bs-toggle="collapse" data-bs-target="#navbarNav"
-					aria-controls="navbarNav" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav">
-						<li class="nav-item">
-							<form action="/searchUser" method="get">
-								<a href="/searchUser" class="nav-link active"
-									aria-current="page">Home</a>
-							</form>
-						</li>
-						<li class="nav-item">
-							<form action="/championImages" method="get">
-								<a href="/championImages" class="nav-link">Champ</a>
-							</form>
-						</li>
-						<li class="nav-item"><a class="nav-link"
-							href="/board/boardMain">Board</a></li>
-						<li class="nav-item"><a class="nav-link disabled"
-							aria-disabled="true">Disabled</a></li>
-					</ul>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-custom" style="background-color: #e3f2fd !important;">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="/home" class="nav-link active" aria-current="page">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/searchUser" class="nav-link active" aria-current="page">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/championImages" class="nav-link">Champ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/board/boardMain">Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                
+                <div class="header_menu ms-auto">
+				    <c:choose>
+				        <c:when test="${not empty memberInfo}"> <!-- 로그인 상태일 때 -->
+				            <a href="#"><button>마이페이지</button></a>
+				            <a href="/member/logout"><button>로그아웃</button></a>
+				        </c:when>
+				        <c:otherwise> <!-- 로그인 상태가 아닐 때 -->
+				            <a href="/member/sign"><button>회원가입</button></a>
+				            <a href="/member/login"><button>로그인</button></a>
+				        </c:otherwise>
+				    </c:choose>
 				</div>
-			</div>
-		</nav>
-	</header>
+            </div>
+        </div>
+    </nav>
 </body>
 </html>

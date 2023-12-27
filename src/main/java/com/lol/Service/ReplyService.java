@@ -8,4 +8,6 @@ public interface ReplyService {
 
 	List<ReplyVO> getReplyList(long b_num);
 
+	int writeReply(ReplyVO replyInfo);
+
 }

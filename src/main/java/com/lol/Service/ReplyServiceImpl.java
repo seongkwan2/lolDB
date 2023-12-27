@@ -18,4 +18,10 @@ public class ReplyServiceImpl implements ReplyService {
 	public List<ReplyVO> getReplyList(long b_num) {
 		return this.replyDAO.getReplyList(b_num);
 	}
+
+	@Override
+	public int writeReply(ReplyVO replyInfo) {
+		return this.replyDAO.writeReply(replyInfo);
+	}
+
 }

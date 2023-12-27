@@ -15,7 +15,7 @@
 <%@ include file="../include/header.jsp" %>
 <%@ include file="boardHeader.jsp"%>
 
-
+<div class="big-container">
 <div class="interface">
 <input type="button" value="전체글">
 <input type="button" value="개념글">
@@ -33,7 +33,7 @@
 <div class="board-container">
     <table border="1">
         <tr>
-            <td>번호</td> <td>제목</td> <td>글쓴이</td> <td>작성일</td> <td>조회수</td> <td>추천</td>
+            <td>번호</td> <td>제목</td> <td>작성자</td> <td>작성일</td> <td>조회수</td> <td>추천</td> <td>댓글수</td>
         </tr>
         <c:forEach var="boardInfo" items="${boardList}">	<%--내가 작성한글은 배경색상이 존재 --%>
             <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightgray;' : ''}">
@@ -43,6 +43,7 @@
                 <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
                 <td>${boardInfo.b_hits}</td>
                 <td>${boardInfo.b_likes}</td>
+                <td>${boardInfo.replyCount}</td>
             </tr>
         </c:forEach>
     </table>
@@ -109,7 +110,15 @@
     </script>
 </c:if>
 
-
-
+<%--새로고침 강제 (사용자가 새로고침 하지 않아도 조회수가 바로바로 갱신)--%>
+<script>
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+};
+</script>
+</div>
+<%@ include file="../include/footer.jsp" %>
 </body>
 </html>
