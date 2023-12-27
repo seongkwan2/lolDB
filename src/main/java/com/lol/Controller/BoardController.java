@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,24 +23,35 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lol.Service.BoardService;
 import com.lol.Service.MemberService;
+import com.lol.Service.ReplyService;
 import com.lol.vo.BoardVO;
 import com.lol.vo.MemberVO;
 import com.lol.vo.PageVO;
+import com.lol.vo.ReplyVO;
 
 @Controller
 @RequestMapping(value="/board/*")
 public class BoardController {
-
-	//해야할것, 의존성 추가 게시판제작, 페이징, 조회수, 좋아요 처리
-	@Autowired
-	private BoardService boardService;
 	
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private BoardService boardService;
+	
+	@Autowired
+	private ReplyService replyService;
+	
+
 	//게시판 메인 페이지
 	@GetMapping(value="/boardMain")
-	public ModelAndView boardMain(HttpServletRequest request, PageVO p) {
+	public ModelAndView boardMain(HttpServletRequest request, PageVO p, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		
+		//로그인 정보 가져오기
+		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
+		mv.addObject("memberInfo", memberInfo);
+		
 		int page=1;
 		int limit=10;
 		if(request.getParameter("page") != null) {
@@ -66,7 +78,7 @@ public class BoardController {
 		int endpage=maxpage;
 		if(endpage>startpage+10-1) endpage=startpage+10-1;
 
-		ModelAndView mv = new ModelAndView();
+		
 		List<BoardVO> boardList = this.boardService.getBoardList();
       
 		mv.addObject("boardList", boardList);
@@ -111,21 +123,31 @@ public class BoardController {
 	
 	//글확인
 	@GetMapping(value="/boardCont")
-	public ModelAndView boardCont(@RequestParam("b_num") long b_num) {
+	public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
+		
+		//현재 로그인 정보를 세션을 통해서 가져옴
+		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
+		mv.addObject("memberInfo", memberInfo);
+		
+		this.boardService.plusHits(b_num);	//조회수 증가
 		
 		//글번호를 기준으로 글의 정보를 가져오기
 		BoardVO boardInfo = this.boardService.getCont(b_num);
-		this.boardService.plusHits(b_num);	//조회수 증가
-		
 		mv.addObject("boardInfo", boardInfo);
+		
+		//댓글 리스트 가져오기 (해당 글에 대한 댓글)
+		List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
+		mv.addObject("replyList", replyList);
+		
+		
 		mv.setViewName("/board/boardCont");
 		return mv;
 	}
 	
 	
 	//글삭제
-	@GetMapping(value="/boardDel")
+	@PostMapping(value="/boardDel")
 	public String boardDel(@RequestParam("b_num") long b_num, RedirectAttributes redirectAttributes) {
 	    int result = this.boardService.boardDel(b_num);
 	    if (result == 1) {

@@ -15,6 +15,7 @@ CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;             
 CREATE SEQUENCE lol_board_seq START WITH 1 INCREMENT BY 1 NOCACHE;                   --게시판 테이블 시퀀스
 CREATE SEQUENCE lol_member_role_seq START WITH 1 INCREMENT BY 1 NOCACHE;            --멤버 권한목록 시퀀스
 CREATE SEQUENCE lol_member_authorities_seq START WITH 1 INCREMENT BY 1 NOCACHE;     --멤버 권한관리 시퀀스
+CREATE SEQUENCE lol_board_reply_seq START WITH 1 INCREMENT BY 1 NOCACHE;  
 
 
 --사이트 사용자 테이블
@@ -29,12 +30,8 @@ m_phone varchar2(20),
 m_state number default 1,  --회원 상태여부(ex: 1은 평범한 상태 0은 탈퇴회원 9는 관리자)
 m_regdate timestamp
 );
-SELECT sequence_name, last_number FROM user_sequences WHERE sequence_name = 'LOL_MEMBER_SEQ';
 
 SELECT * FROM lol_member;
-
---테스트용 아이디
-INSERT INTO lol_member VALUES(lol_member_seq.nextval,'z', 'z' , '조성관', '19960307', 'zaq3195@naver.com', '01038882488', '1', '2023-12-21');
 
 -- 권한 테이블
 CREATE TABLE lol_member_role (
@@ -57,12 +54,7 @@ CREATE TABLE lol_member_authorities (
   FOREIGN KEY (m_num) REFERENCES lol_member (m_num)
 );
 
-commit;
-
-
 SELECT * FROM lol_member_authorities;
-
-commit;
 
 -- 게시판 테이블
 CREATE TABLE lol_board (
@@ -77,15 +69,30 @@ CREATE TABLE lol_board (
   FOREIGN KEY (b_id) REFERENCES lol_member(m_id) ON DELETE SET NULL -- 아이디 삭제 시 게시글이 남아있고 아이디는 NULL로 설정
 );
 
+--게시판 댓글 테이블
+CREATE TABLE lol_board_reply (
+    r_num NUMBER PRIMARY KEY,   --게시글 번호
+    r_id VARCHAR2(30),
+    r_cont VARCHAR2(300),
+    r_date TIMESTAMP,
+    r_board_num NUMBER,             --댓글 번호
+    FOREIGN KEY (r_board_num) REFERENCES lol_board(b_num) ON DELETE CASCADE
+); --사용자 탈퇴 시에도 댓글을 보존하기 위해 별도의 외래 키 제약 조건은 추가하지 않음
 
-SELECT * FROM lol_board where b_num = 39;
-
+commit;
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡ게시판 데이터 추가 (테스트)ㅡㅡㅡ
+--테스트용 댓글 작성
+INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'zaq3195','안녕하세요 댓글입니다', sysdate, 3);
+INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'zzz3195','반갑습니다', sysdate, 3);
+INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'z','하이', sysdate, 3);
+
+
+--테스트용 아이디
+INSERT INTO lol_member VALUES(lol_member_seq.nextval,'z', 'z' , '조성관', '19960307', 'zaq3195@naver.com', '01038882488', '1', '2023-12-21');
+
+--테스트용 게시글작성
 INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','테스트 제목 입니다','테스트 내용 입니다','2023-12-11','자유게시판',1,0);
 INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','두번째 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','자유게시판',1,0);
-
-SELECT * FROM lol_board;
-commit;
 
 --조회수 쿼리문
 UPDATE lol_board SET board_views = board_views + 1 WHERE board_id = :게시물_ID;
@@ -95,6 +102,8 @@ UPDATE lol_board SET board_likes = board_likes + 1 WHERE board_id = :게시물_I
 
 -- 비추천 추가
 UPDATE lol_board SET board_dislikes = board_dislikes + 1 WHERE board_id = :게시물_ID;
+
+commit;
 
 
 

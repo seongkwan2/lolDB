@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD config 3.0//EN"
 		<typeAlias type="com.lol.vo.MemberVO" alias="member"/>
 		<typeAlias type="com.lol.vo.BoardVO" alias="board"/>
 		<typeAlias type="com.lol.vo.PageVO" alias="page"/>
+		<typeAlias type="com.lol.vo.ReplyVO" alias="reply"/>
 	</typeAliases>
 	
 </configuration>

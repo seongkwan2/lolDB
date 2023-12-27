@@ -31,22 +31,24 @@
 <br>
 
 <div class="board-container">
-	<table border="1">
-		<tr>
-			<td>번호</td> <td>제목</td> <td>글쓴이</td> <td>작성일</td> <td>조회수</td> <td>추천</td>
-		</tr>
-		<c:forEach var="board" items="${boardList}">
-		<tr>
-				<td>${board.b_num}</td>
-				<td><a href = "boardCont?b_num=${board.b_num}">${board.b_title}</td></a>
-				<td>${board.b_id}</td>
-				<td><fmt:formatDate value="${board.b_date}" pattern="yyyy-MM-dd"/> </td>
-				<td>${board.b_hits}</td>
-				<td>${board.b_likes}</td>
-		</tr>
-		</c:forEach>
-	</table>
+    <table border="1">
+        <tr>
+            <td>번호</td> <td>제목</td> <td>글쓴이</td> <td>작성일</td> <td>조회수</td> <td>추천</td>
+        </tr>
+        <c:forEach var="boardInfo" items="${boardList}">	<%--내가 작성한글은 배경색상이 존재 --%>
+            <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightgray;' : ''}">
+                <td>${boardInfo.b_num}</td>
+                <td><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
+                <td>${boardInfo.b_id}</td>
+                <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
+                <td>${boardInfo.b_hits}</td>
+                <td>${boardInfo.b_likes}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
+
+
 
 <%--페이징(쪽나누기)--%>
 <br>

@@ -1,10 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <%--날짜를 형식에 맞게 표현하기 위한 태그라이브러리--%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>글 수정</title>
+    <title>글 확인</title>
     <script src="/js/jquery.js"></script>
     <link href="/css/main.css" rel="stylesheet"/>
     <link href="/css/board/board.css" rel="stylesheet"/>
@@ -48,25 +49,66 @@
             <!-- 추천수-->
             추천수 : ${boardInfo.b_likes}
             <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" readOnly><br> 
-            
+            </form>
             <!-- 추천버튼 -->
             <input type = "button" value="추천하기"> <br><br><br><br>
             
-            <input type="submit" value="글수정"> <%--글수정 버튼을 세션의 아이디값과 작성자의 아이디값을 비교해서 버튼을 보이게 만듬 --%>
+            <!-- 댓글 -->
+            <form action="writeReply" method="post">
+	            <table border="1">
+	           		 <tr>
+		            	<td colspan="2">
+		            		<label>댓글</label><textarea rows="2" cols="50" name="r_cont"></textarea><br>
+		            		<label>작성자</label><input type="text" name="r_id" value=""><br>
+		            		<input type="submit" value="댓글달기">
+		            	</td>
+	            	</tr>
+	            </table>
+            </form>
+            
+            <table border="1">
+	            <tr>
+			        <th>아이디</th>
+			        <th>내용<th>
+			        <th>날짜</th>
+			        <th>삭제</th>
+			        </tr>
+			        
+				 <c:forEach var="replyInfo" items="${replyList}">    
+	            <tr>
+	            	<td>${replyInfo.r_id}</td>
+	            	<td>${replyInfo.r_cont}</td>
+	            	<td><fmt:formatDate value="${replyInfo.r_date}" pattern="MM-dd HH:mm" /></td>
+	            	<td><a href="deleteReply?r_num=${reply_vo.r_num}"><button>삭제</button></a></td>
+	           	</tr>
+	           	</c:forEach>
+            </table>
+            
+            
+            
+            
+            
+            
+            
+            
+            <!-- 글 수정 버튼 (글 작성자만 보이게함) -->
+            <c:if test="${memberInfo.m_id == boardInfo.b_id}">
+			    <input type="submit" id="Editbutton" value="글수정">
+			</c:if>
+			
             <input type="button" value="목록으로" onclick="goBoardMain();">
             
-            <a href="boardDel?b_num=${boardInfo.b_num}"> <%-- boardDel메서드에 b_num값을 전달해서 동작시킴 --%>
-			<input type="button" value="글삭제">
-			</a>
+            <!-- 글삭제 -->
+            <form action="boardDel?b_num=${boardInfo.b_num}" method="post">
+			<input type="submit" value="글삭제">
+			</form>
             
-            <script>
+        	<script>
             function goBoardMain(){
             	location = '/board/boardMain';
             }
             
-            </script>
-            
-        </form>
+         	</script>
     </div>
 
 </body>
