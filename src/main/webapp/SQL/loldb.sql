@@ -4,6 +4,7 @@ DROP TABLE lol_member_role;        --권한 목록 테이블
 DROP TABLE lol_member_authorities;      --권한 관리 테이블
 DROP TABLE lol_board;                   --게시판 테이블
 DROP TABLE lol_board_reply;             --게시판 댓글 테이블
+DROP TABLE lol_board_likes;          --게시판 추천 추적 테이블
 
 
 DROP SEQUENCE lol_member_seq;       --멤버 시퀀스
@@ -11,6 +12,7 @@ DROP SEQUENCE lol_member_role_seq;      --멤버 권한 시퀀스
 DROP SEQUENCE lol_member_authorities;   --멤버 권한 관리 시퀀스
 DROP SEQUENCE lol_board_seq;            --게시판 시퀀스
 DROP SEQUENCE lol_board_reply_seq;      --게시판 댓글 시퀀스
+DROP SEQUENCE lol_board_likes_seq;      --게시판 추천 추적 시퀀스
 
 -- 시퀀스
 CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --멤버 테이블 시퀀스
@@ -18,7 +20,7 @@ CREATE SEQUENCE lol_member_role_seq START WITH 1 INCREMENT BY 1 NOCACHE;        
 CREATE SEQUENCE lol_member_authorities_seq START WITH 1 INCREMENT BY 1 NOCACHE;     --멤버 권한관리 시퀀스
 CREATE SEQUENCE lol_board_seq START WITH 1 INCREMENT BY 1 NOCACHE;                   --게시판 테이블 시퀀스
 CREATE SEQUENCE lol_board_reply_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --게시판 댓글 시퀀스
-
+CREATE SEQUENCE lol_board_likes_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --게시판 추천 추적 시퀀스
 
 --사이트 사용자 테이블
 create table lol_member(
@@ -82,6 +84,27 @@ CREATE TABLE lol_board_reply (
 ); --사용자 탈퇴 시에도 댓글을 보존하기 위해 별도의 외래 키 제약 조건은 추가하지 않음
 
 
+--이미 게시글에 추천을했는지 추적할수 있도록 liks테이블생성
+--사용자가 몇번 게시글에 추천을 했는지 추적가능
+CREATE TABLE lol_board_likes (
+    like_id NUMBER PRIMARY KEY,
+    b_num NUMBER NOT NULL,
+    m_id VARCHAR2(30) NOT NULL,
+    liked CHAR(1) CHECK (liked IN ('Y', 'N')),
+    FOREIGN KEY (b_num) REFERENCES lol_board(b_num),
+    FOREIGN KEY (m_id) REFERENCES lol_member(m_id)
+);
+select * from lol_board_likes;
+--게시글 추천 테스트 쿼리문
+SELECT * FROM lol_board_likes;
+
+SELECT COUNT(*) AS like_count
+FROM lol_board_likes
+WHERE b_num = [대상 게시글 번호] AND liked = 'Y';
+
+
+
+SELECT COUNT(*) FROM lol_board_likes WHERE b_num = :b_num AND m_id = :m_id AND liked = 'Y';
 
 commit;
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡ게시판 데이터 추가 (테스트)ㅡㅡㅡ

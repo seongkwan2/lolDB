@@ -23,4 +23,16 @@ public interface BoardDAO {
 
 	List<BoardVO> getBoardListWithReplyCount();
 
+	int checkLikeStatus(long b_num, String m_id);
+
+	void removeLike(long b_num, String m_id);
+
+	void addLike(long b_num, String m_id);
+
+	void upLike(long b_num);
+
+	void downLike(long b_num);
+
+	int getLikesCount(long b_num);
+
 }

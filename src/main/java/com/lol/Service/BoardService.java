@@ -23,4 +23,8 @@ public interface BoardService {
 
 	List<BoardVO> getBoardListWithReplyCount();
 
+	String toggleLike(long b_num, String m_id);
+
+	int getLikesCount(long b_num);
+
 }

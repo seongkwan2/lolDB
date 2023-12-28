@@ -226,4 +226,51 @@ public class BoardController {
 
 		return resultMap;
 	}
+	
+	//추천액션
+	@PostMapping("/likesUp")
+	@ResponseBody
+	public Map<String, Object> likesUp(@RequestParam("b_num") long b_num, HttpSession session) {
+	    Map<String, Object> resultMap = new HashMap<>();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+
+	    if (memberInfo == null) {
+	        resultMap.put("status", "fail");
+	        resultMap.put("message", "로그인 후 이용해주세요!");
+	        return resultMap;
+	    }
+	    //추천 검증(추천을 했는지 안했는지 확인하고 여부에따라 추천,취소하는 메서드)
+	    String result = this.boardService.toggleLike(b_num, memberInfo.getM_id());
+	    
+	    //비동기식을 적용하기위해 추천수를 가져와서 resultMap에 추가
+	    int LikesCount = boardService.getLikesCount(b_num);
+	    resultMap.put("LikesCount", LikesCount);
+	    
+	    resultMap.put("status", "success");
+	    resultMap.put("message", result);
+	    return resultMap;
+	}
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

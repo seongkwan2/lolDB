@@ -19,7 +19,11 @@
 <div class="interface">
 <input type="button" value="전체글">
 <input type="button" value="개념글">
-<input type="button" value="공지사항">
+<input type="button" value="공지사항">이 부분 해결할것 셀렉부분
+<select style = "width: 150px;"> 여기부터 수정할것 카테고리 나눈것으로 이거하고 페이징 처리할것
+	<option>자유게시판</option>
+	<option>팁게시판</option>
+</select>
 <input type="button" value="글쓰기" style="float:right; margin-right: 200px" onclick = "goWrite()";>
 <script>
 	function goWrite(){

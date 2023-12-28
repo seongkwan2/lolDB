@@ -60,15 +60,47 @@
             <input type="hidden" name="b_cont" id="b_cont" value="${boardInfo.b_cont}">
             
             <!-- 추천수-->
-            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}" readOnly><br> 
+            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}">
             </form>
             
             
             <!-- 추천버튼 --> 추천기능구현 할것
-            <div class="likes_button">
-            <input type = "button" value="추천하기👍 ${boardInfo.b_likes}">
-            </div>
-          </div>
+			<div class="likes_button">
+			            <button type="button" id="likeButton" data-bnum="${boardInfo.b_num}">
+			            추천하기👍 <span id="likes-count">${boardInfo.b_likes}</span>
+</button>
+			</div>
+			
+			<script>
+				$(document).ready(function(){
+					$('#likeButton').click(function(){
+						var b_num = $(this).data('bnum');
+						
+						
+						$.ajax({
+							url: '/board/likesUp',
+							type: 'POST',
+							data: {b_num:b_num},
+							success: function(response){
+								if(response.status == 'success'){
+									alert(response.message);					 //비동기식으로 사용하기 위해서
+									$("#likes-count").text(response.LikesCount); //여기서 반환한는 이름 "#likes-count" 이걸 화면에 표시해야됨
+								}else{
+									alert(response.message);
+								}
+							},//success
+							error: function(xhr, status, error){
+								alert("에러 발생, 새로고침 후 다시 시도해주세요.");
+							}
+						});//ajax
+						
+						
+					});
+				});
+			
+			
+			</script>
+
           
           <br><br><hr><br><br>
           

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lol.DAO.BoardDAO;
 import com.lol.vo.BoardVO;
@@ -54,4 +55,30 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVO> getBoardListWithReplyCount() {
 		return this.boardDao.getBoardListWithReplyCount();
 	}
+	
+	@Transactional
+	@Override
+	public String toggleLike(long b_num, String m_id) {
+	    int likeStatus = this.boardDao.checkLikeStatus(b_num, m_id);
+	    if (likeStatus > 0) {
+	    	this.boardDao.removeLike(b_num, m_id);
+	    	this. boardDao.downLike(b_num);
+	        return "추천을 취소했습니다.";
+	    } else {
+	    	this.boardDao.addLike(b_num, m_id);
+	    	this.boardDao.upLike(b_num);
+	        return "추천을 했습니다.";
+	    }
+	}
+
+	@Override
+	public int getLikesCount(long b_num) {
+		return this.boardDao.getLikesCount(b_num);
+	}
+
+
+	
+
+
+
 }
