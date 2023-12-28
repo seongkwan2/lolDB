@@ -51,10 +51,11 @@
 .title_box{
 	width: auto;
 }
-
+/*
 .title{
-	margin:
-}
+현재 사용하지 않고 있음
+}*/
+
 .etc{
 	text-align: right;
 }
@@ -84,23 +85,35 @@
 	margin: auto;
 	width: 1300px;
 }
-/* 전체 테이블의 스타일 */
+/* 목록 테이블의 스타일 */
 .board-container table {
-    width: 80%; /* 테이블의 너비를 부모 컨테이너의 80%로 설정 */
+    width: 900px; /* 테이블의 너비를 부모 컨테이너의 80%로 설정 */
     margin: auto; /* 가운데 정렬 */
+    
 }
 
 /* 각 셀(td)의 스타일 */
 .board-container td {
-    padding: 10px; /* 셀 안에 여백 추가 */
+    padding: 5px; /* 셀 안에 여백 추가 */
 }
 
-.board-container td:hover{
-	background-color: lightgray;
+.board-container a {
+    text-decoration: none; /*하이퍼링크의 밑줄 제거*/
+    color : black;
+    font-weight: bold;
 }
+
+/*.board-container 내의 첫 번째 <tr>를 제외한 
+모든 <tr>에 대해 마우스를 올렸을 때 배경색 변경 */
+.board-container tr:not(:first-child):hover {
+    background-color: lightyellow !important;
+    cursor: pointer;
+    
+}
+
 
 .button {
-	background-color: gray;
+	background-color: lightgray;
 	border: none;
 	color: white;
 	padding: 10px 20px;
@@ -150,6 +163,8 @@
 /* '내용' 열 스타일 */
 .reply_list th:nth-child(2), .reply_list td:nth-child(2) {
     width: 60%; /* '내용' 열 너비 */
+    white-space: pre-wrap;
+    word-break: break-all; /* 단어 경계에 관계없이 줄바꿈 */
 }
 /*내용열의 내용들만 왼쪽 정렬*/
 .reply_list td:nth-child(2){
@@ -169,8 +184,10 @@ text-align: left; /* '내용' 열만 왼쪽 정렬 */
 }
 
 .reply_write textarea {
-    width: 100%; /* 텍스트 영역 너비를 폼의 너비에 맞춤 */
+    width: 100%;
 }
+
+
 
 /*댓글달기 버튼*/
 .reply-button-container {

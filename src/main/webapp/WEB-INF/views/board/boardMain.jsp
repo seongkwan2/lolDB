@@ -32,11 +32,11 @@
 
 <div class="board-container">
     <table border="1">
-        <tr>
-            <td>번호</td> <td>제목</td> <td>작성자</td> <td>작성일</td> <td>조회수</td> <td>추천</td> <td>댓글수</td>
+        <tr style="font-weight: bold; background-color: #49557d; color:#f8f8f8;">
+            <td>번호</td> <td>제목</td> <td>작성자</td> <td>작성일자</td> <td>조회수</td> <td>추천</td> <td>댓글수</td>
         </tr>
         <c:forEach var="boardInfo" items="${boardList}">	<%--내가 작성한글은 배경색상이 존재 --%>
-            <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightgray;' : ''}">
+            <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
                 <td>${boardInfo.b_num}</td>
                 <td><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
                 <td>${boardInfo.b_id}</td>
@@ -48,6 +48,25 @@
         </c:forEach>
     </table>
 </div>
+
+<%--행의 아무곳이나 선택해도 해당 글의 링크에 들어가짐 --%>
+<script>
+function addRowClickEvent() {
+    // 테이블의 각 행에 대해 이벤트 리스너 추가
+    var rows = document.querySelectorAll(".board-container tr");
+    rows.forEach(function(row) {
+        row.addEventListener("click", function() {
+            var link = this.querySelector("a");
+            if(link) {
+                window.location.href = link.href; // 링크로 이동
+            }
+        });
+    });
+}
+//DOM이 완전히 로드된 후 함수 실행
+document.addEventListener("DOMContentLoaded", addRowClickEvent);
+</script>
+
 
 
 

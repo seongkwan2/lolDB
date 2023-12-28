@@ -118,7 +118,7 @@ public class BoardController {
 		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
 		if(memberInfo == null) {
 			redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
-			return "/member/login";
+			return "redirect:/member/login";
 		}
 
 		int result = this.boardService.writeBoard(boardInfo);

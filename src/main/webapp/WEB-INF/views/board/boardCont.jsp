@@ -10,6 +10,9 @@
     <link href="/css/main.css" rel="stylesheet"/>
     <link href="/css/board/board.css" rel="stylesheet"/>
     <link href="/css/board/boardWrite.css" rel="stylesheet"/>
+    <style>
+
+	</style>
 </head>
 <body>
     <%@ include file="../include/header.jsp" %>
@@ -61,16 +64,17 @@
             </form>
             
             
-            <!-- 추천버튼 --> 기능구현 할것
+            <!-- 추천버튼 --> 추천기능구현 할것
             <div class="likes_button">
             <input type = "button" value="추천하기👍 ${boardInfo.b_likes}">
             </div>
-            
           </div>
           
+          <br><br><hr><br><br>
+          
           <%--댓글 영역 --%>
-          <%-- 댓글 목록 출력 --%> 댓글에 대한 유효성 검사도 만들어야함 값이 너무크면 안들어감
-          <p>* 댓글</p>
+          <%-- 댓글 목록 출력 --%>
+          <label>* 댓글</label>
 			<c:choose>
 			    <c:when test="${not empty replyList}">
 			        <div class="reply_list">
@@ -101,13 +105,34 @@
             
             <%-- 댓글 작성 영역 --%>
            <div class="reply_write">
-            <form action="/board/writeReply" method="post">
-		            		<input type="hidden" name="r_board_num" value="${boardInfo.b_num}">	<%--해당 게시글의 번호--%>
-		            		<label>댓글작성</label><textarea rows="2" cols="50" name="r_cont"></textarea><br>
-		            		<input type="hidden" name="r_id" value="${memberInfo.m_id}"><br>
+            <form action="/board/writeReply" method="post" onsubmit="return writeReplyCheck();">
+            	<input type="hidden" name="r_id" id="r_id" value="${memberInfo.m_id}"><br>
+		        <input type="hidden" name="r_board_num" value="${boardInfo.b_num}">	<%--해당 게시글의 번호--%>
+		        <label>* 댓글작성</label>
+		        <textarea rows="2" cols="50" name="r_cont" id="r_cont" maxlength="300" placeholder="매너 채팅 부탁드립니다."></textarea><br>
+		            		<%--댓글달기 버튼--%>
 		            		<div class="reply-button-container">
 							    <input type="submit" value="댓글달기">
 							</div>
+							
+							<%--댓글 유효성 검사--%>
+							<script>
+								function writeReplyCheck(){
+									var cont = $("#r_cont").val();
+									if(cont == ""){
+										alert("내용을 입력해주세요!");
+										$("#r_cont").val("").focus();
+										return false;
+									}
+									
+									if(cont.length > 300){
+							            alert("댓글은 300자 이내로 작성해주세요!");
+							            $("#r_cont").focus();
+							            return false;
+							        }
+							        return true;
+								}
+							</script>
             </form>
            </div>
   		
@@ -115,7 +140,7 @@
   		
   		<br>
   		<div class="button-con">
-  		 <!-- 목록으로 -->
+  		 	<!-- 목록으로 -->
             <input type="button" value="목록으로" onclick="goBoardMain();">        	
             <script>
             function goBoardMain(){

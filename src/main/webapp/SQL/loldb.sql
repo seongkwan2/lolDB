@@ -60,24 +60,24 @@ SELECT * FROM lol_member_authorities;
 
 -- 게시판 테이블
 CREATE TABLE lol_board (
-  b_num NUMBER PRIMARY KEY,
-  b_id VARCHAR2(30),
-  b_title VARCHAR2(255),
-  b_cont CLOB,
-  b_date TIMESTAMP,
-  b_category VARCHAR2(50),
-  b_hits NUMBER DEFAULT 0,
-  b_likes NUMBER DEFAULT 0,
+  b_num NUMBER NOT NULL PRIMARY KEY,
+  b_id VARCHAR2(30) NOT NULL,
+  b_title VARCHAR2(255) NOT NULL,
+  b_cont CLOB NOT NULL,
+  b_date TIMESTAMP NOT NULL,
+  b_category VARCHAR2(50) NOT NULL,
+  b_hits NUMBER DEFAULT 0 NOT NULL,
+  b_likes NUMBER DEFAULT 0 NOT NULL,
   FOREIGN KEY (b_id) REFERENCES lol_member(m_id) ON DELETE SET NULL -- 아이디 삭제 시 게시글이 남아있고 아이디는 NULL로 설정
 );
 select * from lol_board;
 --게시판 댓글 테이블
 CREATE TABLE lol_board_reply (
-    r_num NUMBER PRIMARY KEY,  --댓글 번호
+    r_num NUMBER NOT NULL PRIMARY KEY,  --댓글 번호
     r_id VARCHAR2(30) NOT NULL,
     r_cont VARCHAR2(300) NOT NULL,
-    r_date TIMESTAMP,
-    r_board_num NUMBER,              --게시글 번호
+    r_date TIMESTAMP NOT NULL,
+    r_board_num NUMBER NOT NULL,              --게시글 번호
     FOREIGN KEY (r_board_num) REFERENCES lol_board(b_num) ON DELETE CASCADE
 ); --사용자 탈퇴 시에도 댓글을 보존하기 위해 별도의 외래 키 제약 조건은 추가하지 않음
 
