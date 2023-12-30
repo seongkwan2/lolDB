@@ -2,6 +2,9 @@ package com.lol.DAO;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+
 import com.lol.vo.BoardVO;
 import com.lol.vo.PageVO;
 
@@ -9,7 +12,7 @@ public interface BoardDAO {
 
 	List<BoardVO> getBoardList();
 
-	int getListCount(PageVO p);
+	int getListCount(PageVO pageInfo);
 
 	int writeBoard(BoardVO boardInfo);
 
@@ -22,6 +25,8 @@ public interface BoardDAO {
 	void plusHits(long b_num);
 
 	List<BoardVO> getBoardListWithReplyCount();
+	
+	List<BoardVO> getBoardListPaging(PageVO page);
 
 	int checkLikeStatus(long b_num, String m_id);
 

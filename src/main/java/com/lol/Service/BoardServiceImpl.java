@@ -3,6 +3,9 @@ package com.lol.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +25,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getListCount(PageVO p) {
-		return this.boardDao.getListCount(p);
+	public int getListCount(PageVO pageInfo) {
+		return this.boardDao.getListCount(pageInfo);
 	}
 
 	@Override
@@ -55,30 +58,31 @@ public class BoardServiceImpl implements BoardService {
 	public List<BoardVO> getBoardListWithReplyCount() {
 		return this.boardDao.getBoardListWithReplyCount();
 	}
-	
+
+	@Override
+	public List<BoardVO> getBoardListPaging(PageVO page) {
+		return this.boardDao.getBoardListPaging(page);
+	}
+
 	@Transactional
 	@Override
 	public String toggleLike(long b_num, String m_id) {
-	    int likeStatus = this.boardDao.checkLikeStatus(b_num, m_id);
-	    if (likeStatus > 0) {
-	    	this.boardDao.removeLike(b_num, m_id);
-	    	this. boardDao.downLike(b_num);
-	        return "추천을 취소했습니다.";
-	    } else {
-	    	this.boardDao.addLike(b_num, m_id);
-	    	this.boardDao.upLike(b_num);
-	        return "추천을 했습니다.";
-	    }
+		int likeStatus = this.boardDao.checkLikeStatus(b_num, m_id);
+		if (likeStatus > 0) {
+			this.boardDao.removeLike(b_num, m_id);
+			this. boardDao.downLike(b_num);
+			return "추천을 취소했습니다.";
+		} else {
+			this.boardDao.addLike(b_num, m_id);
+			this.boardDao.upLike(b_num);
+			return "추천을 했습니다.";
+		}
 	}
 
 	@Override
 	public int getLikesCount(long b_num) {
 		return this.boardDao.getLikesCount(b_num);
 	}
-
-
-	
-
 
 
 }

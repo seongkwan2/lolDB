@@ -14,7 +14,7 @@ DROP SEQUENCE lol_board_seq;            --게시판 시퀀스
 DROP SEQUENCE lol_board_reply_seq;      --게시판 댓글 시퀀스
 DROP SEQUENCE lol_board_likes_seq;      --게시판 추천 추적 시퀀스
 
--- 시퀀스
+-- 시퀀스 생성
 CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --멤버 테이블 시퀀스
 CREATE SEQUENCE lol_member_role_seq START WITH 1 INCREMENT BY 1 NOCACHE;            --멤버 권한목록 시퀀스
 CREATE SEQUENCE lol_member_authorities_seq START WITH 1 INCREMENT BY 1 NOCACHE;     --멤버 권한관리 시퀀스
@@ -61,7 +61,7 @@ CREATE TABLE lol_member_authorities (
 SELECT * FROM lol_member_authorities;
 
 -- 게시판 테이블
-CREATE TABLE lol_board (
+CREATE TABLE lol_board (        --게시글 수정날짜 추가할것
   b_num NUMBER NOT NULL PRIMARY KEY,
   b_id VARCHAR2(30) NOT NULL,
   b_title VARCHAR2(255) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE lol_board (
   FOREIGN KEY (b_id) REFERENCES lol_member(m_id) ON DELETE SET NULL -- 아이디 삭제 시 게시글이 남아있고 아이디는 NULL로 설정
 );
 select * from lol_board;
---게시판 댓글 테이블
+--게시판 댓글 테이블       --댓글 수정날짜 추가할것
 CREATE TABLE lol_board_reply (
     r_num NUMBER NOT NULL PRIMARY KEY,  --댓글 번호
     r_id VARCHAR2(30) NOT NULL,

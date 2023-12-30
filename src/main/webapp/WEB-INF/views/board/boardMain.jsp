@@ -10,8 +10,33 @@
 <script src="/js/jquery.js"></script>
 <link href="/css/main.css" rel="stylesheet"/>
 <link href="/css/board/board.css" rel="stylesheet"/>
+<style>
+    .page-button {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 2px;
+        border: 1px solid #ddd;
+        background-color: #f8f8f8;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .page-button:hover {
+        background-color: #e9e9e9;
+    }
+
+    .page-button.active {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+</style>
+
 </head>
 <body>
+
 <%@ include file="../include/header.jsp" %>
 <%@ include file="boardHeader.jsp"%>
 
@@ -19,11 +44,43 @@
 <div class="interface">
 <input type="button" value="전체글">
 <input type="button" value="개념글">
-<input type="button" value="공지사항">이 부분 해결할것 셀렉부분
-<select style = "width: 150px;"> 여기부터 수정할것 카테고리 나눈것으로 이거하고 페이징 처리할것
-	<option>자유게시판</option>
-	<option>팁게시판</option>
+<input type="button" value="공지사항">
+
+<%--카테고리로 게시판 이동--%>
+<select id="boardSelect" style="width: 150px;">
+    <option value="전체보기">전체보기</option>
+    <option value="자유게시판">자유게시판</option>
+    <option value="팁게시판">팁게시판</option>
 </select>
+
+
+파일 올리는것도 구현하기
+<div id="boardContent">
+    <!-- 게시판 내용이 여기 -->
+</div>
+
+<script>
+$(document).ready(function(){
+    $('#boardSelect').change(function(){
+        var category = $(this).val();
+        $.ajax({
+            url: '/boardMain', // URL 변경
+            type: 'GET',
+            data: { 
+                b_category: category, // 카테고리 파라미터 추가
+                page: 1 // 기본 페이지 1로 설정
+            },
+            success: function(response){
+                $('#boardContent').html(response);
+            }
+        });
+    });
+});
+</script>
+
+
+
+
 <input type="button" value="글쓰기" style="float:right; margin-right: 200px" onclick = "goWrite()";>
 <script>
 	function goWrite(){
@@ -75,8 +132,7 @@ document.addEventListener("DOMContentLoaded", addRowClickEvent);
 
 
 <%--페이징(쪽나누기)--%>
-<br>
-<div id="page_control" style="display: flex; align-items: center; justify-content: center; font-size:18px">
+<div id="page_control">
 	<%--검색전 페이징 --%>
 	<c:if test="${(empty find_field)&&(empty find_name)}">
 		<c:if test="${page <=1}">[이전]&nbsp;</c:if>
@@ -120,11 +176,10 @@ document.addEventListener("DOMContentLoaded", addRowClickEvent);
 </c:if>
 </div>
 
-<div  class="write-menu">
-<c:if test="${(!empty find_field) && (!empty find_name)}">
-	<input type="button" value="전체목록" onclick="location='boardMain?page=${page}';" />
-</c:if>
-</div>
+
+
+
+
 
 <%--alert 메시지에 반응하는 코드 --%>
 <c:if test="${not empty message}">

@@ -43,7 +43,7 @@ public class BoardController {
 	@Autowired
 	private ReplyService replyService;
 
-
+	/*
 	//게시판 메인 페이지
 	@GetMapping(value="/boardMain")
 	public ModelAndView boardMain(HttpServletRequest request, PageVO p, HttpSession session) {
@@ -60,7 +60,7 @@ public class BoardController {
 			//페이지 번호를 정수 숫자로 변경해서 저장
 		}
 
-		/* 검색 관련 부분 */
+		// 검색 관련 부분
 		String find_name=request.getParameter("find_name");//검색어
 		String find_field=request.getParameter("find_field");//검색 필드
 		p.setFind_name("%"+find_name+"%");
@@ -95,6 +95,53 @@ public class BoardController {
 
 		return mv;
 	}
+	 */
+	//게시판 메인 페이지
+	@GetMapping("/boardMain")
+	public ModelAndView boardMain(HttpServletRequest request, PageVO pageInfo, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+
+		// 로그인 정보 가져오기
+		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+		mv.addObject("memberInfo", memberInfo);
+		
+		
+		int page=1;
+		int limit=10;
+		if(request.getParameter("page") != null) {
+			page=Integer.parseInt(request.getParameter("page"));
+			//페이지 번호를 정수 숫자로 변경해서 저장
+		}
+		
+		int listcount = this.boardService.getListCount(pageInfo); //글의 개수를 파악
+
+		pageInfo.setStartrow((page-1)*10+1); //시작행 번호
+		pageInfo.setEndrow(pageInfo.getStartrow()+limit-1); //끝행 번호
+		pageInfo.setLimit(limit);
+
+
+		//총 페이지수
+		int maxpage=(int)((double)listcount/limit+0.95);
+		//시작페이지(1,11,21 ..)
+		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
+		//현재 페이지에 보여질 마지막 페이지(10,20 ..)
+		int endpage=maxpage;
+		if(endpage>startpage+10-1) endpage=startpage+10-1;
+
+		//모든 게시글과, 해당게시글의 댓글수를 가져옴
+		List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount();
+
+	    mv.addObject("boardList", boardList);
+	    mv.addObject("page",page);				// 쪽번호
+		mv.addObject("startpage",startpage);	// 시작페이지
+		mv.addObject("endpage",endpage);		// 마지막 페이지
+		mv.addObject("maxpage",maxpage);		// 최대 페이지
+
+	    mv.setViewName("/board/boardMain");
+
+		return mv;
+	}
+
 
 	//글쓰기 폼
 	@RequestMapping(value="/boardWrite")
@@ -135,7 +182,7 @@ public class BoardController {
 	@PostMapping(value="/writeReply")
 	public String writeReply(@ModelAttribute ReplyVO replyInfo, 
 			RedirectAttributes redirectAttributes, HttpSession session) {
-		
+
 		//현재 로그인 정보를 세션을 통해서 가져옴
 		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
 		if(memberInfo == null) {
@@ -155,33 +202,33 @@ public class BoardController {
 	//글확인
 	@GetMapping(value="/boardCont")
 	public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
-	    ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView();
 
-	    // 현재 로그인 정보를 세션에서 가져옴
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
-	    mv.addObject("memberInfo", memberInfo);
+		// 현재 로그인 정보를 세션에서 가져옴
+		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+		mv.addObject("memberInfo", memberInfo);
 
-	    // 조회수 증가
-	    this.boardService.plusHits(b_num);
+		// 조회수 증가
+		this.boardService.plusHits(b_num);
 
-	    // 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
-	    BoardVO boardInfo = this.boardService.getCont(b_num);
-	    String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
-	    String formattedContent = safeContent.replace("\n", "<br>");
-	    boardInfo.setB_cont(formattedContent);
-	    mv.addObject("boardInfo", boardInfo);
+		// 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
+		BoardVO boardInfo = this.boardService.getCont(b_num);
+		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
+		String formattedContent = safeContent.replace("\n", "<br>");
+		boardInfo.setB_cont(formattedContent);
+		mv.addObject("boardInfo", boardInfo);
 
-	    // 댓글 리스트 가져오기
-	    List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
-	    for (ReplyVO reply : replyList) {
-	        String safeReplyContent = StringEscapeUtils.escapeHtml4(reply.getR_cont());
-	        String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
-	        reply.setR_cont(formattedReplyContent);
-	    }
-	    mv.addObject("replyList", replyList);
+		// 댓글 리스트 가져오기
+		List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
+		for (ReplyVO reply : replyList) {
+			String safeReplyContent = StringEscapeUtils.escapeHtml4(reply.getR_cont());
+			String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
+			reply.setR_cont(formattedReplyContent);
+		}
+		mv.addObject("replyList", replyList);
 
-	    mv.setViewName("/board/boardCont");
-	    return mv;
+		mv.setViewName("/board/boardCont");
+		return mv;
 	}
 
 
@@ -226,51 +273,51 @@ public class BoardController {
 
 		return resultMap;
 	}
-	
+
 	//추천액션
 	@PostMapping("/likesUp")
 	@ResponseBody
 	public Map<String, Object> likesUp(@RequestParam("b_num") long b_num, HttpSession session) {
-	    Map<String, Object> resultMap = new HashMap<>();
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+		Map<String, Object> resultMap = new HashMap<>();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 
-	    if (memberInfo == null) {
-	        resultMap.put("status", "fail");
-	        resultMap.put("message", "로그인 후 이용해주세요!");
-	        return resultMap;
-	    }
-	    //추천 검증(추천을 했는지 안했는지 확인하고 여부에따라 추천,취소하는 메서드)
-	    String result = this.boardService.toggleLike(b_num, memberInfo.getM_id());
-	    
-	    //비동기식을 적용하기위해 추천수를 가져와서 resultMap에 추가
-	    int LikesCount = boardService.getLikesCount(b_num);
-	    resultMap.put("LikesCount", LikesCount);
-	    
-	    resultMap.put("status", "success");
-	    resultMap.put("message", result);
-	    return resultMap;
+		if (memberInfo == null) {
+			resultMap.put("status", "fail");
+			resultMap.put("message", "로그인 후 이용해주세요!");
+			return resultMap;
+		}
+		//추천 검증(추천을 했는지 안했는지 확인하고 여부에따라 추천,취소하는 메서드)
+		String result = this.boardService.toggleLike(b_num, memberInfo.getM_id());
+
+		//비동기식을 적용하기위해 추천수를 가져와서 resultMap에 추가
+		int LikesCount = boardService.getLikesCount(b_num);
+		resultMap.put("LikesCount", LikesCount);
+
+		resultMap.put("status", "success");
+		resultMap.put("message", result);
+		return resultMap;
 	}
 
 
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

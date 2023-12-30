@@ -63,8 +63,8 @@
             <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}">
             </form>
             
-            
-            <!-- 추천버튼 --> 추천기능구현 할것
+            <br><br><br>
+            <!-- 추천버튼 -->
 			<div class="likes_button">
 			            <button type="button" id="likeButton" data-bnum="${boardInfo.b_num}">
 			            추천하기👍 <span id="likes-count">${boardInfo.b_likes}</span>
@@ -193,7 +193,7 @@
 			</form>
 			</c:if>
 		</div>
-            
+</div>
 
     
     
