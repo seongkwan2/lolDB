@@ -60,18 +60,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>	<!-- BoardVO 클래스의 replyCount 프로퍼티와 데이터베이스의 reply_count 컬럼을 서로 연결 -->
 
 	<!-- 게시글과 댓글수를 가져옴 -->
-	<select id="getBoardListWithReplyCount"
-		resultMap="boardResultMap">		
-		SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
-		COUNT(r.r_num) AS reply_count
-		FROM lol_board b
-		LEFT JOIN lol_board_reply
-		r ON b.b_num = r.r_board_num
-		GROUP BY b.b_num, b.b_title, b.b_id,
-		b.b_date, b.b_hits, b.b_likes
-		ORDER BY b.b_num DESC
+	<select id="getBoardListWithReplyCount" parameterType="page" resultMap="boardResultMap">
+	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
+	    COUNT(r.r_num) AS reply_count
+	    FROM lol_board b
+	    LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+	    GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+	    ORDER BY b.b_num DESC
+	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
-
 
 	<!-- 추천 상태 확인 -->
 	<select id="checkLikeStatus" parameterType="map"

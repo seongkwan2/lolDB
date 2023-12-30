@@ -3,9 +3,6 @@ package com.lol.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,13 +52,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> getBoardListWithReplyCount() {
-		return this.boardDao.getBoardListWithReplyCount();
-	}
-
-	@Override
-	public List<BoardVO> getBoardListPaging(PageVO page) {
-		return this.boardDao.getBoardListPaging(page);
+	public List<BoardVO> getBoardListWithReplyCount(PageVO pageInfo) {
+		return this.boardDao.getBoardListWithReplyCount(pageInfo);
 	}
 
 	@Transactional

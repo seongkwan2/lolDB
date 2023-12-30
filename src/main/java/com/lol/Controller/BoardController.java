@@ -43,104 +43,44 @@ public class BoardController {
 	@Autowired
 	private ReplyService replyService;
 
-	/*
-	//게시판 메인 페이지
-	@GetMapping(value="/boardMain")
-	public ModelAndView boardMain(HttpServletRequest request, PageVO p, HttpSession session) {
-		ModelAndView mv = new ModelAndView();
-
-		//로그인 정보 가져오기
-		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
-		mv.addObject("memberInfo", memberInfo);
-
-		int page=1;
-		int limit=10;
-		if(request.getParameter("page") != null) {
-			page=Integer.parseInt(request.getParameter("page"));
-			//페이지 번호를 정수 숫자로 변경해서 저장
-		}
-
-		// 검색 관련 부분
-		String find_name=request.getParameter("find_name");//검색어
-		String find_field=request.getParameter("find_field");//검색 필드
-		p.setFind_name("%"+find_name+"%");
-		p.setFind_field(find_field);
-
-		int listcount = this.boardService.getListCount(p); //글의 개수를 파악
-
-		p.setStartrow((page-1)*10+1); //시작행 번호
-		p.setEndrow(p.getStartrow()+limit-1); //끝행 번호
-
-		//총 페이지수
-		int maxpage=(int)((double)listcount/limit+0.95);
-		//시작페이지(1,11,21 ..)
-		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
-		//현재 페이지에 보여질 마지막 페이지(10,20 ..)
-		int endpage=maxpage;
-		if(endpage>startpage+10-1) endpage=startpage+10-1;
-
-		//모든 게시글과, 해당게시글의 댓글수를 가져옴
-		List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount();
-
-		mv.addObject("boardList", boardList);
-		mv.addObject("page",page);// 쪽번호
-		mv.addObject("startpage",startpage);// 시작페이지
-		mv.addObject("endpage",endpage);// 마지막 페이지
-		mv.addObject("maxpage",maxpage);// 최대 페이지
-		mv.addObject("listcount",listcount);// 검색전후 레코드 개수
-		mv.addObject("find_field", find_field);// 검색 필드
-		mv.addObject("find_name", find_name);// 검색어
-
-		mv.setViewName("/board/boardMain");
-
-		return mv;
-	}
-	 */
 	//게시판 메인 페이지
 	@GetMapping("/boardMain")
-	public ModelAndView boardMain(HttpServletRequest request, PageVO pageInfo, HttpSession session) {
-		ModelAndView mv = new ModelAndView();
+	public ModelAndView boardMain(@RequestParam(value = "page", defaultValue = "1") int page, 
+	                              PageVO pageVO, HttpSession session) {
+	    ModelAndView mv = new ModelAndView();
 
-		// 로그인 정보 가져오기
-		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
-		mv.addObject("memberInfo", memberInfo);
-		
-		
-		int page=1;
-		int limit=10;
-		if(request.getParameter("page") != null) {
-			page=Integer.parseInt(request.getParameter("page"));
-			//페이지 번호를 정수 숫자로 변경해서 저장
-		}
-		
-		int listcount = this.boardService.getListCount(pageInfo); //글의 개수를 파악
+	    // 로그인 정보 가져오기
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+	    mv.addObject("memberInfo", memberInfo);
+	    
+	    // 페이징 처리
+	    int limit = 10;
 
-		pageInfo.setStartrow((page-1)*10+1); //시작행 번호
-		pageInfo.setEndrow(pageInfo.getStartrow()+limit-1); //끝행 번호
-		pageInfo.setLimit(limit);
+	    int listCount = this.boardService.getListCount(pageVO); // 글의 개수 파악
 
+	    int offset = (page - 1) * limit;
+	    pageVO.setOffset(offset);
+	    pageVO.setLimit(limit);
 
-		//총 페이지수
-		int maxpage=(int)((double)listcount/limit+0.95);
-		//시작페이지(1,11,21 ..)
-		int startpage=(((int)((double)page/10+0.9))-1)*10+1;
-		//현재 페이지에 보여질 마지막 페이지(10,20 ..)
-		int endpage=maxpage;
-		if(endpage>startpage+10-1) endpage=startpage+10-1;
+	    // 총 페이지 수 계산
+	    int maxpage = (int) Math.ceil((double) listCount / limit);
+	    int startpage = ((page - 1) / 10) * 10 + 1;
+	    int endpage = Math.min(startpage + 9, maxpage);
 
-		//모든 게시글과, 해당게시글의 댓글수를 가져옴
-		List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount();
+	    List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount(pageVO);
 
 	    mv.addObject("boardList", boardList);
-	    mv.addObject("page",page);				// 쪽번호
-		mv.addObject("startpage",startpage);	// 시작페이지
-		mv.addObject("endpage",endpage);		// 마지막 페이지
-		mv.addObject("maxpage",maxpage);		// 최대 페이지
+	    mv.addObject("page", page);
+	    mv.addObject("startpage", startpage);
+	    mv.addObject("endpage", endpage);
+	    mv.addObject("maxpage", maxpage);
 
 	    mv.setViewName("/board/boardMain");
 
-		return mv;
+	    return mv;
 	}
+
+
 
 
 	//글쓰기 폼

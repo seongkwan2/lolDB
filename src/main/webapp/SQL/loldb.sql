@@ -136,6 +136,15 @@ GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes;
 
 commit;
 
+ SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
+    COUNT(r.r_num) AS reply_count
+    FROM lol_board b
+    LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+    GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+    ORDER BY b.b_num desc
+    OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;
+    
+    SELECT * FROM lol_board;
 
 
 

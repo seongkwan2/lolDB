@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.lol.vo.BoardVO;
@@ -55,13 +53,8 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public List<BoardVO> getBoardListWithReplyCount() {
-		return this.sqlSession.selectList("getBoardListWithReplyCount");
-	}
-	
-	@Override
-	public List<BoardVO> getBoardListPaging(PageVO page) {
-		return this.sqlSession.selectList("getBoardListPaging",page);
+	public List<BoardVO> getBoardListWithReplyCount(PageVO pageInfo) {
+		return this.sqlSession.selectList("getBoardListWithReplyCount",pageInfo);
 	}
 
 	@Override	//파라미터가 두개이상이면 Map형태로 만들어서 put으로 변수에 집어넣고 mybatis에 전달해야함
