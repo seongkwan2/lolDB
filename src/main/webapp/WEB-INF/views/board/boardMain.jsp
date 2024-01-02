@@ -10,30 +10,6 @@
 <script src="/js/jquery.js"></script>
 <link href="/css/main.css" rel="stylesheet"/>
 <link href="/css/board/board.css" rel="stylesheet"/>
-<style>
-    .page-button {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 2px;
-        border: 1px solid #ddd;
-        background-color: #f8f8f8;
-        text-decoration: none;
-        color: #333;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .page-button:hover {
-        background-color: #e9e9e9;
-    }
-
-    .page-button.active {
-        background-color: #007bff;
-        color: white;
-        border-color: #007bff;
-    }
-</style>
-
 </head>
 <body>
 
@@ -48,67 +24,74 @@
 
 <%--카테고리로 게시판 이동--%>
 <select id="boardSelect" style="width: 150px;">
-    <option value="전체보기">전체보기</option>
     <option value="자유게시판">자유게시판</option>
     <option value="팁게시판">팁게시판</option>
 </select>
 
-
-파일 올리는것도 구현하기
-<div id="boardContent">
-    <!-- 게시판 내용이 여기 -->
-</div>
-
-<script>
-$(document).ready(function(){
-    $('#boardSelect').change(function(){
-        var category = $(this).val();
-        $.ajax({
-            url: '/boardMain', // URL 변경
-            type: 'GET',
-            data: { 
-                b_category: category, // 카테고리 파라미터 추가
-                page: 1 // 기본 페이지 1로 설정
-            },
-            success: function(response){
-                $('#boardContent').html(response);
-            }
-        });
-    });
-});
-</script>
-
-
-
-
-<input type="button" value="글쓰기" style="float:right; margin-right: 200px" onclick = "goWrite()";>
+<button style="float:right; margin-right: 200px" onclick = "goWrite();">글쓰기</button>
 <script>
 	function goWrite(){
 		location = '/board/boardWrite';
 	}
 </script>
 </div>
+파일 올리는것도 구현하기
 
-<br>
-
-<div class="board-container">
-    <table border="1">
-        <tr style="font-weight: bold; background-color: #49557d; color:#f8f8f8;">
-            <td>번호</td> <td>제목</td> <td>작성자</td> <td>작성일자</td> <td>조회수</td> <td>추천</td> <td>댓글수</td>
-        </tr>
-        <c:forEach var="boardInfo" items="${boardList}">	<%--내가 작성한글은 배경색상이 존재 --%>
-            <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
-                <td>${boardInfo.b_num}</td>
-                <td><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
-                <td>${boardInfo.b_id}</td>
-                <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
-                <td>${boardInfo.b_hits}</td>
-                <td>${boardInfo.b_likes}</td>
-                <td>${boardInfo.replyCount}</td>
-            </tr>
-        </c:forEach>
-    </table>
+<%--boardList를 include하여 출력 --%>
+<div id="boardContent">
+	<%@ include file="boardList.jsp" %>
 </div>
+
+<%--카테고리 별 글을 가져오는 ajax구현 --%>
+<script>
+$(document).ready(function(){
+    // 현재 선택된 카테고리 값을 저장하거나 가져오는 함수
+    function setCategory(category) {
+        if (category) { //sessionStorage에 현재의 카테고리를 저장해서 페이징 처리해도 유지되게함
+            sessionStorage.setItem('category', category);
+        } else {
+            return sessionStorage.getItem('category');
+        }
+    }
+
+    // 페이지 로딩 시 저장된 카테고리 값을 select 요소에 설정
+    var savedCategory = setCategory();
+    if (savedCategory) {
+        $('#boardSelect').val(savedCategory);
+    }
+
+    $('#boardSelect').change(function(){
+        var category = $(this).val();
+        setCategory(category); // 선택된 카테고리 저장
+
+        // AJAX 요청
+        $.ajax({
+            url: '/board/boardMain',
+            type: 'GET',
+            data: { 
+                b_category: category,
+                page: 1
+            },
+            success: function(response){
+                $('#boardContent').html(response);
+            }
+        });
+    });
+
+    // 페이징 링크에 카테고리 값을 포함시키는 로직 추가
+    $(document).on('click', '.page-button', function(e) {
+        e.preventDefault();
+        var pageLink = $(this).attr('href');	//href 속성을 가져와 pageLink 변수에 저장
+        var category = setCategory(); 	// 현재 카테고리 가져오기
+        if (category) {
+            pageLink += "&b_category=" + category; // URL에 카테고리 추가
+        }
+        location.href = pageLink; // 페이지 이동
+    });
+});
+</script>
+
+
 
 <%--행의 아무곳이나 선택해도 해당 글의 링크에 들어가짐 --%>
 <script>
@@ -130,55 +113,42 @@ document.addEventListener("DOMContentLoaded", addRowClickEvent);
 
 
 
-
+<br><br>
 <%--페이징(쪽나누기)--%>
-<div id="page_control">
-	<%--검색전 페이징 --%>
-	<c:if test="${(empty find_field)&&(empty find_name)}">
-		<c:if test="${page <=1}">[이전]&nbsp;</c:if>
-		<c:if test="${page >1}">
-			<a href="boardMain?page=${page-1}">[이전]</a>&nbsp;
-				</c:if>
+<div class="page_control">
+    <!-- "이전" 버튼 섹션 -->
+    <!-- 현재 페이지가 1보다 큰 경우, "이전" 링크를 활성화 -->
+    <c:if test="${page > 1}">
+        <a href="boardMain?page=${page-1}" class="page-button">이전</a>&nbsp;
+    </c:if>
+    <!-- 현재 페이지가 1 이하인 경우, "이전" 링크를 비활성화(텍스트만 출력) -->
+    <c:if test="${page <= 1}">
+        <span class="page-button">이전</span>&nbsp;
+    </c:if>
 
-		<%--쪽번호 출력부분 --%>
-		<c:forEach var="a" begin="${startpage}" end="${endpage}" step="1">
-			<c:if test="${a == page}"><${a}></c:if>
-			<c:if test="${a != page}">
-				<a href="boardMain?page=${a}">[${a}]</a>&nbsp;
-					</c:if>
-		</c:forEach>
-		<c:if test="${page>=maxpage}">[다음]</c:if>
-		<c:if test="${page<maxpage}"><a href="boardMain?page=${page+1}">[다음]</a></c:if>
-	</c:if>
-	
-	<%-- 검색후 페이징(쪽나누기) --%>
-	<c:if test="${(!empty find_field) || (!empty find_name)}">
-		<c:if test="${page <=1}">[이전]&nbsp;</c:if>
-		<c:if test="${page >1}">
-			<a href="boardMain?page=${page-1}&find_field=${find_field}
-				&find_name=${find_name}">[이전]</a>&nbsp;
-			</c:if>
+    <!-- 페이지 번호를 출력하는 섹션 -->
+    <!-- startpage부터 endpage까지의 각 페이지 번호를 반복하여 출력합니다. -->
+    <c:forEach var="number" begin="${startpage}" end="${endpage}" step="1">
+        <!-- 현재 페이지 번호에는 강조 스타일을 적용합니다. -->
+        <c:if test="${number == page}">
+            <span class="page-button current-page">${number}</span>
+        </c:if>
+        <!-- 현재 페이지가 아닌 번호는 클릭 가능한 링크로 표시합니다. -->
+        <c:if test="${number != page}">
+            <a href="boardMain?page=${number}" class="page-button">${number}</a>
+        </c:if>
+    </c:forEach>
 
-	<%--쪽번호 출력부분 --%>
-	<c:forEach var="a" begin="${startpage}" end="${endpage}" step="1">
-		<c:if test="${a == page}"><${a}></c:if>
-		<c:if test="${a != page}">
-			<a href="boardMain?page=${a}&find_field=${find_field}
-				&find_name=${find_name}">[${a}]</a>&nbsp;
-			</c:if>
-	</c:forEach>
-
-	<c:if test="${page>=maxpage}">[다음]</c:if>
-	<c:if test="${page<maxpage}">
-		<a href="boardMain?page=${page+1}&find_field=${find_field}
-			&find_name=${find_name}">[다음]</a>
-	</c:if>
-</c:if>
+    <!-- "다음" 버튼 섹션 -->
+    <!-- 현재 페이지가 maxpage 미만인 경우, "다음" 링크를 활성화합니다. -->
+    <c:if test="${page < maxpage}">
+        <a href="boardMain?page=${page+1}" class="page-button">다음</a>
+    </c:if>
+    <!-- 현재 페이지가 maxpage 이상인 경우, 비활성화된 "다음" 텍스트를 표시합니다. -->
+    <c:if test="${page >= maxpage}">
+        <span class="page-button">다음</span>
+    </c:if>
 </div>
-
-
-
-
 
 
 <%--alert 메시지에 반응하는 코드 --%>

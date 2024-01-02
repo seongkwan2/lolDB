@@ -37,13 +37,13 @@
             <h2>자유게시판</h2><hr>
             
             <%--글 상단 제목 박스 --%>
-            <div class="title_box">
-            	<div class="title">
+            <div class="cont_title_box">
+            	<div class="cont_title">
 		           <h4>글제목 : <b>${boardInfo.b_title}</b></h4>
 		            작성자 : ${boardInfo.b_id}
             	</div>
             	
-            	<div class="etc">
+            	<div class="cont_etc">
             		조회 ${boardInfo.b_hits} | 추천 ${boardInfo.b_likes} | <span style="text-align: right;">
 		            					<fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd HH:mm"/></span>
             	</div>

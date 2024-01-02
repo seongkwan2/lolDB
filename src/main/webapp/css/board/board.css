@@ -47,16 +47,16 @@
     padding: 0; /* 기본 패딩 제거 */
 }
 
-/*글상단 제목 라인*/
-.title_box{
+/*글내용 확인 제목 라인*/
+.cont_title_box{
 	width: auto;
 }
 /*
-.title{
+.cont_title{
 현재 사용하지 않고 있음
 }*/
 
-.etc{
+.cont_etc{
 	text-align: right;
 }
 
@@ -79,19 +79,34 @@
 
 
 /*게시글 목록*/
-.board-container{
-	text-align: center;
-	justify-content: center;
-	display: flex;
-	margin: auto;
-	width: 1300px;
+.board-container {
+    text-align: center;
+    justify-content: center; /* 수평 정렬을 중앙으로 유지 */
+    align-items: flex-start; /* 새로 추가된 속성: 아이템들을 세로 방향으로 맨 위에 정렬 */
+    display: flex;
+    margin: auto;
+    width: 1300px;
+    min-height: 500px;
 }
+
 /* 목록 테이블의 스타일 */
 .board-container table {
     width: 900px; /* 테이블의 너비를 부모 컨테이너의 80%로 설정 */
-    margin: auto; /* 가운데 정렬 */
-    
+    margin-top: 0; /* 상단 정렬 */
+    margin-bottom: auto; /* 나머지 공간을 아래에 두어 테이블을 위로 밀어냄 */
+    margin-left: auto; /* 수평 가운데 정렬 */
+    margin-right: auto; /* 수평 가운데 정렬 */
 }
+
+/* 테이블의 제목과 작성자 칼럼(td) 스타일 설정 */
+.board-container td.title, .board-container td.writer {
+    max-width: 200px; /* 최대 너비 설정 */
+    overflow: hidden; /* 넘치는 내용 숨기기 */
+    text-overflow: ellipsis; /* 넘치는 텍스트를 생략 기호(...)로 표시 */
+    white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+    word-wrap: break-word; /* 긴 단어가 다음 줄로 넘어가도록 설정 */
+}
+
 
 /* 각 셀(td)의 스타일 */
 .board-container td {
@@ -104,7 +119,7 @@
     font-weight: bold;
 }
 
-/*.board-container 내의 첫 번째 <tr>를 제외한 
+/*.board-container 내의 첫 번째 <tr>를 제외한(첫번재 tr은 번호,제목,작성자 등등..타이틀임) 
 모든 <tr>에 대해 마우스를 올렸을 때 배경색 변경 */
 .board-container tr:not(:first-child):hover {
     background-color: lightyellow !important;
@@ -203,6 +218,31 @@ text-align: left; /* '내용' 열만 왼쪽 정렬 */
     gap: 10px; /* 버튼 사이 간격 */
 }
 
+
+/*페이징 버튼*/
+.page_control{
+	display: flex;
+    justify-content : center;
+    text-align: center;
+}
+
+.page-button {
+	padding: 5px 10px;
+	margin: 2px;
+	background-color: #f2f2f2;
+	border: 1px solid #d4d4d4;
+	text-decoration: none;
+	color: black;
+}
+
+.page-button:hover {
+	background-color: #ddd;
+}
+
+.current-page {
+	font-weight: bold;
+	color: red;
+}
 
  
  

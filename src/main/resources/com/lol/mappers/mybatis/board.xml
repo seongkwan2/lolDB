@@ -47,10 +47,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{b_num}
 	</update>
 
-	<!-- 기존 맵퍼 정의 ... -->
+	<!-- 기존 맵퍼 정의 -->
 	<resultMap id="boardResultMap" type="board">
 		<id property="b_num" column="b_num" />
-		<!-- 기타 필드 매핑 ... -->
+		<!-- 기타 필드 매핑 -->
 		<result property="b_title" column="b_title" />
 		<result property="b_id" column="b_id" />
 		<result property="b_date" column="b_date" />
@@ -65,10 +65,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    COUNT(r.r_num) AS reply_count
 	    FROM lol_board b
 	    LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+	    <!-- 카테고리에 따른 필터링 조건 -->
+	    <where>
+	        <if test="b_category != null and b_category != ''">
+	            AND b.b_category = #{b_category}
+	        </if>
+	    </where>
 	    GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
 	    ORDER BY b.b_num DESC
 	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
+
 
 	<!-- 추천 상태 확인 -->
 	<select id="checkLikeStatus" parameterType="map"
@@ -113,20 +120,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getLikesCount" resultType="int">
 		SELECT b_likes FROM
 		lol_board WHERE b_num = #{b_num}
-	</select>
-
-	<!-- 페이징 처리된 게시판 목록 조회 -->
-	<select id="getBoardListPaging" resultType="board" parameterType="page">
-		SELECT * FROM (
-		SELECT /*+ INDEX_DESC(tbl LOL_BOARD_PK) */
-		a.*, ROWNUM rnum
-		FROM (
-		SELECT * FROM lol_board
-		ORDER BY b_date DESC
-		) a
-		WHERE ROWNUM &lt;= (#{pageNum} * #{amount})
-		)
-		WHERE rnum > ((#{pageNum}-1) * #{amount})
 	</select>
 
 
