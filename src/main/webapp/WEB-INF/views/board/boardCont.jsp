@@ -176,7 +176,7 @@
             <input type="button" value="목록으로" onclick="goBoardMain();">        	
             <script>
             function goBoardMain(){
-            	location = '/board/boardMain';
+            	history.back(); // 브라우저의 이전 페이지로 이동
             }
          	</script>
 

@@ -22,11 +22,47 @@
 <input type="button" value="개념글">
 <input type="button" value="공지사항">
 
-<%--카테고리로 게시판 이동--%>
+<!-- 카테고리 선택 요소 -->
 <select id="boardSelect" style="width: 150px;">
-    <option value="자유게시판">자유게시판</option>
-    <option value="팁게시판">팁게시판</option>
+    <option value="자유게시판" ${bCategory == '자유게시판' ? 'selected' : ''}>자유게시판</option>
+    <option value="팁게시판" ${bCategory == '팁게시판' ? 'selected' : ''}>팁게시판</option>
 </select>
+<!-- bCategory 변수가 '자유게시판'과 동일한 경우에는 'selected' 문자열을 반환하여 해당 옵션을 선택한 것처럼 만들고
+	그렇지 않으면 빈 문자열을 반환하여 선택되지 않은 상태로 지정 -->
+	
+<%--카테고리 선택시 발동되는 Javascript--%>
+<script>
+// 카테고리 변경 시 호출되는 함수
+$('#boardSelect').change(function(){
+    var category = $(this).val();
+    var page = 1; // 페이지 초기화
+
+    // 선택한 카테고리를 세션 스토리지에 저장
+    sessionStorage.setItem("selectedCategory", category);
+
+    // 페이지 업데이트 요청을 보냄(아래의 코드 실행)
+    updatePageByCategory(category, page);
+});
+
+//카테고리별 글을 가져오는 코드 ajax구현
+function updatePageByCategory(category, page) {
+	// 세션에 선택한 카테고리 저장
+    sessionStorage.setItem("selectedCategory", category);
+    // AJAX 요청을 보냅니다.
+    $.ajax({
+        url: '/board/boardMain',
+        type: 'GET',
+        data: { 
+            b_category: category,
+            page: page // 페이지를 파라미터로 전달
+        },
+        success: function(response){
+            $('#boardContent').html(response); // 받은 데이터로 게시판 내용을 업데이트
+        }
+    });
+}
+</script>
+
 
 <button style="float:right; margin-right: 200px" onclick = "goWrite();">글쓰기</button>
 <script>
@@ -42,91 +78,34 @@
 	<%@ include file="boardList.jsp" %>
 </div>
 
-<%--카테고리 별 글을 가져오는 ajax구현 --%>
-<script>
-// 카테고리 변경 시 호출되는 함수   카테고리 변경시 해당 카테고리의 게시글 수만큼 페이징이 남게하기 //무조건 여기부터할것
-function updatePageByCategory(category, page) {
-    // AJAX 요청을 보냅니다.
-    $.ajax({
-        url: '/board/boardMain', // 요청할 URL을 지정하세요.
-        type: 'GET',
-        data: { 
-            b_category: category,
-            page: page // 페이지를 파라미터로 전달합니다.
-        },
-        success: function(response){
-            $('#boardContent').html(response); // 받은 데이터로 게시판 내용을 업데이트합니다.
-        }
-    });
-}
-
-// 카테고리 선택 요소의 변경 이벤트 핸들러
-$('#boardSelect').change(function(){
-    var category = $(this).val();
-    var page = 1; // 페이지 초기화
-    updatePageByCategory(category, page); // 카테고리 변경 시 페이지 업데이트
-});
-
-// 페이지 번호를 클릭할 때 호출되는 함수
-function goToPage(page) {
-    var category = $('#boardSelect').val();
-    updatePageByCategory(category, page); // 페이지 변경 시 페이지 업데이트
-}
-
-</script>
-
-
-
-<%--행의 아무곳이나 선택해도 해당 글의 링크에 들어가짐 --%>
+<%--행의 아무곳이나 선택해도 해당 글의 링크에 들어가는 코드 --%>
 <script>
 function addRowClickEvent() {
-    // 테이블의 각 행에 대해 이벤트 리스너 추가
+    // ".board-container tr" 선택자를 사용하여 모든 게시판 행을 선택합니다.
     var rows = document.querySelectorAll(".board-container tr");
     rows.forEach(function(row) {
-        row.addEventListener("click", function() {
-            var link = this.querySelector("a");
-            if(link) {
-                window.location.href = link.href; // 링크로 이동
+        // 각 행에 클릭 이벤트 리스너를 추가
+        row.addEventListener("click", function(event) {
+            // 클릭된 요소가 a 태그인 경우 페이지 이동 (이 코드가 없으면 조회수가 서버에서 두번호출되서 조회수가 2가 오름)
+            if (event.target.tagName.toLowerCase() === 'a') {//동작을 한번만 하도록 하기 위한 코드
+                return;
+            }
+
+            // 현재 행에서 'boardCont'를 포함하는 href 속성을 가진 a 태그를 찾음
+            var link = this.querySelector("a[href*='boardCont']");
+            // 링크가 존재하고 href 속성이 있는 경우 해당 링크로 페이지를 이동
+            if (link && link.href) {
+                window.location.href = link.href;
             }
         });
     });
 }
-//DOM이 완전히 로드된 후 함수 실행
-document.addEventListener("DOMContentLoaded", addRowClickEvent);
+
+// 페이지가 완전히 로드된 후 addRowClickEvent 함수를 호출
+$(document).ready(function() {
+    addRowClickEvent();
+});
 </script>
-
-
-
-<br><br>
-<%--페이징(쪽나누기)--%>
-<div class="page_control">
-    <!-- "이전" 버튼 섹션 -->
-    <c:if test="${page > 1}">
-        <a href="boardMain?page=${page-1}" class="page-button">이전</a>&nbsp;
-    </c:if>
-    <c:if test="${page <= 1}">
-        <span class="page-button disabled">이전</span>&nbsp;
-    </c:if>
-
-    <!-- 페이지 번호를 출력하는 섹션 -->
-    <c:forEach var="number" begin="${startpage}" end="${endpage}" step="1">
-        <c:if test="${number == page}">
-            <span class="page-button current-page disabled">${number}</span>
-        </c:if>
-        <c:if test="${number != page}">
-            <a href="boardMain?page=${number}" class="page-button">${number}</a>
-        </c:if>
-    </c:forEach>
-
-    <!-- "다음" 버튼 섹션 -->
-    <c:if test="${page < maxpage}">
-        <a href="boardMain?page=${page+1}" class="page-button">다음</a>
-    </c:if>
-    <c:if test="${page >= maxpage}">
-        <span class="page-button disabled">다음</span>
-    </c:if>
-</div>
-
 
 
 <%--alert 메시지에 반응하는 코드 --%>

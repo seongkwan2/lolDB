@@ -118,8 +118,8 @@ INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'z','하이', sys
 INSERT INTO lol_member VALUES(lol_member_seq.nextval,'z', 'z' , '조성관', '19960307', 'zaq3195@naver.com', '01038882488', '1', '2023-12-21');
 
 --테스트용 게시글작성
-INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','테스트 제목 입니다','테스트 내용 입니다','2023-12-11','자유게시판',1,0);
-INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','두번째 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','자유게시판',1,50);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁테스트 제목 입니다','테스트 내용 입니다','2023-12-11','팁게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁게시판 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','팁게시판',1,50);
 
 --조회수 쿼리문
 UPDATE lol_board SET board_views = board_views + 1 WHERE board_id = :게시물_ID;

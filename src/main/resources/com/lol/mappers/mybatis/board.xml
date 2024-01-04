@@ -43,8 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 글 확인시 조회수 증가 -->
 	<update id="plusHits">
-		UPDATE lol_board SET b_hits = b_hits +1 WHERE b_num =
-		#{b_num}
+		UPDATE lol_board SET b_hits = b_hits +1 WHERE b_num = #{b_num}
 	</update>
 
 	<!-- 기존 맵퍼 정의 -->

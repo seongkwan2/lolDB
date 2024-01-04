@@ -46,7 +46,7 @@ public class BoardController {
 	//게시판 메인 페이지
 	@GetMapping("/boardMain")
 	public ModelAndView boardMain(@RequestParam(value = "page", defaultValue = "1") int page,
-	                              @RequestParam(value = "b_category", defaultValue = "자유게시판") String bCategory, // 카테고리 파라미터 추가
+	                              @RequestParam(value = "b_category", required = false) String bCategory, // 카테고리 파라미터 추가
 	                              PageVO pageVO, HttpSession session, HttpServletRequest request) {
 	    ModelAndView mv = new ModelAndView();
 
@@ -54,10 +54,23 @@ public class BoardController {
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 	    mv.addObject("memberInfo", memberInfo);
 
-	    pageVO.setB_category(bCategory);
-	    int listCount = this.boardService.getCountByCategory(bCategory);
+	 // 세션에서 선택한 카테고리 읽어오기
+	    String selectedCategory = (String) session.getAttribute("selectedCategory");
+	    if (selectedCategory == null) {
+	        selectedCategory = "자유게시판"; // 기본값으로 자유게시판 설정
+	    }
 
-	    System.out.println("카테고리의 글 개수:"+listCount);
+	    // 카테고리 파라미터가 제공되면 선택한 카테고리를 사용하고, 그렇지 않으면 세션에서 읽어온 카테고리를 사용합니다.
+	    if (bCategory != null) {
+	        // 카테고리 파라미터가 제공되면 해당 카테고리로 변경
+	        selectedCategory = bCategory;
+	        // 선택한 카테고리를 세션에 다시 저장 (다른 페이지에서도 사용하기 위함)
+	        session.setAttribute("selectedCategory", selectedCategory);
+	    }
+
+	    pageVO.setB_category(selectedCategory);
+	    int listCount = this.boardService.getCountByCategory(selectedCategory);
+
 	    // 페이징 처리
 	    int limit = 10;
 	    int offset = (page - 1) * limit;
@@ -74,7 +87,7 @@ public class BoardController {
 
 	    // 뷰 설정
 	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환
+	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환 (카테고리 선택시)
 	    } else {
 	        mv.setViewName("/board/boardMain"); // 전체 페이지 반환
 	    }
@@ -85,10 +98,11 @@ public class BoardController {
 	    mv.addObject("startpage", startpage);
 	    mv.addObject("endpage", endpage);
 	    mv.addObject("maxpage", maxpage);
-	    mv.addObject("bCategory", bCategory); // 현재 선택된 카테고리
+	    mv.addObject("bCategory", selectedCategory); // 현재 선택된 카테고리
 
 	    return mv;
 	}
+
 
 
 
@@ -143,10 +157,10 @@ public class BoardController {
 		}
 		int result = this.replyService.writeReply(replyInfo);
 		if (result == 1) {
-			redirectAttributes.addFlashAttribute("message", "댓글 쓰기 성공!");
+			//redirectAttributes.addFlashAttribute("message", "댓글 쓰기 성공!");
 			return "redirect:/board/boardCont?b_num=" + replyInfo.getR_board_num(); // 게시글 번호를 URL에 포함
 		} else {
-			redirectAttributes.addFlashAttribute("message", "댓글 쓰기 실패!");
+			//redirectAttributes.addFlashAttribute("message", "댓글 쓰기 실패!");
 			return "redirect:/board/boardWrite";
 		}
 	}
@@ -166,7 +180,7 @@ public class BoardController {
 		// 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
 		BoardVO boardInfo = this.boardService.getCont(b_num);
 		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
-		String formattedContent = safeContent.replace("\n", "<br>");
+		String formattedContent = safeContent.replace("\n", "<br>");	//글 줄바꿈처리 적용
 		boardInfo.setB_cont(formattedContent);
 		mv.addObject("boardInfo", boardInfo);
 
@@ -189,10 +203,10 @@ public class BoardController {
 	public String boardDel(@RequestParam("b_num") long b_num, RedirectAttributes redirectAttributes) {
 		int result = this.boardService.boardDel(b_num);
 		if (result == 1) {
-			redirectAttributes.addFlashAttribute("message", "글 삭제 성공!");
+			redirectAttributes.addFlashAttribute("message", "해당 글이 삭제되었습니다!");
 			return "redirect:/board/boardMain";
 		} else {
-			redirectAttributes.addFlashAttribute("message", "글 삭제 실패!");
+			redirectAttributes.addFlashAttribute("message", "해당 글을 삭제에 실패했습니다.");
 			return "redirect:/board/boardWrite";
 		}
 	}
@@ -241,7 +255,7 @@ public class BoardController {
 		//추천 검증(추천을 했는지 안했는지 확인하고 여부에따라 추천,취소하는 메서드)
 		String result = this.boardService.toggleLike(b_num, memberInfo.getM_id());
 
-		//비동기식을 적용하기위해 추천수를 가져와서 resultMap에 추가
+		//비동기식 ajax를 적용하기위해 추천수를 가져와서 resultMap에 추가
 		int LikesCount = boardService.getLikesCount(b_num);
 		resultMap.put("LikesCount", LikesCount);
 
@@ -249,27 +263,6 @@ public class BoardController {
 		resultMap.put("message", result);
 		return resultMap;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
