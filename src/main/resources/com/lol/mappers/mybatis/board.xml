@@ -12,8 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by b_num desc
 	</select>
 
-	<!-- 게시판 글 개수 파악 -->
-	<select id="getListCount" parameterType="page" resultType="int">
+	<!-- 게시판 전체 글 개수 파악 -->
+	<select id="getListCount" resultType="int">
 		select count(b_num) from lol_board
 	</select>
 
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="replyCount" column="reply_count" />
 	</resultMap>	<!-- BoardVO 클래스의 replyCount 프로퍼티와 데이터베이스의 reply_count 컬럼을 서로 연결 -->
 
-	<!-- 게시글과 댓글수를 가져옴 -->
+	<!-- 해당 카테고리의 게시글과 댓글수를 가져옴 -->
 	<select id="getBoardListWithReplyCount" parameterType="page" resultMap="boardResultMap">
 	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
 	    COUNT(r.r_num) AS reply_count
@@ -75,6 +75,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    ORDER BY b.b_num DESC
 	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
+	
+	<!-- 카테고리 별로 글을 가져와서 글의 개수체크 (카테고리 마다 다른 페이징을 위함)  -->
+	<select id="getCountByCategory" parameterType="string" resultType="int">
+    	SELECT COUNT(*) FROM lol_board WHERE b_category = #{b_category}
+	</select>
+	
 
 
 	<!-- 추천 상태 확인 -->

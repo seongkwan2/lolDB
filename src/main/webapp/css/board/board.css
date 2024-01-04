@@ -241,8 +241,16 @@ text-align: left; /* '내용' 열만 왼쪽 정렬 */
 
 .current-page {
 	font-weight: bold;
-	color: red;
+	color: orange !important;
 }
+
+.page-button.disabled {
+    color: #ccc; /* 회색 텍스트 */
+    cursor: default; /* 기본 커서 */
+    pointer-events: none; /* 마우스 이벤트 비활성화 */
+}
+
+
 
  
  

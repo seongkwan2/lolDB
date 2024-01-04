@@ -9,7 +9,7 @@ public interface BoardService {
 
 	List<BoardVO> getBoardList();
 	
-	int getListCount(PageVO pageInfo);
+	int getListCount();
 
 	int writeBoard(BoardVO boardInfo);
 
@@ -26,4 +26,6 @@ public interface BoardService {
 	String toggleLike(long b_num, String m_id);
 
 	int getLikesCount(long b_num);
+
+	int getCountByCategory(String bCategory);
 }

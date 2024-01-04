@@ -44,51 +44,35 @@
 
 <%--카테고리 별 글을 가져오는 ajax구현 --%>
 <script>
-$(document).ready(function(){
-    // 현재 선택된 카테고리 값을 저장하거나 가져오는 함수
-    function setCategory(category) {
-        if (category) { //sessionStorage에 현재의 카테고리를 저장해서 페이징 처리해도 유지되게함
-            sessionStorage.setItem('category', category);
-        } else {
-            return sessionStorage.getItem('category');
+// 카테고리 변경 시 호출되는 함수   카테고리 변경시 해당 카테고리의 게시글 수만큼 페이징이 남게하기 //무조건 여기부터할것
+function updatePageByCategory(category, page) {
+    // AJAX 요청을 보냅니다.
+    $.ajax({
+        url: '/board/boardMain', // 요청할 URL을 지정하세요.
+        type: 'GET',
+        data: { 
+            b_category: category,
+            page: page // 페이지를 파라미터로 전달합니다.
+        },
+        success: function(response){
+            $('#boardContent').html(response); // 받은 데이터로 게시판 내용을 업데이트합니다.
         }
-    }
-
-    // 페이지 로딩 시 저장된 카테고리 값을 select 요소에 설정
-    var savedCategory = setCategory();
-    if (savedCategory) {
-        $('#boardSelect').val(savedCategory);
-    }
-
-    $('#boardSelect').change(function(){
-        var category = $(this).val();
-        setCategory(category); // 선택된 카테고리 저장
-
-        // AJAX 요청
-        $.ajax({
-            url: '/board/boardMain',
-            type: 'GET',
-            data: { 
-                b_category: category,
-                page: 1
-            },
-            success: function(response){
-                $('#boardContent').html(response);
-            }
-        });
     });
+}
 
-    // 페이징 링크에 카테고리 값을 포함시키는 로직 추가
-    $(document).on('click', '.page-button', function(e) {
-        e.preventDefault();
-        var pageLink = $(this).attr('href');	//href 속성을 가져와 pageLink 변수에 저장
-        var category = setCategory(); 	// 현재 카테고리 가져오기
-        if (category) {
-            pageLink += "&b_category=" + category; // URL에 카테고리 추가
-        }
-        location.href = pageLink; // 페이지 이동
-    });
+// 카테고리 선택 요소의 변경 이벤트 핸들러
+$('#boardSelect').change(function(){
+    var category = $(this).val();
+    var page = 1; // 페이지 초기화
+    updatePageByCategory(category, page); // 카테고리 변경 시 페이지 업데이트
 });
+
+// 페이지 번호를 클릭할 때 호출되는 함수
+function goToPage(page) {
+    var category = $('#boardSelect').val();
+    updatePageByCategory(category, page); // 페이지 변경 시 페이지 업데이트
+}
+
 </script>
 
 
@@ -117,38 +101,32 @@ document.addEventListener("DOMContentLoaded", addRowClickEvent);
 <%--페이징(쪽나누기)--%>
 <div class="page_control">
     <!-- "이전" 버튼 섹션 -->
-    <!-- 현재 페이지가 1보다 큰 경우, "이전" 링크를 활성화 -->
     <c:if test="${page > 1}">
         <a href="boardMain?page=${page-1}" class="page-button">이전</a>&nbsp;
     </c:if>
-    <!-- 현재 페이지가 1 이하인 경우, "이전" 링크를 비활성화(텍스트만 출력) -->
     <c:if test="${page <= 1}">
-        <span class="page-button">이전</span>&nbsp;
+        <span class="page-button disabled">이전</span>&nbsp;
     </c:if>
 
     <!-- 페이지 번호를 출력하는 섹션 -->
-    <!-- startpage부터 endpage까지의 각 페이지 번호를 반복하여 출력합니다. -->
     <c:forEach var="number" begin="${startpage}" end="${endpage}" step="1">
-        <!-- 현재 페이지 번호에는 강조 스타일을 적용합니다. -->
         <c:if test="${number == page}">
-            <span class="page-button current-page">${number}</span>
+            <span class="page-button current-page disabled">${number}</span>
         </c:if>
-        <!-- 현재 페이지가 아닌 번호는 클릭 가능한 링크로 표시합니다. -->
         <c:if test="${number != page}">
             <a href="boardMain?page=${number}" class="page-button">${number}</a>
         </c:if>
     </c:forEach>
 
     <!-- "다음" 버튼 섹션 -->
-    <!-- 현재 페이지가 maxpage 미만인 경우, "다음" 링크를 활성화합니다. -->
     <c:if test="${page < maxpage}">
         <a href="boardMain?page=${page+1}" class="page-button">다음</a>
     </c:if>
-    <!-- 현재 페이지가 maxpage 이상인 경우, 비활성화된 "다음" 텍스트를 표시합니다. -->
     <c:if test="${page >= maxpage}">
-        <span class="page-button">다음</span>
+        <span class="page-button disabled">다음</span>
     </c:if>
 </div>
+
 
 
 <%--alert 메시지에 반응하는 코드 --%>

@@ -9,7 +9,7 @@ public interface BoardDAO {
 
 	List<BoardVO> getBoardList();
 
-	int getListCount(PageVO pageInfo);
+	int getListCount();
 
 	int writeBoard(BoardVO boardInfo);
 
@@ -34,5 +34,7 @@ public interface BoardDAO {
 	void downLike(long b_num);
 
 	int getLikesCount(long b_num);
+
+	int getCountByCategory(String bCategory);
 
 }

@@ -46,7 +46,7 @@ public class BoardController {
 	//게시판 메인 페이지
 	@GetMapping("/boardMain")
 	public ModelAndView boardMain(@RequestParam(value = "page", defaultValue = "1") int page,
-	                              @RequestParam(value = "b_category", required = false) String bCategory, // 카테고리 파라미터 추가
+	                              @RequestParam(value = "b_category", defaultValue = "자유게시판") String bCategory, // 카테고리 파라미터 추가
 	                              PageVO pageVO, HttpSession session, HttpServletRequest request) {
 	    ModelAndView mv = new ModelAndView();
 
@@ -54,14 +54,12 @@ public class BoardController {
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 	    mv.addObject("memberInfo", memberInfo);
 
-	    // 카테고리가 있는 경우 PageVO에 설정
-	    if (bCategory != null && !bCategory.isEmpty()) {
-	        pageVO.setB_category(bCategory);
-	    }
+	    pageVO.setB_category(bCategory);
+	    int listCount = this.boardService.getCountByCategory(bCategory);
 
+	    System.out.println("카테고리의 글 개수:"+listCount);
 	    // 페이징 처리
 	    int limit = 10;
-	    int listCount = this.boardService.getListCount(pageVO); // 글의 개수 파악
 	    int offset = (page - 1) * limit;
 	    pageVO.setOffset(offset);
 	    pageVO.setLimit(limit);
@@ -71,7 +69,7 @@ public class BoardController {
 	    int startpage = ((page - 1) / 10) * 10 + 1;
 	    int endpage = Math.min(startpage + 9, maxpage);
 
-	    // 게시판 목록 가져오기
+	    // 해당 카테고리의 게시판 목록 가져오기
 	    List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount(pageVO);
 
 	    // 뷰 설정
@@ -87,9 +85,11 @@ public class BoardController {
 	    mv.addObject("startpage", startpage);
 	    mv.addObject("endpage", endpage);
 	    mv.addObject("maxpage", maxpage);
+	    mv.addObject("bCategory", bCategory); // 현재 선택된 카테고리
 
 	    return mv;
 	}
+
 
 
 

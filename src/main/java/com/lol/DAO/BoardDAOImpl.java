@@ -23,8 +23,8 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public int getListCount(PageVO pageInfo) {
-		return this.sqlSession.selectOne("getListCount",pageInfo);
+	public int getListCount() {
+		return this.sqlSession.selectOne("getListCount");
 	}
 
 	@Override
@@ -95,5 +95,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public int getLikesCount(long b_num) {
 		return this.sqlSession.selectOne("getLikesCount",b_num);
 	}
+
+	@Override
+	public int getCountByCategory(String bCategory) {
+	    return this.sqlSession.selectOne("getCountByCategory", bCategory);
+	}
+
 
 }

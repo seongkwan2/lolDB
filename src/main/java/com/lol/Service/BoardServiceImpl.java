@@ -22,8 +22,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getListCount(PageVO pageInfo) {
-		return this.boardDao.getListCount(pageInfo);
+	public int getListCount() {
+		return this.boardDao.getListCount();
 	}
 
 	@Override
@@ -74,6 +74,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int getLikesCount(long b_num) {
 		return this.boardDao.getLikesCount(b_num);
+	}
+
+	@Override
+	public int getCountByCategory(String bCategory) {
+		return this.boardDao.getCountByCategory(bCategory);
 	}
 
 
