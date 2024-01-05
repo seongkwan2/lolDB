@@ -32,10 +32,15 @@ public interface BoardService {
 	BoardVO getBoardByNum(long b_num);
 
 	List<BoardVO> getPopularByCategory(PageVO pageVO);
+	
+	List<BoardVO> getPopularByCategory(String b_title, String b_category, int offset, int limit);
 
 	int getPopularCount(String selectedCategory);
 
 	List<BoardVO> searchByTitle(String b_title, String b_category, int offset, int limit);
 
 	int countSearchResults(String b_title, String b_category);
+
+	
+
 }

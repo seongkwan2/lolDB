@@ -76,32 +76,56 @@
 
 <%--페이징(쪽나누기) --%>
 <div class="page_control">
-    <!-- "이전" 버튼 섹션 -->
+    <!-- "이전" 버튼 -->
     <c:if test="${page > 1}">
-        <a href="boardMain?page=${page-1}" class="page-button">이전</a>&nbsp;
+        <c:choose>
+            <c:when test="${not empty b_title or not empty b_category}">
+                <a href="boardMain?page=${page-1}&b_title=${b_title}&b_category=${b_category}" class="page-button">이전</a>
+            </c:when>
+            <c:otherwise>
+                <a href="boardMain?page=${page-1}" class="page-button">이전</a>
+            </c:otherwise>
+        </c:choose>
     </c:if>
     <c:if test="${page <= 1}">
-        <span class="page-button disabled">이전</span>&nbsp;
+        <span class="page-button disabled">이전</span>
     </c:if>
 
-    <!-- 페이지 번호를 출력하는 섹션 -->
+    <!-- 페이지 번호 -->
     <c:forEach var="number" begin="${startpage}" end="${endpage}" step="1">
-        <c:if test="${number == page}">
-            <span class="page-button current-page disabled">${number}</span>
-        </c:if>
-        <c:if test="${number != page}">
-            <a href="boardMain?page=${number}" class="page-button">${number}</a>
-        </c:if>
+        <c:choose>
+            <c:when test="${number == page}">
+                <span class="page-button current-page disabled">${number}</span>
+            </c:when>
+            <c:otherwise>
+                <c:choose>
+                    <c:when test="${not empty b_title or not empty b_category}">
+                        <a href="boardMain?page=${number}&b_title=${b_title}&b_category=${b_category}" class="page-button">${number}</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="boardMain?page=${number}" class="page-button">${number}</a>
+                    </c:otherwise>
+                </c:choose>
+            </c:otherwise>
+        </c:choose>
     </c:forEach>
 
-    <!-- "다음" 버튼 섹션 -->
+    <!-- "다음" 버튼 -->
     <c:if test="${page < maxpage}">
-        <a href="boardMain?page=${page+1}" class="page-button">다음</a>
+        <c:choose>
+            <c:when test="${not empty b_title or not empty b_category}">
+                <a href="boardMain?page=${page+1}&b_title=${b_title}&b_category=${b_category}" class="page-button">다음</a>
+            </c:when>
+            <c:otherwise>
+                <a href="boardMain?page=${page+1}" class="page-button">다음</a>
+            </c:otherwise>
+        </c:choose>
     </c:if>
     <c:if test="${page >= maxpage}">
         <span class="page-button disabled">다음</span>
     </c:if>
 </div>
+
 
 </body>
 </html>

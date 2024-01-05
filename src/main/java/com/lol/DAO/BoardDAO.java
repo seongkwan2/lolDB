@@ -47,4 +47,6 @@ public interface BoardDAO {
 
 	int countSearchResults(String b_title, String b_category);
 
+	List<BoardVO> getPopularByCategory(String b_title, String b_category, int offset, int limit);
+
 }

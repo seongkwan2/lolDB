@@ -136,6 +136,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 	
+	<!-- (추천글에서 검색)게시글 조회 (페이징 처리 및 카테고리, 제목 필터링) -->
+	<select id="getPopularByCategory2" parameterType="page" resultMap="boardResultMap">
+	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
+	    COUNT(r.r_num) AS reply_count
+	    FROM lol_board b
+	    LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+	    WHERE b.b_likes >= 30
+	    <if test="b_title != null and b_title != ''">
+	        AND LOWER(b.b_title) LIKE LOWER('%${b_title}%')
+	    </if>
+	    <if test="b_category != null and b_category != ''">
+	        AND b.b_category = #{b_category}
+	    </if>
+	    GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+	    ORDER BY b.b_num DESC
+	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+
+	
 	<!-- 특정 카테고리의 추천 게시글 개수 조회 -->
 	<select id="getPopularCount" parameterType="String" resultType="int">
 	    SELECT COUNT(*)

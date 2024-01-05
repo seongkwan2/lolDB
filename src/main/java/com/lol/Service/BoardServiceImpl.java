@@ -106,5 +106,10 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.countSearchResults(b_title, b_category);
 	}
 
+	@Override
+	public List<BoardVO> getPopularByCategory(String b_title, String b_category, int offset, int limit) {
+		return this.boardDao.getPopularByCategory(b_title,b_category, offset, limit);
+	}
+
 
 }

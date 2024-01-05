@@ -134,5 +134,14 @@ public class BoardDAOImpl implements BoardDAO {
 	    return this.sqlSession.selectOne("countSearchResults", paramMap);
 	}
 
+	@Override
+	public List<BoardVO> getPopularByCategory(String b_title,String b_category, int offset, int limit) {
+		Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("b_category", b_category);
+	    paramMap.put("offset", offset);
+	    paramMap.put("limit", limit);
+		return this.sqlSession.selectList("getPopularByCategory2",paramMap);
+	}
+
 
 }

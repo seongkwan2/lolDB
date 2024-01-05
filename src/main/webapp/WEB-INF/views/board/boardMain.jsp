@@ -63,11 +63,8 @@ function checkViewMode() {
     var selectedCategory = sessionStorage.getItem("selectedCategory") || "자유게시판";
     var currentPage = getCurrentPageFromUrl() || 1;
 
-    if (viewMode === "popular") {
-        updatePageByCategory(selectedCategory, currentPage, '/board/popular');
-    } else {
-        updatePageByCategory(selectedCategory, currentPage, '/board/boardMain');
-    }
+    // 페이지 초기 로드 시에는 AJAX 요청을 하지 않음
+    // 예를 들어, 특정 플래그를 사용하여 초기 로드와 AJAX 요청을 구분
 }
 
 function updatePageByCategory(category, page, url) {
@@ -97,15 +94,34 @@ function getCurrentPageFromUrl() {
     return urlParams.get('page');
 }
 
-function updateView() {
-	console.log("뷰 업데이트 호출");
-    var selectedCategory = sessionStorage.getItem("selectedCategory") || "자유게시판";
-    var currentPage = sessionStorage.getItem("currentPage") || 1;
-    var viewMode = sessionStorage.getItem("viewMode") || "all";
-    var url = (viewMode === "popular") ? '/board/popular' : '/board/boardMain';
 
-    updatePageByCategory(selectedCategory, currentPage, url);
+function updateView() {
+    var viewMode = sessionStorage.getItem("viewMode") || "all";
+    var selectedCategory = sessionStorage.getItem("selectedCategory") || "자유게시판";
+    var currentPage = getCurrentPageFromUrl() || 1;
+    var url = '/board/search'; // 검색 URL로 변경
+
+    if (window.location.search) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                b_category: selectedCategory,
+                page: currentPage,
+                viewMode: viewMode // 뷰 모드 추가
+            },
+            success: function(response) {
+                // ...
+            },
+            error: function(xhr, status, error) {
+                // ...
+            }
+        });
+    }
 }
+
+
+
 
 </script>
 
@@ -140,6 +156,7 @@ function addRowClickEvent() {
     });
     console.log("이벤트 핸들러 설정 완료");
 }
+
 
 
 

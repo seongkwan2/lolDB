@@ -8,15 +8,6 @@
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 설정 */
 }
 
-/* 선택 목록 스타일링 */
-#b_category {
-	width: 100%; /* 너비를 100%로 설정하여 폼 너비에 맞춤 */
-	padding: 10px; /* 내부 여백 설정 */
-	font-size: 16px; /* 글꼴 크기 설정 */
-	border: 1px solid #ccc; /* 테두리 설정 */
-	border-radius: 5px; /* 모서리 둥글게 설정 */
-}
-
 /* 입력 필드 스타일링 */
 input[type="text"], textarea {
 	width: 100%; /* 너비를 100%로 설정하여 폼 너비에 맞춤 */

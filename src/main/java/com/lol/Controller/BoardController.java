@@ -71,7 +71,7 @@ public class BoardController {
 	    }
 
 	    // 페이지가 1일 때만 해당 카테고리의 게시판 목록을 가져옴 (검색 결과가 아니면)
-	    if (page == 1 && !pageVO.isSearchMode()) {
+	   
 	        pageVO.setB_category(selectedCategory);
 	        int listCount = this.boardService.getCountByCategory(selectedCategory);
 
@@ -103,10 +103,7 @@ public class BoardController {
 	        mv.addObject("endpage", endpage);
 	        mv.addObject("maxpage", maxpage);
 	        mv.addObject("bCategory", selectedCategory); // 현재 선택된 카테고리
-	    } else {
-	        // 페이지가 1이 아니거나 검색 결과 페이지인 경우, 검색 결과 페이지로 보여줌
-	        mv.setViewName("/board/boardMain");
-	    }
+	    
 
 	    return mv;
 	}
@@ -370,44 +367,55 @@ public class BoardController {
 	    return mv;
 	}
 
-	//검색기능 	//구현이 덜됐음 이 기능부터 구현할것
+	// 검색 결과에 따른 페이징 처리
 	@GetMapping("/search")
 	public ModelAndView search(@RequestParam(value = "b_title", required = false) String b_title,
 	                           @RequestParam(value = "b_category", required = false) String b_category,
 	                           @RequestParam(value = "page", defaultValue = "1") int page,
+	                           @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
 	                           HttpSession session) {
 	    ModelAndView mv = new ModelAndView();
 
 	    // 페이징 처리
-	    int limit = 10; // 한 페이지에 보여줄 게시글 수
+	    int limit = 10;
 	    int offset = (page - 1) * limit;
 
-	    // 검색 로직 구현
-	    List<BoardVO> searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
-	    int totalResults = boardService.countSearchResults(b_title, b_category);
+	    List<BoardVO> searchResults;
+	    int totalResults;
 
-	    // 세션에 검색 결과 및 검색 조건 저장
-	    session.setAttribute("searchResults", searchResults);
-	    session.setAttribute("totalResults", totalResults);
-	    session.setAttribute("b_title", b_title);
-	    session.setAttribute("b_category", b_category);
+	    // viewMode가 "popular"이면 추천 수 30개 이상인 글 필터링
+	    if ("popular".equals(viewMode)) {
+	        searchResults = boardService.getPopularByCategory(b_title,b_category, offset, limit);
+	        totalResults = boardService.getPopularCount(b_category);
+	        System.out.println("추천글 모드 searchResults : "+searchResults);
+	        System.out.println("추천글 모드 totalResults : "+totalResults);
+	    } else {
+	        searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
+	        totalResults = boardService.countSearchResults(b_title, b_category);
+	        System.out.println("전체글 모드 searchResults : "+searchResults);
+	        System.out.println("전체글 모드 totalResults : "+totalResults);
+	    }
+	    System.out.println("");
 
 	    // 페이징 정보 계산
 	    int maxpage = (int) Math.ceil((double) totalResults / limit);
 	    int startpage = ((page - 1) / 10) * 10 + 1;
 	    int endpage = Math.min(startpage + 9, maxpage);
 
+	    // 모델에 데이터 추가
 	    mv.addObject("searchResults", searchResults);
 	    mv.addObject("page", page);
 	    mv.addObject("startpage", startpage);
 	    mv.addObject("endpage", endpage);
 	    mv.addObject("maxpage", maxpage);
 
-	    // AJAX 요청 또는 전체 페이지 반환
+	    // 뷰 설정
 	    mv.setViewName("/board/boardMain");
 
 	    return mv;
 	}
+
+
 
 
 
