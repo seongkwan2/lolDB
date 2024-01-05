@@ -117,17 +117,22 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public List<BoardVO> searchByTitle(String find_Name, int offset, int limit) {
+	public List<BoardVO> searchByTitle(String b_title, String b_category, int offset, int limit) {
 		Map<String, Object> paramMap = new HashMap<>();
-	    paramMap.put("find_Name", find_Name);
+	    paramMap.put("b_title", b_title);
+	    paramMap.put("b_category", b_category);
 	    paramMap.put("offset", offset);
 	    paramMap.put("limit", limit);
 	    return this.sqlSession.selectList("searchByTitle", paramMap);
 	}
 
 	@Override
-	public int countSearchResults(String find_Name) {
-		return this.sqlSession.selectOne("countSearchResults",find_Name);
+	public int countSearchResults(String b_title, String b_category) {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("b_title", b_title);
+	    paramMap.put("b_category", b_category);
+	    return this.sqlSession.selectOne("countSearchResults", paramMap);
 	}
+
 
 }

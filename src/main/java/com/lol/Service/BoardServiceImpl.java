@@ -97,13 +97,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardVO> searchByTitle(String find_Name, int offset, int limit) {
-		return this.boardDao.searchByTitle(find_Name, offset, limit);
+	public List<BoardVO> searchByTitle(String b_title, String b_category, int offset, int limit) {
+		return this.boardDao.searchByTitle(b_title, b_category, offset, limit);
 	}
 
 	@Override
-	public int countSearchResults(String find_Name) {
-		return this.boardDao.countSearchResults(find_Name);
+	public int countSearchResults(String b_title, String b_category) {
+		return this.boardDao.countSearchResults(b_title, b_category);
 	}
 
 

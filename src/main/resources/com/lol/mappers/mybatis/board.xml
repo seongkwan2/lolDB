@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND m_id = #{m_id}
 	</select>
 
-	<!-- 추천 추가 -->
+	<!-- 추천 추가 (해당 아이디의 추천 기록을 추가) (중복 추천을 못하게 하는 코드) -->
 	<insert id="addLike" parameterType="map">
 		INSERT INTO lol_board_likes
 		(like_id, b_num, m_id, liked)
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{b_num}, #{m_id}, 'Y')
 	</insert>
 
-	<!-- 추천 제거 -->
+	<!-- 추천 제거 (해당 아이디의 추천 기록을 없앰) -->
 	<delete id="removeLike" parameterType="map">
 		DELETE FROM lol_board_likes WHERE b_num = #{b_num} AND m_id = #{m_id}
 	</delete>
@@ -149,19 +149,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 검색 쿼리 (제목 검색 및 댓글 수 포함) -->
 	<select id="searchByTitle" resultMap="boardResultMap">
 	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes, COUNT(r.r_num) AS reply_count
-		FROM lol_board b
-		LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
-		WHERE b.b_title LIKE '%' || #{find_Name} || '%'
-		GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
-		ORDER BY b.b_num DESC
-		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+        FROM lol_board b
+        LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+        WHERE b.b_title LIKE '%' || #{b_title} || '%' AND b.b_category = #{b_category}
+        GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+        ORDER BY b.b_num DESC
+        OFFSET 0 ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 
-	<!-- 검색 결과 개수 쿼리 -->
+
+	<!-- 검색 결과 개수 쿼리 수정: 카테고리 조건 추가 -->
 	<select id="countSearchResults" resultType="int">
 	    SELECT COUNT(*) FROM lol_board
-	    WHERE b_title LIKE '%' || #{find_Name} || '%'
+	    WHERE b_title LIKE '%' || #{b_title} || '%' AND b_category = #{b_category}
 	</select>
+
 
 
 	

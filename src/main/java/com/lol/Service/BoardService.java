@@ -35,7 +35,7 @@ public interface BoardService {
 
 	int getPopularCount(String selectedCategory);
 
-	List<BoardVO> searchByTitle(String find_Name, int offset, int limit);
+	List<BoardVO> searchByTitle(String b_title, String b_category, int offset, int limit);
 
-	int countSearchResults(String find_Name);
+	int countSearchResults(String b_title, String b_category);
 }

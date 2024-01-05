@@ -35,6 +35,7 @@
 <script>
 $(document).ready(function() {
     // 페이지 로드 시 현재 상태 확인 및 적용
+    console.log("문서 준비 완료");
     checkViewMode();
 
     // 라디오 버튼 변경 이벤트
@@ -55,6 +56,7 @@ $(document).ready(function() {
 
 function checkViewMode() {
     var viewMode = sessionStorage.getItem("viewMode") || "all";
+    console.log("현재 뷰 모드:", viewMode);
     // 라디오 버튼 상태 갱신
     $("input[type='radio'][name='viewMode'][value='" + viewMode + "']").prop("checked", true);
     
@@ -69,6 +71,7 @@ function checkViewMode() {
 }
 
 function updatePageByCategory(category, page, url) {
+    console.log("AJAX 요청 시작: 카테고리:", category, ", 페이지:", page, ", URL:", url);
     $.ajax({
         url: url,
         type: 'GET',
@@ -77,11 +80,17 @@ function updatePageByCategory(category, page, url) {
             page: page
         },
         success: function(response) {
+            console.log("AJAX 응답 수신");
             $('#boardContent').html(response);
+            console.log("DOM 업데이트 완료");
             addRowClickEvent();
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX 요청 실패:", status, error);
         }
     });
 }
+
 
 function getCurrentPageFromUrl() {
     var urlParams = new URLSearchParams(window.location.search);
@@ -89,6 +98,7 @@ function getCurrentPageFromUrl() {
 }
 
 function updateView() {
+	console.log("뷰 업데이트 호출");
     var selectedCategory = sessionStorage.getItem("selectedCategory") || "자유게시판";
     var currentPage = sessionStorage.getItem("currentPage") || 1;
     var viewMode = sessionStorage.getItem("viewMode") || "all";
@@ -115,25 +125,23 @@ function updateView() {
 <%--행의 아무곳이나 선택해도 해당 글의 링크에 들어가는 코드 --%>
 <script>
 function addRowClickEvent() {
-    // ".board-container tr" 선택자를 사용하여 모든 게시판 행을 선택합니다.
-    var rows = document.querySelectorAll(".board-container tr");
-    rows.forEach(function(row) {
-        // 각 행에 클릭 이벤트 리스너를 추가
-        row.addEventListener("click", function(event) {
-            // 클릭된 요소가 a 태그인 경우 페이지 이동
-            if (event.target.tagName.toLowerCase() === 'a') {
-                return;
-            }
+    console.log("이벤트 핸들러 설정 시작");
+    $('.big-container').on('click', '.board-container tr', function(event) {
+        console.log("행 클릭 이벤트 발생:", this);
+        if (event.target.tagName.toLowerCase() === 'a') {
+            return;
+        }
 
-            // 현재 행에서 'boardCont'를 포함하는 href 속성을 가진 a 태그를 찾음
-            var link = this.querySelector("a[href*='boardCont']");
-            // 링크가 존재하고 href 속성이 있는 경우 해당 링크로 페이지를 이동
-            if (link && link.href) {
-                window.location.href = link.href;
-            }
-        });
+        var link = $(this).find("a[href*='boardCont']").attr('href');
+        if (link) {
+            console.log("링크로 이동:", link.href);
+            window.location.href = link;
+        }
     });
+    console.log("이벤트 핸들러 설정 완료");
 }
+
+
 
 // 페이지가 완전히 로드된 후 addRowClickEvent 함수를 호출
 $(document).ready(function() {

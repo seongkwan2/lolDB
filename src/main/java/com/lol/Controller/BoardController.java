@@ -60,15 +60,14 @@ public class BoardController {
 	    if (selectedCategory == null) {
 	        selectedCategory = "자유게시판"; // 기본값으로 자유게시판 설정
 	    }
-
-	    // 카테고리 파라미터가 제공되면 선택한 카테고리를 사용하고, 그렇지 않으면 세션에서 읽어온 카테고리를 사용합니다.
+	    // 클라이언트가 카테고리를 선택하면 그것을 사용, 선택하지 않았으면 현재 세션의 카테고리를 그대로 사용(페이징 유지)
 	    if (bCategory != null) {
 	        // 카테고리 파라미터가 제공되면 해당 카테고리로 변경
 	        selectedCategory = bCategory;
 	        // 선택한 카테고리를 세션에 다시 저장 (다른 페이지에서도 사용하기 위함)
 	        session.setAttribute("selectedCategory", selectedCategory);
 	    }
-
+	    //현재 선택된 카테고리를 세팅 후, 카테고리에 해당하는 글만 가져옴
 	    pageVO.setB_category(selectedCategory);
 	    int listCount = this.boardService.getCountByCategory(selectedCategory);
 
@@ -320,7 +319,6 @@ public class BoardController {
 	        selectedCategory = "자유게시판"; // 기본값으로 자유게시판 설정
 	    }
 
-	    // 카테고리 파라미터가 제공되면 선택한 카테고리를 사용하고, 그렇지 않으면 세션에서 읽어온 카테고리를 사용합니다.
 	    if (bCategory != null) {
 	        selectedCategory = bCategory;
 	        session.setAttribute("selectedCategory", selectedCategory);
@@ -363,9 +361,11 @@ public class BoardController {
 	}
 
 	//검색기능 	//구현이 덜됐음 이 기능부터 구현할것
-	@GetMapping("/board/search")
-	public ModelAndView search(@RequestParam("find_name") String find_Name,
-	                            @RequestParam(value = "page", defaultValue = "1") int page) {
+	@GetMapping("/search")
+	public ModelAndView search(@RequestParam(value = "b_title", required=false) String b_title,
+	                           @RequestParam(value = "b_category", required=false) String b_category,
+	                           @RequestParam(value = "page", defaultValue = "1") int page,
+	                           HttpServletRequest request) {
 	    ModelAndView mv = new ModelAndView();
 
 	    // 페이징 처리
@@ -373,13 +373,23 @@ public class BoardController {
 	    int offset = (page - 1) * limit;
 
 	    // 검색 로직 구현
-	    List<BoardVO> searchResults = boardService.searchByTitle(find_Name, offset, limit);
-	    int totalResults = boardService.countSearchResults(find_Name); // 총 검색 결과 수
+	    // 카테고리를 매개변수로 전달
+	    List<BoardVO> searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
+	    int totalResults = boardService.countSearchResults(b_title, b_category); // 총 검색 결과 수
+	    System.out.println("searchResults 의 값: "+searchResults);
+	    System.out.println("totalResults의 값 : "+ totalResults);
 
 	    // 페이징 정보 계산
 	    int maxpage = (int) Math.ceil((double) totalResults / limit);
 	    int startpage = ((page - 1) / 10) * 10 + 1;
 	    int endpage = Math.min(startpage + 9, maxpage);
+	    
+	    // AJAX 요청을 확인하고 뷰 설정
+	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환
+	    } else {
+	        mv.setViewName("/board/boardMain"); // 전체 페이지 반환
+	    }
 
 	    mv.addObject("searchResults", searchResults);
 	    mv.addObject("page", page);

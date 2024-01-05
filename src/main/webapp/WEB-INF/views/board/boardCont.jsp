@@ -34,7 +34,7 @@
             
             
             
-            <h2>자유게시판</h2><hr>
+            <h2>${boardInfo.b_category}</h2><hr>
             
             <%--글 상단 제목 박스 --%>
             <div class="cont_title_box">

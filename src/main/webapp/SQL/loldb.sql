@@ -148,6 +148,7 @@ commit;
 
 
 SELECT * FROM lol_board WHERE b_num = 56;
+SELECT COUNT(*) FROM lol_board WHERE b_likes >= 30;
 
 
 
