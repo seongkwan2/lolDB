@@ -23,5 +23,15 @@ public class ReplyDAOImpl implements ReplyDAO {
 	public int writeReply(ReplyVO replyInfo) {
 		return this.sqlSession.insert("writeReply",replyInfo);
 	}
+
+	@Override
+	public int deleteReply(long r_num) {
+		return this.sqlSession.delete("deleteReply",r_num);
+	}
+
+	@Override
+	public ReplyVO getReplyByNum(long r_num) {
+		return this.sqlSession.selectOne("getReplyByNum",r_num);
+	}
 	
 }

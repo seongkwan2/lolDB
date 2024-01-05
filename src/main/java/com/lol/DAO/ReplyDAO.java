@@ -10,4 +10,8 @@ public interface ReplyDAO {
 
 	int writeReply(ReplyVO replyInfo);
 
+	int deleteReply(long r_num);
+
+	ReplyVO getReplyByNum(long r_num);
+
 }

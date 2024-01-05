@@ -28,4 +28,14 @@ public interface BoardService {
 	int getLikesCount(long b_num);
 
 	int getCountByCategory(String bCategory);
+
+	BoardVO getBoardByNum(long b_num);
+
+	List<BoardVO> getPopularByCategory(PageVO pageVO);
+
+	int getPopularCount(String selectedCategory);
+
+	List<BoardVO> searchByTitle(String find_Name, int offset, int limit);
+
+	int countSearchResults(String find_Name);
 }

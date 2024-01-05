@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,12 +104,6 @@ public class BoardController {
 	    return mv;
 	}
 
-
-
-
-
-
-
 	//글쓰기 폼
 	@RequestMapping(value="/boardWrite")
 	public String boardWrite(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -136,13 +131,45 @@ public class BoardController {
 
 		int result = this.boardService.writeBoard(boardInfo);
 		if (result == 1) {
-			redirectAttributes.addFlashAttribute("message", "글 쓰기 성공!");
+			redirectAttributes.addFlashAttribute("message", "게시글이 작성되었습니다!");
 			return "redirect:/board/boardMain";
 		} else {
-			redirectAttributes.addFlashAttribute("message", "글 쓰기 실패!");
+			redirectAttributes.addFlashAttribute("message", "게시글 작성에 실패했습니다!");
 			return "redirect:/board/boardWrite";
 		}
 	}
+	
+		//글확인
+		@GetMapping(value="/boardCont")
+		public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
+			ModelAndView mv = new ModelAndView();
+
+			// 현재 로그인 정보를 세션에서 가져옴
+			MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+			mv.addObject("memberInfo", memberInfo);
+
+			// 조회수 증가
+			this.boardService.plusHits(b_num);
+
+			// 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
+			BoardVO boardInfo = this.boardService.getCont(b_num);
+			String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
+			String formattedContent = safeContent.replace("\n", "<br>");	//글 줄바꿈처리 적용
+			boardInfo.setB_cont(formattedContent);
+			mv.addObject("boardInfo", boardInfo);
+
+			// 댓글 리스트 가져오기
+			List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
+			for (ReplyVO reply : replyList) {
+				String safeReplyContent = StringEscapeUtils.escapeHtml4(reply.getR_cont());
+				String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
+				reply.setR_cont(formattedReplyContent);
+			}
+			mv.addObject("replyList", replyList);
+
+			mv.setViewName("/board/boardCont");
+			return mv;
+		}
 
 	//댓글 작성 액션
 	@PostMapping(value="/writeReply")
@@ -164,51 +191,68 @@ public class BoardController {
 			return "redirect:/board/boardWrite";
 		}
 	}
+	
+	//댓글 삭제 액션
+	@PostMapping("/deleteReply")
+	public String deleteReply(@RequestParam("r_num") long r_num,
+	                          RedirectAttributes redirectAttributes, HttpSession session) {
+	    // 세션을 통해 로그인 정보를 가져옴
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 
-	//글확인
-	@GetMapping(value="/boardCont")
-	public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
-		ModelAndView mv = new ModelAndView();
+	    // 댓글 번호(replyNum)를 사용하여 댓글 정보를 가져옴
+	    ReplyVO replyInfo = replyService.getReplyByNum(r_num);
 
-		// 현재 로그인 정보를 세션에서 가져옴
-		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
-		mv.addObject("memberInfo", memberInfo);
+	    if (replyInfo != null) {
+	        // 댓글 작성자 아이디와 현재 로그인한 사용자 아이디를 비교하여 권한을 확인
+	        if (memberInfo != null && memberInfo.getM_id().equals(replyInfo.getR_id())) {
+	            // 아이디가 일치하면 댓글 삭제 작업 수행
+	        	this.replyService.deleteReply(r_num);
 
-		// 조회수 증가
-		this.boardService.plusHits(b_num);
-
-		// 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
-		BoardVO boardInfo = this.boardService.getCont(b_num);
-		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
-		String formattedContent = safeContent.replace("\n", "<br>");	//글 줄바꿈처리 적용
-		boardInfo.setB_cont(formattedContent);
-		mv.addObject("boardInfo", boardInfo);
-
-		// 댓글 리스트 가져오기
-		List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
-		for (ReplyVO reply : replyList) {
-			String safeReplyContent = StringEscapeUtils.escapeHtml4(reply.getR_cont());
-			String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
-			reply.setR_cont(formattedReplyContent);
-		}
-		mv.addObject("replyList", replyList);
-
-		mv.setViewName("/board/boardCont");
-		return mv;
+	            // 삭제 후, 리다이렉트할 URL을 설정하여 리다이렉트
+	            redirectAttributes.addFlashAttribute("message", "댓글이 삭제되었습니다.");
+	            return "redirect:/board/boardCont?b_num=" + replyInfo.getR_board_num();
+	        } else {
+	            // 아이디가 일치하지 않으면 오류 메시지를 전달하고 다시 게시글 상세 페이지로 리다이렉트
+	            redirectAttributes.addFlashAttribute("message", "댓글 삭제 권한이 없습니다.");
+	            return "redirect:/board/boardCont?b_num=" + replyInfo.getR_board_num();
+	        }
+	    } else {
+	        // 댓글이 존재하지 않으면 오류 메시지를 전달하고 다시 게시글 상세 페이지로 리다이렉트
+	        redirectAttributes.addFlashAttribute("message", "댓글이 존재하지 않습니다.");
+	        return "redirect:/board/boardCont?b_num=" + replyInfo.getR_board_num();
+	    }
 	}
 
+	//게시글 삭제
+	@PostMapping("/boardDel")
+	public String boardDel(@RequestParam("b_num") long b_num,
+	                      RedirectAttributes redirectAttributes, HttpSession session) {
+	    // 세션을 통해 로그인 정보를 가져옴
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 
-	//글삭제
-	@PostMapping(value="/boardDel")
-	public String boardDel(@RequestParam("b_num") long b_num, RedirectAttributes redirectAttributes) {
-		int result = this.boardService.boardDel(b_num);
-		if (result == 1) {
-			redirectAttributes.addFlashAttribute("message", "해당 글이 삭제되었습니다!");
-			return "redirect:/board/boardMain";
-		} else {
-			redirectAttributes.addFlashAttribute("message", "해당 글을 삭제에 실패했습니다.");
-			return "redirect:/board/boardWrite";
-		}
+	    // 댓글 번호(replyNum)를 사용하여 댓글 정보를 가져옴
+	    BoardVO boardInfo = this.boardService.getBoardByNum(b_num);
+
+	    //게시글 삭제는 JSP에서 이미 보안설정을 했으나 이중 보안으로 하기로함
+	    if (boardInfo != null) {
+	        // 댓글 작성자 아이디와 현재 로그인한 사용자 아이디를 비교하여 권한을 확인
+	        if (memberInfo != null && memberInfo.getM_id().equals(boardInfo.getB_id())) {
+	            // 아이디가 일치하면 게시글 삭제 작업 수행
+	            this.boardService.boardDel(b_num);
+
+	            // 삭제 후, 리다이렉트할 URL을 설정하여 리다이렉트
+	            redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
+	            return "redirect:/board/boardMain"; // 게시글 목록 페이지로 리다이렉트
+	        } else {
+	            // 아이디가 일치하지 않으면 오류 메시지를 전달하고 다시 해당 게시글 페이지로 리다이렉트
+	            redirectAttributes.addFlashAttribute("message", "게시글 삭제 권한이 없습니다.");
+	            return "redirect:/board/boardCont?b_num=" + b_num;
+	        }
+	    } else {
+	        // 댓글이 존재하지 않으면 오류 메시지를 전달하고 다시 게시글 목록 페이지로 리다이렉트
+	        redirectAttributes.addFlashAttribute("message", "게시글이 존재하지 않습니다.");
+	        return "redirect:/board/boardMain"; // 게시글 목록 페이지로 리다이렉트
+	    }
 	}
 
 	//글수정 폼
@@ -222,7 +266,6 @@ public class BoardController {
 		mv.setViewName("/board/boardUpdate");
 		return mv;
 	}
-
 
 	//글수정 액션
 	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
@@ -264,5 +307,93 @@ public class BoardController {
 		return resultMap;
 	}
 
+	// 추천글 요청 처리
+	@GetMapping("/popular")
+	public ModelAndView popular(@RequestParam(value = "page", defaultValue = "1") int page,
+	                            @RequestParam(value = "b_category", required = false) String bCategory,
+	                            HttpSession session, HttpServletRequest request) {
+	    ModelAndView mv = new ModelAndView();
+
+	    // 세션에서 선택한 카테고리 읽어오기
+	    String selectedCategory = (String) session.getAttribute("selectedCategory");
+	    if (selectedCategory == null) {
+	        selectedCategory = "자유게시판"; // 기본값으로 자유게시판 설정
+	    }
+
+	    // 카테고리 파라미터가 제공되면 선택한 카테고리를 사용하고, 그렇지 않으면 세션에서 읽어온 카테고리를 사용합니다.
+	    if (bCategory != null) {
+	        selectedCategory = bCategory;
+	        session.setAttribute("selectedCategory", selectedCategory);
+	    }
+
+	    // 페이징 처리
+	    int limit = 10;
+	    int offset = (page - 1) * limit;
+	    PageVO pageVO = new PageVO();
+	    pageVO.setB_category(selectedCategory);
+	    pageVO.setOffset(offset);
+	    pageVO.setLimit(limit);
+
+	    // 카테고리에 맞는 추천글 목록 가져오기
+	    List<BoardVO> popularPosts = boardService.getPopularByCategory(pageVO);
+	    mv.addObject("popularPosts", popularPosts);
+
+	    // 추천글 전체 개수 조회 (카테고리에 맞춰서)
+	    int listCount = boardService.getPopularCount(selectedCategory);
+
+	    // 총 페이지 수 계산
+	    int maxpage = (int) Math.ceil((double) listCount / limit);
+	    int startpage = ((page - 1) / 10) * 10 + 1;
+	    int endpage = Math.min(startpage + 9, maxpage);
+
+	    // 뷰 설정
+	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환
+	    } else {
+	        mv.setViewName("/board/boardMain"); // 전체 페이지 반환
+	    }
+
+	    // 모델에 데이터 추가
+	    mv.addObject("page", page);
+	    mv.addObject("startpage", startpage);
+	    mv.addObject("endpage", endpage);
+	    mv.addObject("maxpage", maxpage);
+
+	    return mv;
+	}
+
+	//검색기능 	//구현이 덜됐음 이 기능부터 구현할것
+	@GetMapping("/board/search")
+	public ModelAndView search(@RequestParam("find_name") String find_Name,
+	                            @RequestParam(value = "page", defaultValue = "1") int page) {
+	    ModelAndView mv = new ModelAndView();
+
+	    // 페이징 처리
+	    int limit = 10; // 한 페이지에 보여줄 게시글 수
+	    int offset = (page - 1) * limit;
+
+	    // 검색 로직 구현
+	    List<BoardVO> searchResults = boardService.searchByTitle(find_Name, offset, limit);
+	    int totalResults = boardService.countSearchResults(find_Name); // 총 검색 결과 수
+
+	    // 페이징 정보 계산
+	    int maxpage = (int) Math.ceil((double) totalResults / limit);
+	    int startpage = ((page - 1) / 10) * 10 + 1;
+	    int endpage = Math.min(startpage + 9, maxpage);
+
+	    mv.addObject("searchResults", searchResults);
+	    mv.addObject("page", page);
+	    mv.addObject("startpage", startpage);
+	    mv.addObject("endpage", endpage);
+	    mv.addObject("maxpage", maxpage);
+
+	    mv.setViewName("/board/boardMain");
+
+	    return mv;
+	}
+
+
+
+	
 
 }

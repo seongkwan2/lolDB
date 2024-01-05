@@ -122,7 +122,11 @@
 			                        <td>${replyInfo.r_id}</td>
 			                        <td>${replyInfo.r_cont}</td>
 			                        <td><fmt:formatDate value="${replyInfo.r_date}" pattern="yyyy-MM-dd HH:mm"/></td>
-			                        <td><a href="deleteReply?r_num=${replyInfo.r_num}"><button>삭제</button></a></td>
+			                        <!-- 댓글 삭제 버튼 -->
+			                        <form action="/board/deleteReply" method="post">
+									    <input type="hidden" name="r_num" value="${replyInfo.r_num}">
+									 <td><button type="submit">삭제</button></td>
+									</form>
 			                    </tr>
 			                </c:forEach>
 			            </table>
@@ -142,31 +146,32 @@
 		        <input type="hidden" name="r_board_num" value="${boardInfo.b_num}">	<%--해당 게시글의 번호--%>
 		        <label>* 댓글작성</label>
 		        <textarea rows="2" cols="50" name="r_cont" id="r_cont" maxlength="300" placeholder="매너 채팅 부탁드립니다."></textarea><br>
-		            		<%--댓글달기 버튼--%>
-		            		<div class="reply-button-container">
-							    <input type="submit" value="댓글달기">
-							</div>
+		        
+		<%--댓글달기 버튼--%>
+		<div class="reply-button-container">
+		<input type="submit" value="댓글달기">
+		</div>
 							
-							<%--댓글 유효성 검사--%>
-							<script>
-								function writeReplyCheck(){
-									var cont = $("#r_cont").val();
-									if(cont == ""){
-										alert("내용을 입력해주세요!");
-										$("#r_cont").val("").focus();
-										return false;
-									}
-									
-									if(cont.length > 300){
-							            alert("댓글은 300자 이내로 작성해주세요!");
-							            $("#r_cont").focus();
-							            return false;
-							        }
-							        return true;
-								}
-							</script>
-            </form>
-           </div>
+		<%--댓글 유효성 검사--%>
+		<script>
+		function writeReplyCheck(){
+			var cont = $("#r_cont").val();
+			if(cont == ""){
+				alert("내용을 입력해주세요!");
+				$("#r_cont").val("").focus();
+			return false;
+			}
+											
+			if(cont.length > 300){
+				alert("댓글은 300자 이내로 작성해주세요!");
+				$("#r_cont").focus();
+			return false;
+			}
+		return true;
+		}
+		</script>
+	</form>
+</div>
   		
   		<hr>
   		
@@ -189,7 +194,7 @@
             
             <!-- 글삭제 -->
             <form action="boardDel?b_num=${boardInfo.b_num}" method="post">
-			<input type="submit" value="글삭제">
+				<input type="submit" value="글삭제">
 			</form>
 			</c:if>
 		</div>
@@ -203,7 +208,6 @@
         alert('${message}');	//addFlashAttribute로 생성한것은 1회사용후 사라지기에 삭제코드가 필요없음
     </script>
 </c:if>
-</div>
 
 <%@ include file="../include/footer.jsp" %>
 </body>

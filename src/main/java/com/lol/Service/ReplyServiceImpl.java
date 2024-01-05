@@ -24,4 +24,14 @@ public class ReplyServiceImpl implements ReplyService {
 		return this.replyDAO.writeReply(replyInfo);
 	}
 
+	@Override
+	public int deleteReply(long r_num) {
+		return this.replyDAO.deleteReply(r_num);
+	}
+
+	@Override
+	public ReplyVO getReplyByNum(long r_num) {
+		return this.replyDAO.getReplyByNum(r_num);
+	}
+
 }

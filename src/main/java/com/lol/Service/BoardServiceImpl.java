@@ -81,5 +81,30 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.getCountByCategory(bCategory);
 	}
 
+	@Override
+	public BoardVO getBoardByNum(long b_num) {
+		return this.boardDao.getBoardByNum(b_num);
+	}
+
+	@Override
+	public List<BoardVO> getPopularByCategory(PageVO pageVO) {
+		return this.boardDao.getPopularByCategory(pageVO);
+	}
+
+	@Override
+	public int getPopularCount(String selectedCategory) {
+		return this.boardDao.getPopularCount(selectedCategory);
+	}
+
+	@Override
+	public List<BoardVO> searchByTitle(String find_Name, int offset, int limit) {
+		return this.boardDao.searchByTitle(find_Name, offset, limit);
+	}
+
+	@Override
+	public int countSearchResults(String find_Name) {
+		return this.boardDao.countSearchResults(find_Name);
+	}
+
 
 }

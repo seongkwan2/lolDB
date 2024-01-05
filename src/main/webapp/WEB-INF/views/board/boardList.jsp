@@ -17,24 +17,64 @@
 <div class="board-container">
     <table border="1">
         <tr style="font-weight: bold; background-color: #49557d; color:#f8f8f8;">
-            <td>번호</td> <td class="title">제목</td> <td class="writer">작성자</td> <td>작성일자</td> <td>조회수</td> <td>추천수</td> <td>댓글수</td>
+            <td>번호</td>
+            <td class="title">제목</td>
+            <td class="writer">작성자</td>
+            <td>작성일자</td>
+            <td>조회수</td>
+            <td>추천수</td>
+            <td>댓글수</td>
         </tr>
-        <c:forEach var="boardInfo" items="${boardList}">	<%--내가 작성한글은 배경색상이 존재 --%>
-            <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
-                <td class="writer">${boardInfo.b_num}</td>
-                <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
-                <td>${boardInfo.b_id}</td>
-                <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
-                <td>${boardInfo.b_hits}</td>
-                <td>${boardInfo.b_likes}</td>
-                <td>${boardInfo.replyCount}</td>
-            </tr>
-        </c:forEach>
+        <!-- 일반 게시판 목록 및 추천 게시판 목록 처리 -->
+        <c:choose>
+            <c:when test="${not empty popularPosts}">
+                <!-- 추천 게시글 목록 처리 -->
+                <c:forEach var="boardInfo" items="${popularPosts}">
+                    <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
+                        <td class="writer">${boardInfo.b_num}</td>
+                        <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
+                        <td>${boardInfo.b_id}</td>
+                        <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
+                        <td>${boardInfo.b_hits}</td>
+                        <td>${boardInfo.b_likes}</td>
+                        <td>${boardInfo.replyCount}</td>
+                    </tr>
+                </c:forEach>
+            </c:when>
+            <c:when test="${not empty searchResults}">
+                <!-- 검색 결과 목록 처리 -->
+                <c:forEach var="boardInfo" items="${searchResults}">
+                    <tr>
+                        <td>${boardInfo.b_num}</td>
+                        <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
+                        <td>${boardInfo.b_id}</td>
+                        <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
+                        <td>${boardInfo.b_hits}</td>
+                        <td>${boardInfo.b_likes}</td>
+                        <td>${boardInfo.replyCount}</td>
+                    </tr>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <!-- 일반 게시글 목록 처리 -->
+                <c:forEach var="boardInfo" items="${boardList}">
+                    <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
+                        <td class="writer">${boardInfo.b_num}</td>
+                        <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
+                        <td>${boardInfo.b_id}</td>
+                        <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
+                        <td>${boardInfo.b_hits}</td>
+                        <td>${boardInfo.b_likes}</td>
+                        <td>${boardInfo.replyCount}</td>
+                    </tr>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
     </table>
- </div>
- 
+</div>
 <br><br>
-<%--페이징(쪽나누기)--%>
+
+<%--페이징(쪽나누기) --%>
 <div class="page_control">
     <!-- "이전" 버튼 섹션 -->
     <c:if test="${page > 1}">

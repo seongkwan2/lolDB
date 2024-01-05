@@ -91,8 +91,8 @@ CREATE TABLE lol_board_likes (
     b_num NUMBER NOT NULL,
     m_id VARCHAR2(30) NOT NULL,
     liked CHAR(1) CHECK (liked IN ('Y', 'N')),
-    FOREIGN KEY (b_num) REFERENCES lol_board(b_num),
-    FOREIGN KEY (m_id) REFERENCES lol_member(m_id)
+    FOREIGN KEY (b_num) REFERENCES lol_board(b_num) ON DELETE CASCADE,
+    FOREIGN KEY (m_id) REFERENCES lol_member(m_id) ON DELETE CASCADE
 );
 select * from lol_board_likes;
 --게시글 추천 테스트 쿼리문
@@ -146,6 +146,8 @@ commit;
     
     SELECT * FROM lol_board;
 
+
+SELECT * FROM lol_board WHERE b_num = 56;
 
 
 

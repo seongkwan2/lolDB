@@ -101,5 +101,33 @@ public class BoardDAOImpl implements BoardDAO {
 	    return this.sqlSession.selectOne("getCountByCategory", bCategory);
 	}
 
+	@Override
+	public BoardVO getBoardByNum(long b_num) {
+		return this.sqlSession.selectOne("getBoardByNum",b_num);
+	}
+
+	@Override
+	public List<BoardVO> getPopularByCategory(PageVO pageVO) {
+		return this.sqlSession.selectList("getPopularByCategory",pageVO);
+	}
+
+	@Override
+	public int getPopularCount(String selectedCategory) {
+		return this.sqlSession.selectOne("getPopularCount",selectedCategory);
+	}
+
+	@Override
+	public List<BoardVO> searchByTitle(String find_Name, int offset, int limit) {
+		Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("find_Name", find_Name);
+	    paramMap.put("offset", offset);
+	    paramMap.put("limit", limit);
+	    return this.sqlSession.selectList("searchByTitle", paramMap);
+	}
+
+	@Override
+	public int countSearchResults(String find_Name) {
+		return this.sqlSession.selectOne("countSearchResults",find_Name);
+	}
 
 }

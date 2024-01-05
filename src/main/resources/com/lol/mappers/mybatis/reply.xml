@@ -16,15 +16,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,#{r_id},#{r_cont},sysdate,#{r_board_num})
 	</insert>
 		
-	<!-- 댓글 삭제 -->
-	<delete id="replyDel">
-		DELETE lol_board_reply where r_num = #{r_num}
-	</delete>
-	
 	<!-- 댓글 수정 -->
 	<update id="replyUpdate" parameterType="reply">
 		UPDATE lol_board_reply SET b_title = #{b_title}, b_cont= #{b_cont}, b_date = sysdate WHERE b_num = #{b_num}
 	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		DELETE lol_board_reply where r_num = #{r_num}
+	</delete>
+	
+	<!-- 해당 댓글의 정보 가져오기 -->
+	<select id="getReplyByNum" resultType="reply">
+		SELECT * FROM lol_board_reply where r_num = #{r_num}
+	</select>
 	
 
 </mapper>

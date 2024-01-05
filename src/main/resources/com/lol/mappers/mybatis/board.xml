@@ -79,8 +79,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getCountByCategory" parameterType="string" resultType="int">
     	SELECT COUNT(*) FROM lol_board WHERE b_category = #{b_category}
 	</select>
-	
-
 
 	<!-- 추천 상태 확인 -->
 	<select id="checkLikeStatus" parameterType="map"
@@ -100,32 +98,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 추천 제거 -->
 	<delete id="removeLike" parameterType="map">
-		DELETE FROM
-		lol_board_likes
-		WHERE b_num = #{b_num} AND m_id = #{m_id}
+		DELETE FROM lol_board_likes WHERE b_num = #{b_num} AND m_id = #{m_id}
 	</delete>
 
 	<!-- 추천 수 증가 -->
 	<update id="upLike" parameterType="map">
-		UPDATE lol_board
-		SET b_likes =
-		b_likes + 1
-		WHERE b_num = #{b_num}
+		UPDATE lol_board SET b_likes = b_likes + 1 WHERE b_num = #{b_num}
 	</update>
 
 	<!-- 추천 수 감소 -->
 	<update id="downLike" parameterType="map">
-		UPDATE lol_board
-		SET b_likes
-		= b_likes - 1
-		WHERE b_num = #{b_num}
+		UPDATE lol_board SET b_likes = b_likes - 1 WHERE b_num = #{b_num}
 	</update>
 
 	<!-- 추천수를 가져오는 코드 -->
 	<select id="getLikesCount" resultType="int">
-		SELECT b_likes FROM
-		lol_board WHERE b_num = #{b_num}
+		SELECT b_likes FROM lol_board WHERE b_num = #{b_num}
 	</select>
+	
+	<!--게시글번호로 게시글 정보를 가져오는 코드  -->
+	<select id="getBoardByNum" resultType="board">
+		SELECT * FROM lol_board WHERE b_num = #{b_num}
+	</select>
+	
+	<!-- 추천 게시글 조회 (페이징 처리 및 카테고리 필터링) -->
+	<select id="getPopularByCategory" parameterType="page" resultMap="boardResultMap">
+	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes,
+	    COUNT(r.r_num) AS reply_count
+	    FROM lol_board b
+	    LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+	    WHERE b.b_likes >= 30
+	    <if test="b_category != null and b_category != ''">
+	        AND b.b_category = #{b_category}
+	    </if>
+	    GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+	    ORDER BY b.b_num DESC
+	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
+	<!-- 특정 카테고리의 추천 게시글 개수 조회 -->
+	<select id="getPopularCount" parameterType="String" resultType="int">
+	    SELECT COUNT(*)
+	    FROM lol_board
+	    WHERE b_likes >= 30
+	    <if test="b_category != null and b_category != ''">
+	        AND b_category = #{b_category}
+	    </if>
+	</select>
+	
+	<!-- 검색 쿼리 (제목 검색 및 댓글 수 포함) -->
+	<select id="searchByTitle" resultMap="boardResultMap">
+	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes, COUNT(r.r_num) AS reply_count
+		FROM lol_board b
+		LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+		WHERE b.b_title LIKE '%' || #{find_Name} || '%'
+		GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+		ORDER BY b.b_num DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+
+	<!-- 검색 결과 개수 쿼리 -->
+	<select id="countSearchResults" resultType="int">
+	    SELECT COUNT(*) FROM lol_board
+	    WHERE b_title LIKE '%' || #{find_Name} || '%'
+	</select>
+
+
+	
+	
+
+
 
 
 </mapper>
