@@ -47,19 +47,21 @@ public class BoardController {
 	//게시판 메인 페이지
 	@GetMapping("/boardMain")
 	public ModelAndView boardMain(@RequestParam(value = "page", defaultValue = "1") int page,
-	                              @RequestParam(value = "b_category", required = false) String bCategory, // 카테고리 파라미터 추가
+	                              @RequestParam(value = "b_category", required = false) String bCategory,
 	                              PageVO pageVO, HttpSession session, HttpServletRequest request) {
 	    ModelAndView mv = new ModelAndView();
+	    System.out.println("페이지 로드");
 
 	    // 로그인 정보 가져오기
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 	    mv.addObject("memberInfo", memberInfo);
 
-	 // 세션에서 선택한 카테고리 읽어오기
+	    // 세션에서 선택한 카테고리 읽어오기
 	    String selectedCategory = (String) session.getAttribute("selectedCategory");
 	    if (selectedCategory == null) {
 	        selectedCategory = "자유게시판"; // 기본값으로 자유게시판 설정
 	    }
+
 	    // 클라이언트가 카테고리를 선택하면 그것을 사용, 선택하지 않았으면 현재 세션의 카테고리를 그대로 사용(페이징 유지)
 	    if (bCategory != null) {
 	        // 카테고리 파라미터가 제공되면 해당 카테고리로 변경
@@ -67,41 +69,49 @@ public class BoardController {
 	        // 선택한 카테고리를 세션에 다시 저장 (다른 페이지에서도 사용하기 위함)
 	        session.setAttribute("selectedCategory", selectedCategory);
 	    }
-	    //현재 선택된 카테고리를 세팅 후, 카테고리에 해당하는 글만 가져옴
-	    pageVO.setB_category(selectedCategory);
-	    int listCount = this.boardService.getCountByCategory(selectedCategory);
 
-	    // 페이징 처리
-	    int limit = 10;
-	    int offset = (page - 1) * limit;
-	    pageVO.setOffset(offset);
-	    pageVO.setLimit(limit);
+	    // 페이지가 1일 때만 해당 카테고리의 게시판 목록을 가져옴 (검색 결과가 아니면)
+	    if (page == 1 && !pageVO.isSearchMode()) {
+	        pageVO.setB_category(selectedCategory);
+	        int listCount = this.boardService.getCountByCategory(selectedCategory);
 
-	    // 총 페이지 수 계산
-	    int maxpage = (int) Math.ceil((double) listCount / limit);
-	    int startpage = ((page - 1) / 10) * 10 + 1;
-	    int endpage = Math.min(startpage + 9, maxpage);
+	        // 페이징 처리
+	        int limit = 10;
+	        int offset = (page - 1) * limit;
+	        pageVO.setOffset(offset);
+	        pageVO.setLimit(limit);
 
-	    // 해당 카테고리의 게시판 목록 가져오기
-	    List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount(pageVO);
+	        // 총 페이지 수 계산
+	        int maxpage = (int) Math.ceil((double) listCount / limit);
+	        int startpage = ((page - 1) / 10) * 10 + 1;
+	        int endpage = Math.min(startpage + 9, maxpage);
 
-	    // 뷰 설정
-	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환 (카테고리 선택시)
+	        // 해당 카테고리의 게시판 목록 가져오기
+	        List<BoardVO> boardList = this.boardService.getBoardListWithReplyCount(pageVO);
+
+	        // AJAX 요청인 경우 boardList.jsp만 반환 (카테고리 선택시)
+	        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+	            mv.setViewName("/board/boardList"); 
+	        } else {
+	            mv.setViewName("/board/boardMain"); //카테고리를 선택하지 않았을때 (전체 페이지 반환)
+	        }
+
+	        // 모델에 데이터 추가
+	        mv.addObject("boardList", boardList);
+	        mv.addObject("page", page);
+	        mv.addObject("startpage", startpage);
+	        mv.addObject("endpage", endpage);
+	        mv.addObject("maxpage", maxpage);
+	        mv.addObject("bCategory", selectedCategory); // 현재 선택된 카테고리
 	    } else {
-	        mv.setViewName("/board/boardMain"); // 전체 페이지 반환
+	        // 페이지가 1이 아니거나 검색 결과 페이지인 경우, 검색 결과 페이지로 보여줌
+	        mv.setViewName("/board/boardMain");
 	    }
-
-	    // 모델에 데이터 추가
-	    mv.addObject("boardList", boardList);
-	    mv.addObject("page", page);
-	    mv.addObject("startpage", startpage);
-	    mv.addObject("endpage", endpage);
-	    mv.addObject("maxpage", maxpage);
-	    mv.addObject("bCategory", selectedCategory); // 현재 선택된 카테고리
 
 	    return mv;
 	}
+
+
 
 	//글쓰기 폼
 	@RequestMapping(value="/boardWrite")
@@ -291,7 +301,7 @@ public class BoardController {
 
 		if (memberInfo == null) {
 			resultMap.put("status", "fail");
-			resultMap.put("message", "로그인 후 이용해주세요!");
+			resultMap.put("message", "추천은 로그인 이후에 가능합니다!");
 			return resultMap;
 		}
 		//추천 검증(추천을 했는지 안했는지 확인하고 여부에따라 추천,취소하는 메서드)
@@ -362,10 +372,10 @@ public class BoardController {
 
 	//검색기능 	//구현이 덜됐음 이 기능부터 구현할것
 	@GetMapping("/search")
-	public ModelAndView search(@RequestParam(value = "b_title", required=false) String b_title,
-	                           @RequestParam(value = "b_category", required=false) String b_category,
+	public ModelAndView search(@RequestParam(value = "b_title", required = false) String b_title,
+	                           @RequestParam(value = "b_category", required = false) String b_category,
 	                           @RequestParam(value = "page", defaultValue = "1") int page,
-	                           HttpServletRequest request) {
+	                           HttpSession session) {
 	    ModelAndView mv = new ModelAndView();
 
 	    // 페이징 처리
@@ -373,23 +383,19 @@ public class BoardController {
 	    int offset = (page - 1) * limit;
 
 	    // 검색 로직 구현
-	    // 카테고리를 매개변수로 전달
 	    List<BoardVO> searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
-	    int totalResults = boardService.countSearchResults(b_title, b_category); // 총 검색 결과 수
-	    System.out.println("searchResults 의 값: "+searchResults);
-	    System.out.println("totalResults의 값 : "+ totalResults);
+	    int totalResults = boardService.countSearchResults(b_title, b_category);
+
+	    // 세션에 검색 결과 및 검색 조건 저장
+	    session.setAttribute("searchResults", searchResults);
+	    session.setAttribute("totalResults", totalResults);
+	    session.setAttribute("b_title", b_title);
+	    session.setAttribute("b_category", b_category);
 
 	    // 페이징 정보 계산
 	    int maxpage = (int) Math.ceil((double) totalResults / limit);
 	    int startpage = ((page - 1) / 10) * 10 + 1;
 	    int endpage = Math.min(startpage + 9, maxpage);
-	    
-	    // AJAX 요청을 확인하고 뷰 설정
-	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-	        mv.setViewName("/board/boardList"); // AJAX 요청인 경우 boardList.jsp만 반환
-	    } else {
-	        mv.setViewName("/board/boardMain"); // 전체 페이지 반환
-	    }
 
 	    mv.addObject("searchResults", searchResults);
 	    mv.addObject("page", page);
@@ -397,10 +403,13 @@ public class BoardController {
 	    mv.addObject("endpage", endpage);
 	    mv.addObject("maxpage", maxpage);
 
+	    // AJAX 요청 또는 전체 페이지 반환
 	    mv.setViewName("/board/boardMain");
 
 	    return mv;
 	}
+
+
 
 
 

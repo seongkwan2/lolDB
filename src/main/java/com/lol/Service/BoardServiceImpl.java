@@ -67,7 +67,7 @@ public class BoardServiceImpl implements BoardService {
 		} else {
 			this.boardDao.addLike(b_num, m_id);
 			this.boardDao.upLike(b_num);
-			return "추천을 했습니다.";
+			return "해당 게시글을 추천합니다.";
 		}
 	}
 

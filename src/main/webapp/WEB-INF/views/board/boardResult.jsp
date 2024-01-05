@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>검색 결과</title>
+<title>게시판 목록</title>
 <script src="/js/jquery.js"></script>
 <link href="/css/main.css" rel="stylesheet"/>
 <link href="/css/board/board.css" rel="stylesheet"/>

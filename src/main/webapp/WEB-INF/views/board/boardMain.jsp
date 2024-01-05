@@ -156,14 +156,7 @@ $(document).ready(function() {
     </script>
 </c:if>
 
-<%--새로고침 강제 --%>
-<script>
-window.onpageshow = function(event) {
-    if (event.persisted) {
-        window.location.reload();
-    }
-};
-</script>
+
 </div>
 
 <%@ include file="../include/footer.jsp" %>
