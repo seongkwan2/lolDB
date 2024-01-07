@@ -367,7 +367,7 @@ public class BoardController {
 	    return mv;
 	}
 
-	// 검색 결과에 따른 페이징 처리
+	// 검색 결과에 따른 페이징 처리 (중복되는 코드 boardMain, popular, search) 코드를 합칠생각 해보기
 	@GetMapping("/search")
 	public ModelAndView search(@RequestParam(value = "b_title", required = false) String b_title,
 	                           @RequestParam(value = "b_category", required = false) String b_category,
