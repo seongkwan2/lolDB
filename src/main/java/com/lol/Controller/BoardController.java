@@ -367,12 +367,11 @@ public class BoardController {
 	    return mv;
 	}
 
-	// 검색 결과에 따른 페이징 처리 (중복되는 코드 boardMain, popular, search) 코드를 합칠생각 해보기
+	// 검색 결과에 따른 페이징 처리
 	@GetMapping("/search")
 	public ModelAndView search(@RequestParam(value = "b_title", required = false) String b_title,
 	                           @RequestParam(value = "b_category", required = false) String b_category,
 	                           @RequestParam(value = "page", defaultValue = "1") int page,
-	                           @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
 	                           HttpSession session) {
 	    ModelAndView mv = new ModelAndView();
 
@@ -383,19 +382,10 @@ public class BoardController {
 	    List<BoardVO> searchResults;
 	    int totalResults;
 
-	    // viewMode가 "popular"이면 추천 수 30개 이상인 글 필터링
-	    if ("popular".equals(viewMode)) {
-	        searchResults = boardService.getPopularByCategory(b_title,b_category, offset, limit);
-	        totalResults = boardService.getPopularCount(b_category);
-	        System.out.println("추천글 모드 searchResults : "+searchResults);
-	        System.out.println("추천글 모드 totalResults : "+totalResults);
-	    } else {
 	        searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
 	        totalResults = boardService.countSearchResults(b_title, b_category);
-	        System.out.println("전체글 모드 searchResults : "+searchResults);
-	        System.out.println("전체글 모드 totalResults : "+totalResults);
-	    }
-	    System.out.println("");
+	    System.out.println("검색결과 : "+searchResults);
+	    System.out.println("검색된 개수 : "+totalResults);
 
 	    // 페이징 정보 계산
 	    int maxpage = (int) Math.ceil((double) totalResults / limit);

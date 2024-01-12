@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <!-- 질문 검색바 -->
+    <!-- 질문 검색바 --> <!-- 추천글은 서버로 만들지말고 자바스크립트로 보게하기-->
     <div class="search-container">
         <form action="/board/search" method="get" onsubmit="return validateForm();">
             <div class="search_bar">
@@ -18,10 +18,10 @@
                 <input type="hidden" name="page" value="${page != null ? page : 1}">
 
                 <!-- 검색 버튼 -->
-                <input type="submit" class="box" value="검색">
+                <input type="submit" class="box" style="margin-left: 10px;" value="검색">
 
                 <!-- 카테고리 선택 -->
-                <select name="b_category" id="b_category">
+                <select name="b_category" id="b_category" style="margin: 0px 10px 0px 10px;">
                     <option value="" ${empty b_category ? "selected" : ""}>--게시판 선택--</option>
                     <option value="자유게시판" ${"자유게시판".equals(b_category) ? "selected" : ""}>자유게시판</option>
                     <option value="팁게시판" ${"팁게시판".equals(b_category) ? "selected" : ""}>팁게시판</option>
