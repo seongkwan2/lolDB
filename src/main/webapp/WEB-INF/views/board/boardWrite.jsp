@@ -17,7 +17,6 @@
     <div class="board_con">
         <h2 style="text-align: center;">게시판 글쓰기</h2><br> 
         
-        <!-- 유효성검사 제작할것 여기서 부터 작업할것, 댓글유효성검사도 작성할것-->
 		<form id="boardForm" method="post" onsubmit="return boardWriteCheck();">
 		    <select id="b_category" name="b_category">
 		        <option value="자유게시판">자유게시판</option>

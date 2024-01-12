@@ -7,17 +7,13 @@
 </head>
 <body>
 
-    <!-- 질문 검색바 --> 여기부터 할것 전체글, 추천글 상태에서 검색하는 상황에 따라 결과가 다르게 출력할것
+    <!-- 질문 검색바 -->
     <div class="search-container">
         <form action="/board/search" method="get" onsubmit="return validateForm();">
             <div class="search_bar">
                 <!-- 검색 필드 -->
                 <input type="search" name="b_title" id="b_title" class="search_box" placeholder="&nbsp; 검색" value="${b_title}">
                 
-                <!-- 라디오 버튼으로 전체글, 추천글 선택 -->
-                <input type="radio" name="viewMode" value="all" checked> 전체글
-                <input type="radio" name="viewMode" value="popular"> 추천글
-
                 <!-- 페이지 번호 -->
                 <input type="hidden" name="page" value="${page != null ? page : 1}">
 
