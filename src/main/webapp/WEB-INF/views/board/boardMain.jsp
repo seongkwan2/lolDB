@@ -17,8 +17,8 @@
 <%@ include file="boardHeader.jsp"%>
 
 <div class="big-container">
-<div class="interface">
-
+<div class="interface">	
+						<!-- 페이징 유지 잘됨 그러나 뒷페이지로 가보면 검색결과 뒤에 원래의 글들이 따라서 출력됨 -->
 <!-- 라디오 버튼 그룹 -->
     <input type="radio" id="showAllPosts" name="viewMode" value="all" checked>
     <label for="showAllPosts">전체글</label>
@@ -38,12 +38,17 @@ $(document).ready(function() {
     console.log("문서 준비 완료");
     checkViewMode();
 
-    // 라디오 버튼 변경 이벤트
-    $("input[type='radio'][name='viewMode']").change(function() {
-        var viewMode = $(this).val();
-        sessionStorage.setItem("viewMode", viewMode);
-        updateView();
-    });
+	 // 라디오 버튼 변경 이벤트
+	    $("input[type='radio'][name='viewMode']").change(function() {
+	        var viewMode = $(this).val();
+	        sessionStorage.setItem("viewMode", viewMode);
+	        sessionStorage.setItem("currentPage", 1); // 세션에 페이지값을 1로 초기화
+	
+	        // sessionStorage에서 currentPage 값을 가져와서 사용
+	        var currentPage = sessionStorage.getItem("currentPage") || 1;
+	        updateView();
+	    });
+
 
     // 카테고리 변경 시 이벤트
     $('#boardSelect').change(function() {
@@ -88,6 +93,11 @@ function updatePageByCategory(category, page, url) {
     });
 }
 
+$('form').on('submit', function() {
+    sessionStorage.setItem("currentPage", 1); // 페이지를 1로 초기화
+});
+
+
 
 function getCurrentPageFromUrl() {
     var urlParams = new URLSearchParams(window.location.search);
@@ -97,25 +107,28 @@ function getCurrentPageFromUrl() {
 
 function updateView() {
     var viewMode = sessionStorage.getItem("viewMode") || "all";
-    var selectedCategory = sessionStorage.getItem("selectedCategory") || "자유게시판";
-    var currentPage = getCurrentPageFromUrl() || 1;
-    var url = (viewMode === "popular") ? '/board/popular' : '/board/boardMain'; // URL을 뷰 모드에 따라 변경
+    var selectedCategory = $('#boardSelect').val() || "자유게시판";
+    var currentPage = sessionStorage.getItem("currentPage") || 1;
 
     $.ajax({
-        url: url,
+        url: '/board/boardMain',
         type: 'GET',
         data: {
             b_category: selectedCategory,
-            page: currentPage
+            page: currentPage,
+            viewMode: viewMode
         },
         success: function(response) {
-            $('#boardContent').html(response); // 응답으로 받은 내용으로 #boardContent를 업데이트
+            $('#boardContent').html(response);
         },
         error: function(xhr, status, error) {
             console.error("AJAX 요청 실패:", status, error);
         }
     });
 }
+
+
+
 
 
 

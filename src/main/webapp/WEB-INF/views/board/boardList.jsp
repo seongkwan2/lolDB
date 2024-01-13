@@ -78,14 +78,7 @@
 <div class="page_control">
     <!-- "이전" 버튼 -->
     <c:if test="${page > 1}">
-        <c:choose>
-            <c:when test="${not empty b_title or not empty b_category}">
-                <a href="boardMain?page=${page-1}&b_title=${b_title}&b_category=${b_category}" class="page-button">이전</a>
-            </c:when>
-            <c:otherwise>
-                <a href="boardMain?page=${page-1}" class="page-button">이전</a>
-            </c:otherwise>
-        </c:choose>
+        <a href="boardMain?page=${page-1}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">이전</a>
     </c:if>
     <c:if test="${page <= 1}">
         <span class="page-button disabled">이전</span>
@@ -98,33 +91,21 @@
                 <span class="page-button current-page disabled">${number}</span>
             </c:when>
             <c:otherwise>
-                <c:choose>
-                    <c:when test="${not empty b_title or not empty b_category}">
-                        <a href="boardMain?page=${number}&b_title=${b_title}&b_category=${b_category}" class="page-button">${number}</a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="boardMain?page=${number}" class="page-button">${number}</a>
-                    </c:otherwise>
-                </c:choose>
+                <a href="boardMain?page=${number}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">${number}</a>
             </c:otherwise>
         </c:choose>
     </c:forEach>
 
     <!-- "다음" 버튼 -->
     <c:if test="${page < maxpage}">
-        <c:choose>
-            <c:when test="${not empty b_title or not empty b_category}">
-                <a href="boardMain?page=${page+1}&b_title=${b_title}&b_category=${b_category}" class="page-button">다음</a>
-            </c:when>
-            <c:otherwise>
-                <a href="boardMain?page=${page+1}" class="page-button">다음</a>
-            </c:otherwise>
-        </c:choose>
+        <a href="boardMain?page=${page+1}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">다음</a>
     </c:if>
     <c:if test="${page >= maxpage}">
         <span class="page-button disabled">다음</span>
     </c:if>
 </div>
+
+
 
 
 </body>

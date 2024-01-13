@@ -12,7 +12,6 @@
 </head>
 <body>
     <%@ include file="../include/header.jsp" %>
-    <%@ include file="boardHeader.jsp"%>
 
     <div class="board_con">
         <h2 style="text-align: center;">게시판 글쓰기</h2><br> 

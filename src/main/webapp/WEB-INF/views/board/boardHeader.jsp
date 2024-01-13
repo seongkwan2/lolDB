@@ -7,9 +7,9 @@
 </head>
 <body>
 
-    <!-- 질문 검색바 --> <!-- 추천글은 서버로 만들지말고 자바스크립트로 보게하기-->
+    <!-- 질문 검색바 -->
     <div class="search-container">
-        <form action="/board/search" method="get" onsubmit="return validateForm();">
+        <form action="/board/boardMain" method="get" onsubmit="return validateForm();">
             <div class="search_bar">
                 <!-- 검색 필드 -->
                 <input type="search" name="b_title" id="b_title" class="search_box" placeholder="&nbsp; 검색" value="${b_title}">
@@ -32,25 +32,34 @@
 
     <script>
     function validateForm() {
-        var category = document.getElementById("b_category").value;
-        if (category === "") {
+        var b_title = document.getElementById("b_title").value;
+        var b_category = document.getElementById("b_category").value;
+
+        // 검색 조건을 sessionStorage에 저장
+        sessionStorage.setItem("b_title", b_title);
+        sessionStorage.setItem("b_category", b_category);
+
+        if (b_category === "") {
             alert("게시판을 지정하고 검색해주세요");
             return false; // 폼 제출 중단
         }
-        return true; // 폼 제출 허용
+        return true; // 폼 제출
+}
+
+// 페이지 로드 시 검색 조건을 복원
+document.addEventListener("DOMContentLoaded", function() {
+    var storedBTitle = sessionStorage.getItem("b_title");
+    var storedBCategory = sessionStorage.getItem("b_category");
+
+    if (storedBTitle !== null) {
+        document.getElementById("b_title").value = storedBTitle;
     }
+    if (storedBCategory !== null) {
+        document.getElementById("b_category").value = storedBCategory;
+    }
+});
+</script>
 
-    // 페이지 로드 시 검색 조건을 저장
-    document.addEventListener("DOMContentLoaded", function() {
-        var urlParams = new URLSearchParams(window.location.search);
-        var b_title = urlParams.get("b_title") || "";
-        var b_category = urlParams.get("b_category") || "";
-
-        document.getElementById("b_title").value = b_title;
-        document.getElementById("b_category").value = b_category;
-    });
-    </script>
-
+<br>
 </body>
 </html>
-
