@@ -173,7 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE b.b_title LIKE '%' || #{b_title} || '%' AND b.b_category = #{b_category}
         GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
         ORDER BY b.b_num DESC
-        OFFSET 0 ROWS FETCH NEXT #{limit} ROWS ONLY
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 
 

@@ -47,8 +47,8 @@ INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nex
 INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nextval, 'MANAGER');
 INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nextval, 'ADMIN');
 
-SELECT * FROM member_role;
-drop table member_role;
+SELECT * FROM lol_member_role;
+drop table lol_member_role;
 
 -- 권한 관리 테이블
 CREATE TABLE lol_member_authorities (
@@ -118,8 +118,14 @@ INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'z','하이', sys
 INSERT INTO lol_member VALUES(lol_member_seq.nextval,'z', 'z' , '조성관', '19960307', 'zaq3195@naver.com', '01038882488', '1', '2023-12-21');
 
 --테스트용 게시글작성
-INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','추천글 반갑습니다!!','테스트 내용 입니다','2023-01-12','자유게시판',1,50);
-INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁게시판 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2023-12-11','팁게시판',1,50);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','추천글 테스트입니다!!','테스트 내용 입니다','2024-01-15','자유게시판',1,50);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','자유게시판 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2024-01-15','자유게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','자유게시판 테스트 제목2 입니다',' 두번째 테스트 내용 입니다','2024-01-15','자유게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','자유게시판 테스트 제목3 입니다',' 두번째 테스트 내용 입니다','2024-01-15','자유게시판',1,0);
+
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁게시판 테스트 제목 입니다',' 두번째 테스트 내용 입니다','2024-01-15','팁게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁게시판 테스트 제목2 입니다',' 두번째 테스트 내용 입니다','2024-01-15','팁게시판',1,0);
+INSERT INTO lol_board values(lol_board_seq.nextval,'zaq3195','팁게시판 테스트 제목3 입니다',' 두번째 테스트 내용 입니다','2024-01-15','팁게시판',1,0);
 
 --조회수 쿼리문
 UPDATE lol_board SET board_views = board_views + 1 WHERE board_id = :게시물_ID;
@@ -149,6 +155,22 @@ commit;
 
 SELECT * FROM lol_board WHERE b_num = 56;
 SELECT COUNT(*) FROM lol_board WHERE b_likes >= 30;
+
+	    SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes, COUNT(r.r_num) AS reply_count
+        FROM lol_board b
+        LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+        WHERE b.b_title LIKE '%' || '안녕' || '%' AND b.b_category = '자유게시판'
+        GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+        ORDER BY b.b_num DESC
+        OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;
+        
+        SELECT b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes, COUNT(r.r_num) AS reply_count
+        FROM lol_board b
+        LEFT JOIN lol_board_reply r ON b.b_num = r.r_board_num
+        WHERE b.b_title LIKE '%' || '안녕' || '%' AND b.b_category = '자유게시판'
+        GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
+        ORDER BY b.b_num asc
+        OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
 
 
 

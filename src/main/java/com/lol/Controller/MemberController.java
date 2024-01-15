@@ -93,37 +93,39 @@ public class MemberController {
 	// 로그인 액션
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(@RequestParam String m_id,
-			@RequestParam String m_pwd,
-			HttpServletResponse response,
-			HttpServletRequest request,
-			HttpSession session, Model model) throws Exception {
+	        @RequestParam String m_pwd,
+	        HttpServletResponse response,
+	        HttpServletRequest request,
+	        HttpSession session, Model model) throws Exception {
 
-		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
+	    response.setContentType("text/html;charset=UTF-8");
+	    PrintWriter out = response.getWriter();
 
-		// 사용자 정보를 데이터베이스에서 가져오는 서비스 메서드 호출 (아래는 예시)
-		MemberVO memberInfo = memberService.findMemberId(m_id);
+	    // 사용자 정보를 데이터베이스에서 가져오는 서비스 메서드 호출 (아래는 예시)
+	    MemberVO memberInfo = memberService.findMemberId(m_id);
 
-		if (memberInfo != null && memberInfo.getM_pwd().equals(m_pwd)) {//로그인이 되었을 때
-			session = request.getSession();
-			session.setAttribute("loginInfo", memberInfo); // 사용자 정보를 세션에 저장
+	    if (memberInfo != null && memberInfo.getM_pwd().equals(m_pwd)) {//로그인이 되었을 때
+	        session = request.getSession();
+	        session.setAttribute("loginInfo", memberInfo); // 사용자 정보를 세션에 저장
 
-			boolean isAdmin = isAdminUser(memberInfo); // 사용자가 관리자인지 확인
+	        boolean isAdmin = isAdminUser(memberInfo); // 사용자가 관리자인지 확인
+	        System.out.println("로그인정보: "+memberInfo);
 
-			if (isAdmin) {
-				// 권한이 있을 경우 실행할 코드
-				return "/admin/adminMain";
-			} else {
-				// 권한이 없을 경우 실행할 코드
-				model.addAttribute("message", "로그인 되었습니다!\n"+memberInfo.getM_name()+"님 안녕하세요!");
-				return "redirect:/board/boardMain";
-			}
-		} else {
-			// 인증 실패 처리
-			model.addAttribute("message", "아이디와 비밀번호를 다시 확인해주세요!");
-			return "/member/login";
-		}
+	        if (isAdmin) {
+	            // 권한이 있을 경우 실행할 코드
+	            return "/admin/adminMain";
+	        } else {
+	            // 권한이 없을 경우 실행할 코드
+	            model.addAttribute("message", "로그인 되었습니다!\n"+memberInfo.getM_name()+"님 안녕하세요!");
+	            return "redirect:/board/boardMain";
+	        }
+	    } else {
+	        // 인증 실패 처리
+	        model.addAttribute("message", "아이디와 비밀번호를 다시 확인해주세요!");
+	        return "/member/login";
+	    }
 	}
+
 
 	private boolean isAdminUser(MemberVO memberInfo) {
 		// 사용자 정보가 null이면 관리자 권한이 없다고 간주
@@ -132,7 +134,7 @@ public class MemberController {
 		}
 
 		// 사용자의 권한을 확인하고, 관리자 권한이 있다면 true를 반환
-		// 여기에서는 단순 예시이며, 실제로는 데이터베이스에서 사용자의 권한 정보를 확인해야 합니다.
+		// 여기에서는 단순 예시이며, 실제로는 데이터베이스에서 사용자의 권한 정보를 확인
 		return memberInfo.getRoles() != null && memberInfo.getRoles().contains("ADMIN");
 	}
 

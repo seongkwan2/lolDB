@@ -1,15 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>boardHeader</title>
+    <title>게시판 헤더</title>
+    <script src="/js/jquery.js"></script>
+    <link href="/css/main.css" rel="stylesheet"/>
+    <link href="/css/board/board.css" rel="stylesheet"/>
 </head>
 <body>
-
     <!-- 질문 검색바 -->
     <div class="search-container">
-        <form action="/board/boardMain" method="get" onsubmit="return validateForm();">
+        <form action="/board/boardSearch" method="get" onsubmit="return validateForm();">
             <div class="search_bar">
                 <!-- 검색 필드 -->
                 <input type="search" name="b_title" id="b_title" class="search_box" placeholder="&nbsp; 검색" value="${b_title}">
@@ -31,35 +34,34 @@
     </div>
 
     <script>
-    function validateForm() {
-        var b_title = document.getElementById("b_title").value;
-        var b_category = document.getElementById("b_category").value;
+        function validateForm() {
+            var b_title = document.getElementById("b_title").value;
+            var b_category = document.getElementById("b_category").value;
 
-        // 검색 조건을 sessionStorage에 저장
-        sessionStorage.setItem("b_title", b_title);
-        sessionStorage.setItem("b_category", b_category);
+            // 검색 조건을 sessionStorage에 저장
+            sessionStorage.setItem("b_title", b_title);
+            sessionStorage.setItem("b_category", b_category);
 
-        if (b_category === "") {
-            alert("게시판을 지정하고 검색해주세요");
-            return false; // 폼 제출 중단
+            if (b_category === "") {
+                alert("게시판을 지정하고 검색해주세요");
+                return false; // 폼 제출 중단
+            }
+            return true; // 폼 제출
         }
-        return true; // 폼 제출
-}
 
-// 페이지 로드 시 검색 조건을 복원
-document.addEventListener("DOMContentLoaded", function() {
-    var storedBTitle = sessionStorage.getItem("b_title");
-    var storedBCategory = sessionStorage.getItem("b_category");
+        // 페이지 로드 시 검색 조건을 복원
+        document.addEventListener("DOMContentLoaded", function() {
+            var storedBTitle = sessionStorage.getItem("b_title");
+            var storedBCategory = sessionStorage.getItem("b_category");
 
-    if (storedBTitle !== null) {
-        document.getElementById("b_title").value = storedBTitle;
-    }
-    if (storedBCategory !== null) {
-        document.getElementById("b_category").value = storedBCategory;
-    }
-});
-</script>
-
-<br>
+            if (storedBTitle !== null) {
+                document.getElementById("b_title").value = storedBTitle;
+            }
+            if (storedBCategory !== null) {
+                document.getElementById("b_category").value = storedBCategory;
+            }
+        });
+    </script>
+    <br>
 </body>
 </html>

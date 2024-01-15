@@ -36,21 +36,7 @@
                         <td>${boardInfo.b_id}</td>
                         <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
                         <td>${boardInfo.b_hits}</td>
-                        <td>${boardInfo.b_likes}</td>
-                        <td>${boardInfo.replyCount}</td>
-                    </tr>
-                </c:forEach>
-            </c:when>
-            <c:when test="${not empty searchResults}">
-                <!-- 검색 결과 목록 처리 -->
-                <c:forEach var="boardInfo" items="${searchResults}">
-                    <tr>
-                        <td>${boardInfo.b_num}</td>
-                        <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
-                        <td>${boardInfo.b_id}</td>
-                        <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
-                        <td>${boardInfo.b_hits}</td>
-                        <td>${boardInfo.b_likes}</td>
+                        <td <c:if test="${boardInfo.b_likes >= 30}">style="color: red;"</c:if>>${boardInfo.b_likes}</td>
                         <td>${boardInfo.replyCount}</td>
                     </tr>
                 </c:forEach>
@@ -64,7 +50,7 @@
                         <td>${boardInfo.b_id}</td>
                         <td><fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd"/></td>
                         <td>${boardInfo.b_hits}</td>
-                        <td>${boardInfo.b_likes}</td>
+                        <td <c:if test="${boardInfo.b_likes >= 30}">style="color: red;"</c:if>>${boardInfo.b_likes}</td>
                         <td>${boardInfo.replyCount}</td>
                     </tr>
                 </c:forEach>
@@ -74,11 +60,11 @@
 </div>
 <br><br>
 
-<%--페이징(쪽나누기) --%>
+<!-- 페이징(쪽나누기) -->
 <div class="page_control">
     <!-- "이전" 버튼 -->
     <c:if test="${page > 1}">
-        <a href="boardMain?page=${page-1}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">이전</a>
+        <a href="boardMain?page=${page-1}&b_category=${b_category}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">이전</a>
     </c:if>
     <c:if test="${page <= 1}">
         <span class="page-button disabled">이전</span>
@@ -91,19 +77,20 @@
                 <span class="page-button current-page disabled">${number}</span>
             </c:when>
             <c:otherwise>
-                <a href="boardMain?page=${number}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">${number}</a>
+                <a href="boardMain?page=${number}&b_category=${b_category}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">${number}</a>
             </c:otherwise>
         </c:choose>
     </c:forEach>
 
     <!-- "다음" 버튼 -->
     <c:if test="${page < maxpage}">
-        <a href="boardMain?page=${page+1}&b_category=${bCategory}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">다음</a>
+        <a href="boardMain?page=${page+1}&b_category=${b_category}&b_title=${fn:escapeXml(b_title)}&viewMode=${viewMode}" class="page-button">다음</a>
     </c:if>
     <c:if test="${page >= maxpage}">
         <span class="page-button disabled">다음</span>
     </c:if>
 </div>
+
 
 
 

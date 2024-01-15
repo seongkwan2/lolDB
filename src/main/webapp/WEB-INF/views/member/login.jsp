@@ -39,11 +39,7 @@
 				<div id="pwd_form">
 					<input type="password" id="m_pwd" name="m_pwd" placeholder="비밀번호">
 				</div>
-				
-				
-				<div id="maintain">
-					<input type="checkbox" id="remember-me" name="remember-me" checked><label for="remember-me" ><span>로그인 상태 유지</span></label>
-				</div>
+	
 				<br>
 				<%--로그인 버튼 --%>
 				<div id="button_form">

@@ -18,7 +18,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="/home" class="nav-link active" aria-current="page">Home</a>
+                        <a href="/" class="nav-link active" aria-current="page">Home</a>
                     </li>
                     <li class="nav-item">
                         <a href="/searchUser" class="nav-link active" aria-current="page">Search</a>
@@ -34,10 +34,10 @@
                     </li>
                 </ul>
                 
-                <div class="header_menu ms-auto">
-				    <c:choose>
-				        <c:when test="${not empty memberInfo}"> <!-- 로그인 상태일 때 -->
-				            <a href="#"><button>마이페이지</button></a>
+				<div class="header_menu ms-auto">
+				    <c:choose><%--세션의 로그인 정보를 확인함 --%>
+				        <c:when test="${not empty sessionScope.loginInfo}"> <!-- 로그인 상태일 때 -->
+				            <!--  <a href="#"><button>마이페이지</button></a>-->
 				            <a href="/member/logout"><button>로그아웃</button></a>
 				        </c:when>
 				        <c:otherwise> <!-- 로그인 상태가 아닐 때 -->

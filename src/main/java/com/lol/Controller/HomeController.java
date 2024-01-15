@@ -9,7 +9,7 @@ public class HomeController {
 	
 
 	/*메인 페이지*/
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 		return "/home";
 	}
@@ -17,7 +17,7 @@ public class HomeController {
 	/* 에러 페이지*/
 	@RequestMapping(value = "/error", method = RequestMethod.GET)
 	public String error() {
-		return "main/error";
+		return "/home";
 	}
 	
 	

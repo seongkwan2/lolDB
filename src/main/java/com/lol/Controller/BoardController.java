@@ -44,85 +44,18 @@ public class BoardController {
 	@Autowired
 	private ReplyService replyService;
 
-	/*
-	//게시판 메인 페이지
-	@GetMapping("/boardMain") //새로 board에 들어올때 라디오버튼이 전체글로 향하게 하기
+	//게시판 메인화면
+	@GetMapping("/boardMain")
 	public ModelAndView boardMain(
-	        @RequestParam(value = "page", defaultValue = "1") int page,
-	        @RequestParam(value = "b_category", required = false) String bCategory,
-	        @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
-	        PageVO pageVO, HttpSession session, HttpServletRequest request) {
-		System.out.println("board메인 실행");
+	    @RequestParam(value = "b_title", required = false) String b_title,
+	    @RequestParam(value = "b_category", required = false) String b_category,
+	    @RequestParam(value = "page", defaultValue = "1") int page,
+	    @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
+	    HttpSession session, HttpServletRequest request) {
 
 	    ModelAndView mv = new ModelAndView();
 
-	    // 세션에서 카테고리 확인, 없으면 기본값 설정
-	    String selectedCategory = (String) session.getAttribute("selectedCategory");
-	    if (selectedCategory == null) {
-	        selectedCategory = "자유게시판";
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
-
-	    if (bCategory != null && !bCategory.isEmpty()) {
-	        selectedCategory = bCategory;
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
-
-	    // 페이지 처리
-	    pageVO.setB_category(selectedCategory);
-	    int limit = 10;
-	    int offset = (page - 1) * limit;
-	    pageVO.setOffset(offset);
-	    pageVO.setLimit(limit);
-
-	    int listCount;
-	    // viewMode에 따른 데이터 처리
-	    if ("popular".equals(viewMode)) {
-	        // 추천글 처리
-	        List<BoardVO> popularPosts = boardService.getPopularByCategory(pageVO);//추천글 댓글개수 포함해서 가져오기
-	        listCount = this.boardService.getPopularCount(selectedCategory); //추천글의 개수 파악
-	        mv.addObject("boardList", popularPosts);
-	    } else {
-	        // 전체글 처리
-	        List<BoardVO> boardList = boardService.getBoardListWithReplyCount(pageVO);//전체글 댓글개수 포함해서 가져오기
-	        listCount = this.boardService.getCountByCategory(selectedCategory);//전체글의 개수 파악
-	        mv.addObject("boardList", boardList);
-	    }
-
-	    // 페이징 정보
-	    int maxpage = (int) Math.ceil((double) listCount / limit);
-	    int startpage = ((page - 1) / 10) * 10 + 1;
-	    int endpage = Math.min(startpage + 9, maxpage);
-
-	    mv.addObject("page", page);
-	    mv.addObject("startpage", startpage);
-	    mv.addObject("endpage", endpage);
-	    mv.addObject("maxpage", maxpage);
-	    mv.addObject("bCategory", selectedCategory);
-	    mv.addObject("viewMode", viewMode);
-	    
-	    // 뷰 결정
-	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-	        mv.setViewName("/board/boardList");
-	    } else {
-	        mv.setViewName("/board/boardMain");
-	    }
-
-	    return mv;
-
-	}
-*/
-
-	@GetMapping("/boardMain") //검색을하고나서 페이징 처리를했을때 같은 게시물이 반복되는 문제 해결할것 
-	public ModelAndView boardMain(
-	        @RequestParam(value = "b_title", required = false) String b_title,
-	        @RequestParam(value = "b_category", required = false) String b_category,
-	        @RequestParam(value = "page", defaultValue = "1") int page,
-	        @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
-	        HttpSession session, HttpServletRequest request) {
-	    ModelAndView mv = new ModelAndView();
-
-	    // 세션에서 카테고리 확인, 없으면 기본값 설정
+	    // 세션에서 카테고리 확인, 없으면 기본값 설정 (게시판을 맨 처음 열었을땐 자유게시판 지정)
 	    String selectedCategory = (String) session.getAttribute("selectedCategory");
 	    if (selectedCategory == null) {
 	        selectedCategory = "자유게시판";
@@ -145,14 +78,9 @@ public class BoardController {
 	    int listCount;
 	    List<BoardVO> boardList;
 
-	    
-	    if (b_title != null && !b_title.isEmpty()) {//사용자가 검색을 한 경우 실행
-	        // 검색 결과 처리
-	        boardList = boardService.searchByTitle(b_title, b_category, offset, limit);
-	        listCount = boardService.countSearchResults(b_title, b_category);
-	        System.out.println("검색 결과"+boardList);
-	        System.out.println("검색 개수"+listCount);
-	    } else if ("popular".equals(viewMode)) {
+	   
+	    //JSP에서 추천글과 전체글중 라디오버튼으로 선택된 게시글 가져오기
+	     if ("popular".equals(viewMode)) {
 	        // 추천글 처리
 	        boardList = boardService.getPopularByCategory(pageVO);
 	        listCount = this.boardService.getPopularCount(selectedCategory);
@@ -186,9 +114,72 @@ public class BoardController {
 
 	    return mv;
 	}
+	
+	//검색 액션
+	@GetMapping("/boardSearch")
+	public ModelAndView boardSearch(
+	    @RequestParam(value = "b_title", required = false) String b_title,
+	    @RequestParam(value = "b_category", required = false) String b_category,
+	    @RequestParam(value = "page", defaultValue = "1") int page,
+	    HttpSession session) {
 
+	    ModelAndView mv = new ModelAndView();
 
+	    // 세션에서 카테고리 확인, 없으면 기본값 설정
+	    String selectedCategory = (String) session.getAttribute("selectedCategory");
+	    if (selectedCategory == null) {
+	        selectedCategory = "자유게시판";
+	        session.setAttribute("selectedCategory", selectedCategory);
+	    }
 
+	    if (b_category != null && !b_category.isEmpty()) {
+	        selectedCategory = b_category;
+	        session.setAttribute("selectedCategory", selectedCategory);
+	    }
+
+	    // 검색 조건을 세션에 저장
+	    if (b_title != null && !b_title.isEmpty()) {
+	        session.setAttribute("searchTitle", b_title);
+	    } else {
+	        session.removeAttribute("searchTitle");
+	    }
+	    if (b_category != null && !b_category.isEmpty()) {
+	        session.setAttribute("searchCategory", b_category);
+	    } else {
+	        session.removeAttribute("searchCategory");
+	    }
+
+	    // 페이지 처리
+	    PageVO pageVO = new PageVO();
+	    pageVO.setB_category(selectedCategory);
+	    int limit = 10;
+	    int offset = (page - 1) * limit;
+	    pageVO.setOffset(offset);
+	    pageVO.setLimit(limit);
+
+	    // 검색 결과 처리
+	    List<BoardVO> boardList = boardService.searchByTitle(b_title, b_category, offset, limit);
+	    int listCount = boardService.countSearchResults(b_title, b_category);
+
+	    // 페이징 정보
+	    int maxpage = (int) Math.ceil((double) listCount / limit);
+	    int startpage = ((page - 1) / 10) * 10 + 1;
+	    int endpage = Math.min(startpage + 9, maxpage);
+
+	    mv.addObject("page", page);
+	    mv.addObject("startpage", startpage);
+	    mv.addObject("endpage", endpage);
+	    mv.addObject("maxpage", maxpage);
+	    mv.addObject("bCategory", selectedCategory);
+	    mv.addObject("b_title", b_title);
+	    mv.addObject("b_category", b_category);
+	    mv.addObject("boardList", boardList);
+	    mv.addObject("listCount", listCount);
+
+	    mv.setViewName("/board/boardSearch");
+
+	    return mv;
+	}
 
 	//글쓰기 폼
 	@RequestMapping(value="/boardWrite")
