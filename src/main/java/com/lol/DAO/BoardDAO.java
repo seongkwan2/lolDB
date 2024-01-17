@@ -3,6 +3,7 @@ package com.lol.DAO;
 import java.util.List;
 
 import com.lol.vo.BoardVO;
+import com.lol.vo.FileUploadVO;
 import com.lol.vo.PageVO;
 
 public interface BoardDAO {
@@ -12,8 +13,8 @@ public interface BoardDAO {
 	int getListCount();
 
 	int writeBoard(BoardVO boardInfo);
-
-	BoardVO getCont(long b_num);
+	
+	void uploadFile(FileUploadVO fileUpload);
 
 	int boardDel(long b_num);
 
@@ -48,5 +49,11 @@ public interface BoardDAO {
 	int countSearchResults(String b_title, String b_category);
 
 	List<BoardVO> getPopularByCategory(String b_title, String b_category, int offset, int limit);
+	
+	long getNextSeqVal();
+
+	FileUploadVO getFileByBoardNum(long b_num);
+
+	
 
 }

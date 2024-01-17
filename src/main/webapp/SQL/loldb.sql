@@ -1,26 +1,30 @@
 --삭제명령어
-DROP TABLE lol_member;              --멤버 테이블
-DROP TABLE lol_member_role;        --권한 목록 테이블
+DROP TABLE lol_member;                   --멤버 테이블
+DROP TABLE lol_member_role;             --권한 목록 테이블
 DROP TABLE lol_member_authorities;      --권한 관리 테이블
 DROP TABLE lol_board;                   --게시판 테이블
+DROP TABLE lol_board_files;              --파일 이미지 테이블
 DROP TABLE lol_board_reply;             --게시판 댓글 테이블
-DROP TABLE lol_board_likes;          --게시판 추천 추적 테이블
+DROP TABLE lol_board_likes;             --게시판 추천 추적 테이블
 
 
-DROP SEQUENCE lol_member_seq;       --멤버 시퀀스
+DROP SEQUENCE lol_member_seq;            --멤버 시퀀스
 DROP SEQUENCE lol_member_role_seq;      --멤버 권한 시퀀스
 DROP SEQUENCE lol_member_authorities;   --멤버 권한 관리 시퀀스
-DROP SEQUENCE lol_board_seq;            --게시판 시퀀스
+DROP SEQUENCE lol_board_seq;              --게시판 시퀀스
+DROP SEQUENCE lol_board_files_seq;        --파일 이미지 시퀀스
 DROP SEQUENCE lol_board_reply_seq;      --게시판 댓글 시퀀스
 DROP SEQUENCE lol_board_likes_seq;      --게시판 추천 추적 시퀀스
 
--- 시퀀스 생성
+-- 시퀀스 생성 (반드시 연속된 시퀀스값을 얻어야할 경우 시퀀스 생성 시 NOCACHE 옵션을 사용해야함)
 CREATE SEQUENCE lol_member_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --멤버 테이블 시퀀스
 CREATE SEQUENCE lol_member_role_seq START WITH 1 INCREMENT BY 1 NOCACHE;            --멤버 권한목록 시퀀스
 CREATE SEQUENCE lol_member_authorities_seq START WITH 1 INCREMENT BY 1 NOCACHE;     --멤버 권한관리 시퀀스
 CREATE SEQUENCE lol_board_seq START WITH 1 INCREMENT BY 1 NOCACHE;                   --게시판 테이블 시퀀스
+CREATE SEQUENCE lol_board_files_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --파일 이미지 시퀀스
 CREATE SEQUENCE lol_board_reply_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --게시판 댓글 시퀀스
 CREATE SEQUENCE lol_board_likes_seq START WITH 1 INCREMENT BY 1 NOCACHE;                --게시판 추천 추적 시퀀스
+
 
 --사이트 사용자 테이블
 create table lol_member(
@@ -61,7 +65,7 @@ CREATE TABLE lol_member_authorities (
 SELECT * FROM lol_member_authorities;
 
 -- 게시판 테이블
-CREATE TABLE lol_board (        --게시글 수정날짜 추가할것
+CREATE TABLE lol_board (
   b_num NUMBER NOT NULL PRIMARY KEY,
   b_id VARCHAR2(30) NOT NULL,
   b_title VARCHAR2(255) NOT NULL,
@@ -73,6 +77,35 @@ CREATE TABLE lol_board (        --게시글 수정날짜 추가할것
   FOREIGN KEY (b_id) REFERENCES lol_member(m_id) ON DELETE SET NULL -- 아이디 삭제 시 게시글이 남아있고 아이디는 NULL로 설정
 );
 select * from lol_board;
+
+
+--게시판 이미지 파일 테이블
+CREATE TABLE lol_board_files (
+    f_num NUMBER NOT NULL PRIMARY KEY,
+    b_num NUMBER NOT NULL,                              -- 게시글 번호를 참조하는 외래키 컬럼
+    f_original_name VARCHAR2(200) DEFAULT NULL,     -- 파일 오리지널 이름
+    f_upload_name VARCHAR2(200) DEFAULT NULL,       -- 서버에 올라갔을 때 이름
+    f_upload_path VARCHAR2(200) DEFAULT NULL,       -- 서버에 올라갔을 때 경로
+    f_ext VARCHAR(10) DEFAULT NULL,                 -- 파일 확장자
+    f_size NUMBER DEFAULT NULL,                     -- 파일 크기
+    FOREIGN KEY (b_num) REFERENCES lol_board(b_num) ON DELETE CASCADE --게시글 삭제시 이미지 파일도 삭제
+);
+
+SELECT 
+    lb.*, 
+    lbf.f_original_name, 
+    lbf.f_upload_name, 
+    lbf.f_upload_path, 
+    lbf.f_ext, 
+    lbf.f_size
+FROM 
+    lol_board lb
+LEFT JOIN 
+    lol_board_files lbf ON lb.b_num = lbf.b_num;
+
+SELECT * FROM lol_board_files;
+
+
 --게시판 댓글 테이블       --댓글 수정날짜 추가할것
 CREATE TABLE lol_board_reply (
     r_num NUMBER NOT NULL PRIMARY KEY,  --댓글 번호

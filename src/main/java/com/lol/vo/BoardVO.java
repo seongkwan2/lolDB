@@ -2,6 +2,8 @@ package com.lol.vo;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -11,6 +13,7 @@ public class BoardVO {
 	private String b_id;
 	private String b_title;
 	private String b_cont;
+	private MultipartFile b_file;
 	private Date b_date;
 	private String b_category;
 	private int b_hits;

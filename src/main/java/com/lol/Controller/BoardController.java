@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lol.Service.BoardService;
 import com.lol.Service.MemberService;
 import com.lol.Service.ReplyService;
+import com.lol.vo.BoardDetailsVO;
 import com.lol.vo.BoardVO;
 import com.lol.vo.MemberVO;
 import com.lol.vo.PageVO;
 import com.lol.vo.ReplyVO;
+
 
 @Controller
 @RequestMapping(value="/board/*")
@@ -202,29 +204,27 @@ public class BoardController {
 
 	//글쓰기 액션
 	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
-	public String boardWrite(@ModelAttribute BoardVO boardInfo, RedirectAttributes redirectAttributes, HttpSession session) {
-		//현재 로그인 정보를 세션을 통해서 가져옴
-		MemberVO memberInfo =  (MemberVO) session.getAttribute("loginInfo");
-		if(memberInfo == null) {
-			redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
-			return "redirect:/member/login";
-		}
-
-		int result = this.boardService.writeBoard(boardInfo);
-		if (result == 1) {
-			redirectAttributes.addFlashAttribute("message", "게시글이 작성되었습니다!");
-			return "redirect:/board/boardMain";
-		} else {
-			redirectAttributes.addFlashAttribute("message", "게시글 작성에 실패했습니다!");
-			return "redirect:/board/boardWrite";
-		}
+	public String boardWrite(@ModelAttribute BoardVO boardInfo,
+	                         RedirectAttributes redirectAttributes, 
+	                         HttpSession session) throws Exception {
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+	    if (memberInfo == null) {
+	        redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
+	        return "redirect:/member/login";
+	    }
+	    
+	    boardService.writeBoard(boardInfo, boardInfo.getB_file());
+	    
+	    return "redirect:/board/boardMain";
 	}
+
 
 	//글확인
 	@GetMapping(value="/boardCont")
 	public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-
+		BoardDetailsVO boardInfo = boardService.getCont(b_num);
+		
 		// 현재 로그인 정보를 세션에서 가져옴
 		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 		mv.addObject("memberInfo", memberInfo);
@@ -233,11 +233,10 @@ public class BoardController {
 		this.boardService.plusHits(b_num);
 
 		// 글번호를 기준으로 글의 정보를 가져오기  //StringEscapeUtils을 사용해서 HTML태그와 같은것들도 제대로 출력가능하게 만듬
-		BoardVO boardInfo = this.boardService.getCont(b_num);
-		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getB_cont());
+		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getBoardInfo().getB_cont());
 		String formattedContent = safeContent.replace("\n", "<br>");	//글 줄바꿈처리 적용
-		boardInfo.setB_cont(formattedContent);
-		mv.addObject("boardInfo", boardInfo);
+		boardInfo.getBoardInfo().setB_cont(formattedContent);
+		
 
 		// 댓글 리스트 가져오기
 		List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
@@ -246,6 +245,8 @@ public class BoardController {
 			String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
 			reply.setR_cont(formattedReplyContent);
 		}
+		
+		mv.addObject("boardInfo", boardInfo);
 		mv.addObject("replyList", replyList);
 
 		mv.setViewName("/board/boardCont");
@@ -341,9 +342,9 @@ public class BoardController {
 	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num) {
 		ModelAndView mv = new ModelAndView();
 
-		BoardVO boardInfo = this.boardService.getCont(b_num);
+		//BoardVO boardInfo = this.boardService.getCont(b_num);
 
-		mv.addObject("boardInfo", boardInfo);
+		//mv.addObject("boardInfo", boardInfo);
 		mv.setViewName("/board/boardUpdate");
 		return mv;
 	}
@@ -351,15 +352,15 @@ public class BoardController {
 	//글수정 액션
 	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> boardUpdate(@RequestBody BoardVO boardInfo) {
+	public Map<String, String> boardUpdate(@RequestBody BoardVO boardInfo, MultipartFile file)throws Exception {
 		Map<String, String> resultMap = new HashMap<>();
 
-		int result = this.boardService.boardUpdate(boardInfo);
+		/*int result = this.boardService.boardUpdate(boardInfo);
 		if (result == 1) {
 			resultMap.put("result", "success");
 		} else {
 			resultMap.put("result", "fail");
-		}
+		}*/
 
 		return resultMap;
 	}
@@ -387,55 +388,5 @@ public class BoardController {
 		resultMap.put("message", result);
 		return resultMap;
 	}
-
-	/*
-	// 검색 결과에 따른 페이징 처리
-	@GetMapping("/search")
-	public ModelAndView search(@RequestParam(value = "b_title", required = false) String b_title,
-	                            @RequestParam(value = "b_category", required = false) String b_category,
-	                            @RequestParam(value = "page", defaultValue = "1") int page,
-	                            HttpSession session) {
-	    ModelAndView mv = new ModelAndView();
-
-	    // 페이징 처리
-	    int limit = 10;
-	    int offset = (page - 1) * limit;
-
-	    List<BoardVO> searchResults;
-	    int totalResults;
-
-	    searchResults = boardService.searchByTitle(b_title, b_category, offset, limit);
-	    totalResults = boardService.countSearchResults(b_title, b_category);
-	    System.out.println("검색결과 : " + searchResults);
-	    System.out.println("검색된 개수 : " + totalResults);
-
-	    // 페이징 정보 계산
-	    int maxpage = (int) Math.ceil((double) totalResults / limit);
-	    int startpage = ((page - 1) / 10) * 10 + 1;
-	    int endpage = Math.min(startpage + 9, maxpage);
-
-	    // 모델에 데이터 추가
-	    mv.addObject("b_title", b_title);
-	    mv.addObject("b_category", b_category);
-	    mv.addObject("searchResults", searchResults);
-	    mv.addObject("page", page);
-	    mv.addObject("startpage", startpage);
-	    mv.addObject("endpage", endpage);
-	    mv.addObject("maxpage", maxpage);
-
-	    // 뷰 설정
-	    mv.setViewName("/board/boardMain");
-
-	    return mv;
-	}
-*/
-
-
-
-
-
-
-
-
 
 }

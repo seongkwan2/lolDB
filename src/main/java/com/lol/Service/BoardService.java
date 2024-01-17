@@ -2,6 +2,9 @@ package com.lol.Service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.lol.vo.BoardDetailsVO;
 import com.lol.vo.BoardVO;
 import com.lol.vo.PageVO;
 
@@ -11,13 +14,13 @@ public interface BoardService {
 	
 	int getListCount();
 
-	int writeBoard(BoardVO boardInfo);
+	void writeBoard(BoardVO boardInfo, MultipartFile file) throws Exception;
 
-	BoardVO getCont(long b_num);
+	BoardDetailsVO getCont(long b_num);
 
 	int boardDel(long b_num);
 
-	int boardUpdate(BoardVO boardInfo);
+	void boardUpdate(BoardVO boardInfo);
 
 	void plusHits(long b_num);
 

@@ -18,6 +18,26 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
+	
+		<!-- 파일 확장자를 추출하는 라이브러리  -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.8.0</version> <!-- 적절한 버전 사용 -->
+		</dependency>
+	
+		<!-- 이미지파일을 업로드 하기위한 라이브러리 -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
+		</dependency>
+
 		
 		<!-- HTML 태그와 같은 잠재적으로 위험한 문자를 안전하게 처리 -->
 		<dependency>

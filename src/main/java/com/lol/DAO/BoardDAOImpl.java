@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.lol.vo.BoardVO;
+import com.lol.vo.FileUploadVO;
 import com.lol.vo.PageVO;
 
 @Repository
@@ -31,10 +32,10 @@ public class BoardDAOImpl implements BoardDAO {
 	public int writeBoard(BoardVO boardInfo) {
 		return this.sqlSession.insert("writeBoard",boardInfo);
 	}
-
+	
 	@Override
-	public BoardVO getCont(long b_num) {
-		return this.sqlSession.selectOne("getCont",b_num);
+	public void uploadFile(FileUploadVO fileUpload) {
+		this.sqlSession.insert("uploadFile",fileUpload);
 	}
 
 	@Override
@@ -142,6 +143,18 @@ public class BoardDAOImpl implements BoardDAO {
 	    paramMap.put("limit", limit);
 		return this.sqlSession.selectList("getPopularByCategory2",paramMap);
 	}
+
+	@Override
+	public long getNextSeqVal() {
+		return sqlSession.selectOne("getNextSeqVal");
+	}
+
+	@Override
+	public FileUploadVO getFileByBoardNum(long b_num) {
+		return this.sqlSession.selectOne("getFileByBoardNum",b_num);
+	}
+
+
 
 
 }

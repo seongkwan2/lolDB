@@ -131,7 +131,6 @@ function goWrite(){
 }
 </script>
 </div>
-<c:out value="${memberInfo.m_id}"/> - <c:out value="${boardInfo.b_id}"/>
 
 <%--boardList를 include하여 출력 --%>
 <div id="boardContent">

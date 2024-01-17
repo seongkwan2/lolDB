@@ -20,54 +20,64 @@
 <div class="big-container">
     <div class="board_con">
         
-        <form action="/board/boardUpdate?b_num=${boardInfo.b_num}">
+        <form action="/board/boardUpdate?b_num=${boardInfo.boardInfo.b_num}">
            	<!-- 글 번호 -->
-            <input type="hidden" name="b_num" id="b_num" value="${boardInfo.b_num}" >
+            <input type="hidden" name="b_num" id="b_num" value="${boardInfo.boardInfo.b_num}" >
             <!-- 글 조회수 -->
-            <input type="hidden" name="b_hit" id="b_hit" value="${boardInfo.b_hits}">
+            <input type="hidden" name="b_hit" id="b_hit" value="${boardInfo.boardInfo.b_hits}">
         	<!-- 카테고리 -->
-        	<input type="hidden" name="b_category" id="b_category" value="${boardInfo.b_category}">
+        	<input type="hidden" name="b_category" id="b_category" value="${boardInfo.boardInfo.b_category}">
         	<!-- 글 제목 -->
-            <input type="hidden" name="b_title" id="b_title" value="${boardInfo.b_title}">
+            <input type="hidden" name="b_title" id="b_title" value="${boardInfo.boardInfo.b_title}">
             <!-- 글 작성자 -->
-            <input type="hidden" name="b_id" id="b_id" value="${boardInfo.b_id}">
+            <input type="hidden" name="b_id" id="b_id" value="${boardInfo.boardInfo.b_id}">
             
             
             
-            <h2>${boardInfo.b_category}</h2><hr>
+            <h2>${boardInfo.boardInfo.b_category}</h2><hr>
             
             <%--글 상단 제목 박스 --%>
             <div class="cont_title_box">
             	<div class="cont_title">
-		           <h4>글제목 : <b>${boardInfo.b_title}</b></h4>
-		            작성자 : ${boardInfo.b_id}
+		           <h4>글제목 : <b>${boardInfo.boardInfo.b_title}</b></h4>
+		            작성자 : ${boardInfo.boardInfo.b_id}
             	</div>
             	
             	<div class="cont_etc">
-            		조회 ${boardInfo.b_hits} | 추천 ${boardInfo.b_likes} | <span style="text-align: right;">
-		            					<fmt:formatDate value="${boardInfo.b_date}" pattern="yyyy-MM-dd HH:mm"/></span>
+            		조회 ${boardInfo.boardInfo.b_hits} | 추천 ${boardInfo.boardInfo.b_likes} | <span style="text-align: right;">
+		            					<fmt:formatDate value="${boardInfo.boardInfo.b_date}" pattern="yyyy-MM-dd HH:mm"/></span>
             	</div>
             </div><br>
             
             <%--글 내용 박스 --%>
             <div class="cont_box">
             	<div class="cont">
-            		${boardInfo.b_cont}
+            	
+            	<%-- 이미지 파일이 존재하는 경우에만 이미지 태그를 표시 --%>
+            	<div class ="img_box">
+					<c:if test="${boardInfo.fileInfo != null}">
+			    	<img src="/upload/image/${boardInfo.fileInfo.f_upload_name}" alt="게시글 이미지">
+					</c:if>
+				</div>
+
+            	<br><br>
+            	<%--글 내용 --%>
+            	${boardInfo.boardInfo.b_cont}
             	</div>
             </div>
             
             <!-- 글 내용 -->
-            <input type="hidden" name="b_cont" id="b_cont" value="${boardInfo.b_cont}">
+            <input type="hidden" name="b_cont" id="b_cont" value="${boardInfo.boardInfo.b_cont}">
             
             <!-- 추천수-->
-            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.b_likes}">
+            <input type="hidden" name="b_likes" id="b_likes" value="${boardInfo.boardInfo.b_likes}">
             </form>
             
             <br><br><br>
             <!-- 추천버튼 -->
 			<div class="likes_button">
-			            <button type="button" id="likeButton" data-bnum="${boardInfo.b_num}">
-			            추천하기👍 <span id="likes-count">${boardInfo.b_likes}</span>
+			            <button type="button" id="likeButton" data-bnum="${boardInfo.boardInfo.b_num}">
+			            추천하기👍 <span id="likes-count">${boardInfo.boardInfo.b_likes}</span>
 </button>
 			</div>
 			
@@ -143,7 +153,7 @@
            <div class="reply_write">
             <form action="/board/writeReply" method="post" onsubmit="return writeReplyCheck();">
             	<input type="hidden" name="r_id" id="r_id" value="${memberInfo.m_id}"><br>
-		        <input type="hidden" name="r_board_num" value="${boardInfo.b_num}">	<%--해당 게시글의 번호--%>
+		        <input type="hidden" name="r_board_num" value="${boardInfo.boardInfo.b_num}">	<%--해당 게시글의 번호--%>
 		        <label>* 댓글작성</label>
 		        <textarea rows="2" cols="50" name="r_cont" id="r_cont" maxlength="300" placeholder="매너 채팅 부탁드립니다."></textarea><br>
 		        
@@ -186,14 +196,14 @@
          	</script>
 
             <!-- 글 수정 버튼 (글 작성자만 보이게함) -->
-            <c:if test="${memberInfo.m_id == boardInfo.b_id}">
-			    <form action="/board/boardUpdate?b_num=${boardInfo.b_num}" method="get">
-			    <input type="hidden" name="b_num" value="${boardInfo.b_num}">
+            <c:if test="${memberInfo.m_id == boardInfo.boardInfo.b_id}">
+			    <form action="/board/boardUpdate?b_num=${boardInfo.boardInfo.b_num}" method="get">
+			    <input type="hidden" name="b_num" value="${boardInfo.boardInfo.b_num}">
 				<input type="submit" value="글수정">
 				</form>
             
             <!-- 글삭제 -->
-            <form action="boardDel?b_num=${boardInfo.b_num}" method="post">
+            <form action="boardDel?b_num=${boardInfo.boardInfo.b_num}" method="post">
 				<input type="submit" value="글삭제">
 			</form>
 			</c:if>
