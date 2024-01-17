@@ -30,7 +30,7 @@
             <c:when test="${not empty popularPosts}">
                 <!-- 추천 게시글 목록 처리 -->
                 <c:forEach var="boardInfo" items="${popularPosts}">
-                    <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
+                    <tr style="${loginInfo.m_id == boardInfo.b_id ? 'background-color: #D3D3D3;' : ''}">
                         <td class="writer">${boardInfo.b_num}</td>
                         <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
                         <td>${boardInfo.b_id}</td>
@@ -44,7 +44,7 @@
             <c:otherwise>
                 <!-- 일반 게시글 목록 처리 -->
                 <c:forEach var="boardInfo" items="${boardList}">
-                    <tr style="${memberInfo.m_id == boardInfo.b_id ? 'background-color: lightblue;' : ''}">
+                    <tr style="${loginInfo.m_id == boardInfo.b_id ? 'background-color: #D3D3D3;' : ''}">
                         <td class="writer">${boardInfo.b_num}</td>
                         <td class="title"><a href="boardCont?b_num=${boardInfo.b_num}">${boardInfo.b_title}</a></td>
                         <td>${boardInfo.b_id}</td>

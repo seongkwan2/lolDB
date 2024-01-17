@@ -22,7 +22,7 @@
 <div class="big-container">
     <div class="interface">	 
         
-        <button onclick="goboardMain();">게시판 메인이동</button>
+        <button onclick="goboardMain();">게시판 목록 이동</button>
         <button style="float:right; margin-right: 200px" onclick="goWrite();">글쓰기</button>
         <script>
             function goboardMain(){

@@ -49,48 +49,87 @@
         </form>
     </div>
 </div>
+
 <script>
-
-$("#editButton").click(function(event) {
-    event.preventDefault(); // 폼 기본 제출 방지
-
-    var data = {
-    	b_num: $("#b_num").val(),
-    	b_id: $("#b_id").val(),
-        b_title: $("#b_title").val(),
-        b_cont: $("#b_cont").val(),
-        b_category: $("#b_category").val(),
-        b_date: $("#b_date").val(),
-        b_hits: $("#b_hits").val(),
-        b_likes: $("#b_likes").val()
-      
-        
-    };
-
-    $.ajax({
-        type: "POST",
-        url: "/board/boardUpdate",
-        contentType: "application/json", // JSON 형식으로 데이터 전송
-        data: JSON.stringify(data), // 객체를 JSON 문자열로 변환
-        success: function(response) {
-            if (response.result === "success") {
-                alert('게시글이 수정되었습니다!');
-                window.location.href = '/board/boardMain'; // 성공 시 페이지 이동
-            } else {
-                alert('게시글 수정에 실패했습니다.');
-            }
-        },
-        error: function(xhr, status, error) {
-            alert('오류가 발생했습니다: ' + error);
-        }
-    });
-});
-
-function goBack(){
-	window.history.back();
+// 유효성 검사 함수
+function boardWriteCheck() {
+    var form = $("#boardUpdateForm");
+    var title = form.find("#b_title").val();
+    var cont = form.find("#b_cont").val();
+    
+    if (title == "") {
+        alert("제목을 입력하세요!");
+        form.find("#b_title").val("").focus();
+        return false;
+    }
+    if (title.length > 20) {
+        alert("제목은 20자 이내로 작성해주세요!");
+        form.find("#b_title").val(title.slice(0, 20)); // 20자를 초과하는 부분을 잘라냄
+        form.find("#b_title").focus();
+        return false;
+    }
+    if (cont == "") {
+        alert("내용을 입력하세요!");
+        form.find("#b_cont").val("").focus();
+        return false;
+    }
+    if (cont.length > 3000) {
+        alert("내용은 3000자 이내로 작성해주세요!");
+        form.find("#b_cont").val(cont.slice(0, 3000));
+        form.find("#b_cont").focus();
+        return false;
+    }
+    return true;
 }
-</script>
 
+$(document).ready(function() {
+    $("#editButton").click(function(event) {
+        event.preventDefault(); // 폼 기본 제출 방지
+        
+        // 먼저 유효성 검사를 수행
+        if (!boardWriteCheck()) {
+            return; // 유효성 검사에서 실패한 경우 아래 코드 실행하지 않음
+        }
+
+        var form = $("#boardUpdateForm");
+        var data = {
+            b_num: form.find("#b_num").val(),
+            b_id: form.find("#b_id").val(),
+            b_title: form.find("#b_title").val(),
+            b_cont: form.find("#b_cont").val(),
+            b_category: form.find("#b_category").val(),
+            b_date: form.find("#b_date").val(),
+            b_hits: form.find("#b_hits").val(),
+            b_likes: form.find("#b_likes").val()
+        };
+
+        console.log("타이틀 확인", form.find("#b_title").val());
+        console.log("Data being sent: ", data); // 콘솔에 데이터 출력
+
+        $.ajax({
+            type: "POST",
+            url: "/board/boardUpdate",
+            contentType: "application/json", // JSON 형식으로 데이터 전송
+            data: JSON.stringify(data), // 객체를 JSON 문자열로 변환
+            success: function(response) {
+                if (response.result === 'success') {
+                    alert('게시글이 수정되었습니다!');
+                    window.location.href = '/board/boardMain'; // 성공 시 페이지 이동
+                } else {
+                    alert('게시글 수정에 실패했습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('오류가 발생했습니다: ' + error);
+            }
+        });
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+});
+</script>
 
 <%@ include file="../include/footer.jsp" %>
 </body>

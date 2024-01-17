@@ -52,6 +52,9 @@ public class BoardController {
 	    @RequestParam(value = "page", defaultValue = "1") int page,
 	    @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
 	    HttpSession session, HttpServletRequest request) {
+		
+		// 세션을 통해 로그인 정보를 가져옴
+		MemberVO loginInfo = (MemberVO) session.getAttribute("loginInfo");
 
 	    ModelAndView mv = new ModelAndView();
 
@@ -95,6 +98,7 @@ public class BoardController {
 	    int startpage = ((page - 1) / 10) * 10 + 1;
 	    int endpage = Math.min(startpage + 9, maxpage);
 
+	    mv.addObject("loginInfo", loginInfo);
 	    mv.addObject("page", page);
 	    mv.addObject("startpage", startpage);
 	    mv.addObject("endpage", endpage);
