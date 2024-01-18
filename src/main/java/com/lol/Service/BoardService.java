@@ -20,7 +20,7 @@ public interface BoardService {
 
 	int boardDel(long b_num);
 
-	void boardUpdate(BoardVO boardInfo);
+	boolean boardUpdate(BoardVO boardInfo, MultipartFile file) throws Exception;
 
 	void plusHits(long b_num);
 
@@ -43,6 +43,8 @@ public interface BoardService {
 	List<BoardVO> searchByTitle(String b_title, String b_category, int offset, int limit);
 
 	int countSearchResults(String b_title, String b_category);
+
+	
 
 	
 

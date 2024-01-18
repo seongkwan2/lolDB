@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
 	    
 	    //게시글 정보를 먼저 저장
 	    boardDao.writeBoard(boardInfo);
-	    System.out.println("boardInfo의 b_num : "+boardInfo.getB_num());
+	    System.out.println("boardInfo의 정보"+boardInfo);
 	    // 파일 처리
 	    if (file != null && !file.isEmpty()) {
 	        // 파일 저장 로직
@@ -76,12 +76,6 @@ public class BoardServiceImpl implements BoardService {
 
 	        // 파일 정보 저장
 	        boardDao.uploadFile(fileUpload);
-	        logger.debug("Starting writeBoard method");
-	        // ... 기존 코드 ...
-	        logger.debug("Board info saved with b_num: {}", boardInfo.getB_num());
-	        // 파일 처리 관련 코드 ...
-	        logger.debug("File uploaded with b_num: {}", fileUpload.getB_num());
-
 	    }
 	}
 	
@@ -104,9 +98,39 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void boardUpdate(BoardVO boardInfo) {
-		this.boardDao.boardUpdate(boardInfo);
-	}
+    public boolean boardUpdate(BoardVO boardInfo, MultipartFile file) throws Exception {
+        // 파일 처리
+        if (file != null && !file.isEmpty()) {
+            // 파일 저장 로직
+            String fileName = file.getOriginalFilename();
+            String uploadPath = "D:\\KGITBANK\\teamproject\\Work_space\\lolDB\\src\\main\\webapp\\upload\\image";
+            String uploadName = UUID.randomUUID().toString() + "_" + fileName;
+            File saveFile = new File(uploadPath, uploadName);
+            file.transferTo(saveFile);
+
+            // 파일 확장자 추출
+            String f_ext = FilenameUtils.getExtension(fileName);
+
+            // 파일 크기 설정
+            long f_size = file.getSize();
+
+            // 파일 정보를 FileUploadVO에 설정
+            FileUploadVO fileUpload = new FileUploadVO();
+            fileUpload.setB_num(boardInfo.getB_num()); // 게시글 번호 설정
+            fileUpload.setF_original_name(fileName);
+            fileUpload.setF_upload_name(uploadName);
+            fileUpload.setF_upload_path(uploadPath);
+            fileUpload.setF_ext(f_ext); // 파일 확장자 설정
+            fileUpload.setF_size((int)f_size); // 파일 크기 설정
+
+            // 파일 정보 저장
+            boardDao.uploadFile(fileUpload);
+        }
+
+        // 게시글 업데이트
+        int updateCount = boardDao.boardUpdate(boardInfo);
+        return updateCount > 0;
+}
 
 	@Override
 	public void plusHits(long b_num) {

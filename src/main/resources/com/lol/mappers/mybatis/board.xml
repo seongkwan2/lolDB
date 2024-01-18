@@ -35,12 +35,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE lol_board where b_num = #{b_num}
 	</delete>
 
-	<!-- 글 수정 -->
-	<update id="boardUpdate" parameterType="board">
-		UPDATE lol_board SET
-		b_title = #{b_title}, b_cont= #{b_cont}, b_date = sysdate WHERE b_num
-		= #{b_num}
-	</update>
+	<!-- 게시글 업데이트 -->
+    <update id="boardUpdate" parameterType="board">
+        UPDATE lol_board
+        SET b_title = #{b_title}, b_cont = #{b_cont}, b_date = sysdate WHERE b_num = #{b_num}
+    </update>
 
 	<!-- 글 확인시 조회수 증가 -->
 	<update id="plusHits">

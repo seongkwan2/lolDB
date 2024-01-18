@@ -191,7 +191,7 @@
             <input type="button" value="목록으로" onclick="goBoardMain();">        	
             <script>
             function goBoardMain(){
-            	history.back(); // 브라우저의 이전 페이지로 이동
+            	window.location.href = '/board/boardMain';
             }
          	</script>
 
@@ -203,9 +203,10 @@
 				</form>
             
             <!-- 글삭제 -->
-            <form action="boardDel?b_num=${boardInfo.boardInfo.b_num}" method="post">
-				<input type="submit" value="글삭제">
+            <form action="boardDel?b_num=${boardInfo.boardInfo.b_num}" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?')">
+			    <input type="submit" value="글삭제">
 			</form>
+
 			</c:if>
 		</div>
 </div>

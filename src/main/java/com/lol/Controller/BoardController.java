@@ -49,142 +49,142 @@ public class BoardController {
 	//게시판 메인화면
 	@GetMapping("/boardMain")
 	public ModelAndView boardMain(
-	    @RequestParam(value = "b_title", required = false) String b_title,
-	    @RequestParam(value = "b_category", required = false) String b_category,
-	    @RequestParam(value = "page", defaultValue = "1") int page,
-	    @RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
-	    HttpSession session, HttpServletRequest request) {
-		
+			@RequestParam(value = "b_title", required = false) String b_title,
+			@RequestParam(value = "b_category", required = false) String b_category,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "viewMode", defaultValue = "all") String viewMode,
+			HttpSession session, HttpServletRequest request) {
+
 		// 세션을 통해 로그인 정보를 가져옴
 		MemberVO loginInfo = (MemberVO) session.getAttribute("loginInfo");
 
-	    ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView();
 
-	    // 세션에서 카테고리 확인, 없으면 기본값 설정 (게시판을 맨 처음 열었을땐 자유게시판 지정)
-	    String selectedCategory = (String) session.getAttribute("selectedCategory");
-	    if (selectedCategory == null) {
-	        selectedCategory = "자유게시판";
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
+		// 세션에서 카테고리 확인, 없으면 기본값 설정 (게시판을 맨 처음 열었을땐 자유게시판 지정)
+		String selectedCategory = (String) session.getAttribute("selectedCategory");
+		if (selectedCategory == null) {
+			selectedCategory = "자유게시판";
+			session.setAttribute("selectedCategory", selectedCategory);
+		}
 
-	    if (b_category != null && !b_category.isEmpty()) {
-	        selectedCategory = b_category;
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
+		if (b_category != null && !b_category.isEmpty()) {
+			selectedCategory = b_category;
+			session.setAttribute("selectedCategory", selectedCategory);
+		}
 
-	    // 페이지 처리
-	    PageVO pageVO = new PageVO();
-	    pageVO.setB_category(selectedCategory);
-	    int limit = 10;
-	    int offset = (page - 1) * limit;
-	    pageVO.setOffset(offset);
-	    pageVO.setLimit(limit);
+		// 페이지 처리
+		PageVO pageVO = new PageVO();
+		pageVO.setB_category(selectedCategory);
+		int limit = 10;
+		int offset = (page - 1) * limit;
+		pageVO.setOffset(offset);
+		pageVO.setLimit(limit);
 
-	    int listCount;
-	    List<BoardVO> boardList;
+		int listCount;
+		List<BoardVO> boardList;
 
-	   
-	    //JSP에서 추천글과 전체글중 라디오버튼으로 선택된 게시글 가져오기
-	     if ("popular".equals(viewMode)) {
-	        // 추천글 처리
-	        boardList = boardService.getPopularByCategory(pageVO);
-	        listCount = this.boardService.getPopularCount(selectedCategory);
-	    } else {
-	        // 전체글 처리
-	        boardList = boardService.getBoardListWithReplyCount(pageVO);
-	        listCount = this.boardService.getCountByCategory(selectedCategory);
-	    }
 
-	    // 페이징 정보
-	    int maxpage = (int) Math.ceil((double) listCount / limit);
-	    int startpage = ((page - 1) / 10) * 10 + 1;
-	    int endpage = Math.min(startpage + 9, maxpage);
+		//JSP에서 추천글과 전체글중 라디오버튼으로 선택된 게시글 가져오기
+		if ("popular".equals(viewMode)) {
+			// 추천글 처리
+			boardList = boardService.getPopularByCategory(pageVO);
+			listCount = this.boardService.getPopularCount(selectedCategory);
+		} else {
+			// 전체글 처리
+			boardList = boardService.getBoardListWithReplyCount(pageVO);
+			listCount = this.boardService.getCountByCategory(selectedCategory);
+		}
 
-	    mv.addObject("loginInfo", loginInfo);
-	    mv.addObject("page", page);
-	    mv.addObject("startpage", startpage);
-	    mv.addObject("endpage", endpage);
-	    mv.addObject("maxpage", maxpage);
-	    mv.addObject("bCategory", selectedCategory);
-	    mv.addObject("viewMode", viewMode);
-	    mv.addObject("b_title", b_title);
-	    mv.addObject("b_category", b_category);
-	    mv.addObject("boardList", boardList);
+		// 페이징 정보
+		int maxpage = (int) Math.ceil((double) listCount / limit);
+		int startpage = ((page - 1) / 10) * 10 + 1;
+		int endpage = Math.min(startpage + 9, maxpage);
 
-	    // 뷰 결정
-	    if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-	        mv.setViewName("/board/boardList");
-	    } else {
-	        mv.setViewName("/board/boardMain");
-	    }
+		mv.addObject("loginInfo", loginInfo);
+		mv.addObject("page", page);
+		mv.addObject("startpage", startpage);
+		mv.addObject("endpage", endpage);
+		mv.addObject("maxpage", maxpage);
+		mv.addObject("bCategory", selectedCategory);
+		mv.addObject("viewMode", viewMode);
+		mv.addObject("b_title", b_title);
+		mv.addObject("b_category", b_category);
+		mv.addObject("boardList", boardList);
 
-	    return mv;
+		// 뷰 결정
+		if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+			mv.setViewName("/board/boardList");
+		} else {
+			mv.setViewName("/board/boardMain");
+		}
+
+		return mv;
 	}
-	
+
 	//검색 액션
 	@GetMapping("/boardSearch")
 	public ModelAndView boardSearch(
-	    @RequestParam(value = "b_title", required = false) String b_title,
-	    @RequestParam(value = "b_category", required = false) String b_category,
-	    @RequestParam(value = "page", defaultValue = "1") int page,
-	    HttpSession session) {
+			@RequestParam(value = "b_title", required = false) String b_title,
+			@RequestParam(value = "b_category", required = false) String b_category,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			HttpSession session) {
 
-	    ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView();
 
-	    // 세션에서 카테고리 확인, 없으면 기본값 설정
-	    String selectedCategory = (String) session.getAttribute("selectedCategory");
-	    if (selectedCategory == null) {
-	        selectedCategory = "자유게시판";
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
+		// 세션에서 카테고리 확인, 없으면 기본값 설정
+		String selectedCategory = (String) session.getAttribute("selectedCategory");
+		if (selectedCategory == null) {
+			selectedCategory = "자유게시판";
+			session.setAttribute("selectedCategory", selectedCategory);
+		}
 
-	    if (b_category != null && !b_category.isEmpty()) {
-	        selectedCategory = b_category;
-	        session.setAttribute("selectedCategory", selectedCategory);
-	    }
+		if (b_category != null && !b_category.isEmpty()) {
+			selectedCategory = b_category;
+			session.setAttribute("selectedCategory", selectedCategory);
+		}
 
-	    // 검색 조건을 세션에 저장
-	    if (b_title != null && !b_title.isEmpty()) {
-	        session.setAttribute("searchTitle", b_title);
-	    } else {
-	        session.removeAttribute("searchTitle");
-	    }
-	    if (b_category != null && !b_category.isEmpty()) {
-	        session.setAttribute("searchCategory", b_category);
-	    } else {
-	        session.removeAttribute("searchCategory");
-	    }
+		// 검색 조건을 세션에 저장
+		if (b_title != null && !b_title.isEmpty()) {
+			session.setAttribute("searchTitle", b_title);
+		} else {
+			session.removeAttribute("searchTitle");
+		}
+		if (b_category != null && !b_category.isEmpty()) {
+			session.setAttribute("searchCategory", b_category);
+		} else {
+			session.removeAttribute("searchCategory");
+		}
 
-	    // 페이지 처리
-	    PageVO pageVO = new PageVO();
-	    pageVO.setB_category(selectedCategory);
-	    int limit = 10;
-	    int offset = (page - 1) * limit;
-	    pageVO.setOffset(offset);
-	    pageVO.setLimit(limit);
+		// 페이지 처리
+		PageVO pageVO = new PageVO();
+		pageVO.setB_category(selectedCategory);
+		int limit = 10;
+		int offset = (page - 1) * limit;
+		pageVO.setOffset(offset);
+		pageVO.setLimit(limit);
 
-	    // 검색 결과 처리
-	    List<BoardVO> boardList = boardService.searchByTitle(b_title, b_category, offset, limit);
-	    int listCount = boardService.countSearchResults(b_title, b_category);
+		// 검색 결과 처리
+		List<BoardVO> boardList = boardService.searchByTitle(b_title, b_category, offset, limit);
+		int listCount = boardService.countSearchResults(b_title, b_category);
 
-	    // 페이징 정보
-	    int maxpage = (int) Math.ceil((double) listCount / limit);
-	    int startpage = ((page - 1) / 10) * 10 + 1;
-	    int endpage = Math.min(startpage + 9, maxpage);
+		// 페이징 정보
+		int maxpage = (int) Math.ceil((double) listCount / limit);
+		int startpage = ((page - 1) / 10) * 10 + 1;
+		int endpage = Math.min(startpage + 9, maxpage);
 
-	    mv.addObject("page", page);
-	    mv.addObject("startpage", startpage);
-	    mv.addObject("endpage", endpage);
-	    mv.addObject("maxpage", maxpage);
-	    mv.addObject("bCategory", selectedCategory);
-	    mv.addObject("b_title", b_title);
-	    mv.addObject("b_category", b_category);
-	    mv.addObject("boardList", boardList);
-	    mv.addObject("listCount", listCount);
+		mv.addObject("page", page);
+		mv.addObject("startpage", startpage);
+		mv.addObject("endpage", endpage);
+		mv.addObject("maxpage", maxpage);
+		mv.addObject("bCategory", selectedCategory);
+		mv.addObject("b_title", b_title);
+		mv.addObject("b_category", b_category);
+		mv.addObject("boardList", boardList);
+		mv.addObject("listCount", listCount);
 
-	    mv.setViewName("/board/boardSearch");
+		mv.setViewName("/board/boardSearch");
 
-	    return mv;
+		return mv;
 	}
 
 	//글쓰기 폼
@@ -205,17 +205,17 @@ public class BoardController {
 	//글쓰기 액션
 	@RequestMapping(value="/boardWrite", method=RequestMethod.POST)
 	public String boardWrite(@ModelAttribute BoardVO boardInfo,
-	                         RedirectAttributes redirectAttributes, 
-	                         HttpSession session) throws Exception {
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
-	    if (memberInfo == null) {
-	        redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
-	        return "redirect:/member/login";
-	    }
-	    
-	    boardService.writeBoard(boardInfo, boardInfo.getB_file());
-	    
-	    return "redirect:/board/boardMain";
+			RedirectAttributes redirectAttributes, 
+			HttpSession session) throws Exception {
+		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+		if (memberInfo == null) {
+			redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
+			return "redirect:/member/login";
+		}
+
+		boardService.writeBoard(boardInfo, boardInfo.getB_file());
+
+		return "redirect:/board/boardMain";
 	}
 
 
@@ -224,7 +224,7 @@ public class BoardController {
 	public ModelAndView boardCont(@RequestParam("b_num") long b_num, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		BoardDetailsVO boardInfo = boardService.getCont(b_num);
-		
+
 		// 현재 로그인 정보를 세션에서 가져옴
 		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
 		mv.addObject("memberInfo", memberInfo);
@@ -236,7 +236,7 @@ public class BoardController {
 		String safeContent = StringEscapeUtils.escapeHtml4(boardInfo.getBoardInfo().getB_cont());
 		String formattedContent = safeContent.replace("\n", "<br>");	//글 줄바꿈처리 적용
 		boardInfo.getBoardInfo().setB_cont(formattedContent);
-		
+
 
 		// 댓글 리스트 가져오기
 		List<ReplyVO> replyList = this.replyService.getReplyList(b_num);
@@ -245,7 +245,7 @@ public class BoardController {
 			String formattedReplyContent = safeReplyContent.replace("\n", "<br>");
 			reply.setR_cont(formattedReplyContent);
 		}
-		
+
 		mv.addObject("boardInfo", boardInfo);
 		mv.addObject("replyList", replyList);
 
@@ -337,32 +337,48 @@ public class BoardController {
 		}
 	}
 
-	//글수정 폼
+	//글수정 폼 여기서부터 시작할것(사진을 수정할시 사진이 한장 더 업로드되어 2장이되므로 selectOne이 듣질않음
+	//사진을 여러장이 가능하게 하던지 한장을 올리면 그전에 올렸던건 삭제되게 하던지 조치가 필요함)
 	@RequestMapping(value="/boardUpdate")
-	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num) {
+	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num,
+			RedirectAttributes redirectAttributes,
+			HttpSession session)throws Exception {
+
 		ModelAndView mv = new ModelAndView();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("loginInfo");
+		if (memberInfo == null) {
+			redirectAttributes.addFlashAttribute("message", "로그인후 이용해주세요!");
 
-		//BoardVO boardInfo = this.boardService.getCont(b_num);
+		}
+		//글내용과 글의 이미지파일을 가져옴
+		BoardDetailsVO boardInfo = boardService.getCont(b_num);
 
-		//mv.addObject("boardInfo", boardInfo);
+		mv.addObject("boardInfo", boardInfo);
 		mv.setViewName("/board/boardUpdate");
 		return mv;
 	}
 
 	//글수정 액션
 	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String, String> boardUpdate(@RequestBody BoardVO boardInfo, MultipartFile file)throws Exception {
-		Map<String, String> resultMap = new HashMap<>();
+	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num,
+									@RequestParam("file") MultipartFile file,
+									BoardVO boardInfo, 
+									HttpSession session, 
+									RedirectAttributes redirectAttributes)throws Exception {
+		ModelAndView mv = new ModelAndView();
 
-		/*int result = this.boardService.boardUpdate(boardInfo);
-		if (result == 1) {
-			resultMap.put("result", "success");
+		// 파일 처리와 게시글 업데이트 로직
+		boolean updateResult = boardService.boardUpdate(boardInfo, file);
+
+		if(updateResult) {
+			redirectAttributes.addFlashAttribute("message", "글이 수정되었습니다.");
+			mv.setViewName("redirect:/board/boardMain"); // 수정 후 목록 페이지로 리다이렉트
 		} else {
-			resultMap.put("result", "fail");
-		}*/
+			mv.addObject("errorMessage", "글 수정 실패");
+			mv.setViewName("/board/boardMain"); // 에러 페이지 뷰 이름
+		}
 
-		return resultMap;
+		return mv;
 	}
 
 	//추천액션

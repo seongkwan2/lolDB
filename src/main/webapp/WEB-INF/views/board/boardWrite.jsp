@@ -24,6 +24,7 @@
             <input type="hidden" name="b_id" id="b_id" value="${memberInfo.m_id}">
             <input type="text" name="b_title" id="b_title" style="width: 100%" placeholder="글 제목" ><br>
             <textarea name="b_cont" id="b_cont" placeholder="글 내용" rows="5"></textarea><br>
+            <%--이미지 파일 --%>
             <input type="file" name="b_file" id="b_file" accept=".jpg, .png">
             <input type="submit" value="글쓰기">
         </form>

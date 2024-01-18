@@ -148,6 +148,7 @@
  /*이미지 파일 크기*/
  .img_box{
  	text-align: center; /*이미지 파일 좌우 가운데 정렬*/
+ 	margin: 15px 0px 15px 0px;
  }
  
  
