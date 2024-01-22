@@ -54,6 +54,8 @@ public interface BoardDAO {
 
 	FileUploadVO getFileByBoardNum(long b_num);
 
+	void DelFile(long b_num);
+
 	
 
 }

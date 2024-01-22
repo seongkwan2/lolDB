@@ -97,11 +97,15 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.boardDel(b_num);
 	}
 
+	@Transactional
 	@Override
     public boolean boardUpdate(BoardVO boardInfo, MultipartFile file) throws Exception {
         // 파일 처리
-        if (file != null && !file.isEmpty()) {
-            // 파일 저장 로직
+        if (file != null && !file.isEmpty()) {//게시글에 (이미지)file도 같이 있다면
+        	//현재 존재하는 게시글의 파일을 제거 후 교체
+        	boardDao.DelFile(boardInfo.getB_num());
+        	
+            // 파일 저장 로직 실행
             String fileName = file.getOriginalFilename();
             String uploadPath = "D:\\KGITBANK\\teamproject\\Work_space\\lolDB\\src\\main\\webapp\\upload\\image";
             String uploadName = UUID.randomUUID().toString() + "_" + fileName;

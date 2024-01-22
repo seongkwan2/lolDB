@@ -337,8 +337,7 @@ public class BoardController {
 		}
 	}
 
-	//글수정 폼 여기서부터 시작할것(사진을 수정할시 사진이 한장 더 업로드되어 2장이되므로 selectOne이 듣질않음
-	//사진을 여러장이 가능하게 하던지 한장을 올리면 그전에 올렸던건 삭제되게 하던지 조치가 필요함)
+	//글수정 폼 (현재 사진을 교체하는것으로 수정됨) 사진을 여러개 올리는 방법도 구현할것.
 	@RequestMapping(value="/boardUpdate")
 	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num,
 			RedirectAttributes redirectAttributes,
@@ -358,7 +357,7 @@ public class BoardController {
 		return mv;
 	}
 
-	//글수정 액션
+	//글수정 액션	//글 수정후 뒤로가기를 누를시 글이 수정됐다고 다시 메시지가 뜨는현상 수정할것
 	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
 	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num,
 									@RequestParam("file") MultipartFile file,

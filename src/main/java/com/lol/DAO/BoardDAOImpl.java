@@ -154,6 +154,11 @@ public class BoardDAOImpl implements BoardDAO {
 		return this.sqlSession.selectOne("getFileByBoardNum",b_num);
 	}
 
+	@Override
+	public void DelFile(long b_num) {
+		this.sqlSession.delete("DelFile",b_num);
+	}
+
 
 
 

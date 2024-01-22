@@ -91,6 +91,12 @@ CREATE TABLE lol_board_files (
     FOREIGN KEY (b_num) REFERENCES lol_board(b_num) ON DELETE CASCADE --게시글 삭제시 이미지 파일도 삭제
 );
 
+select * from lol_board_files;
+DELETE FROM lol_board_files WHERE b_num = 25;
+
+DELETE FROM lol_board_files WHERE b_num = 22;
+
+commit;
 SELECT 
     lb.*, 
     lbf.f_original_name, 

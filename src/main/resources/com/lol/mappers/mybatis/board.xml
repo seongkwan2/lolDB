@@ -192,5 +192,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getNextSeqVal" resultType="long">
 	    SELECT lol_board_seq.nextval FROM dual
 	</select>
+	
+	<!-- 이미지 파일 삭제 -->
+	<delete id="DelFile">
+		DELETE FROM lol_board_files WHERE b_num = #{b_num}
+	</delete>
 
 </mapper>
