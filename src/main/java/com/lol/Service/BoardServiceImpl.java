@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ import com.lol.vo.PageVO;
 @Service
 public class BoardServiceImpl implements BoardService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
+	//private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 
 	@Autowired
 	private BoardDAO boardDao;

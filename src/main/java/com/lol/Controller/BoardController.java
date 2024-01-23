@@ -357,28 +357,26 @@ public class BoardController {
 		return mv;
 	}
 
-	//글수정 액션	//글 수정후 뒤로가기를 누를시 글이 수정됐다고 다시 메시지가 뜨는현상 수정할것
-	@RequestMapping(value="/boardUpdate",method=RequestMethod.POST)
-	public ModelAndView boardUpdate(@RequestParam("b_num") long b_num,
-									@RequestParam("file") MultipartFile file,
-									BoardVO boardInfo, 
-									HttpSession session, 
-									RedirectAttributes redirectAttributes)throws Exception {
-		ModelAndView mv = new ModelAndView();
+	// 글 수정 액션
+	@RequestMapping(value="/boardUpdate", method=RequestMethod.POST)
+	public String boardUpdate(@RequestParam("b_num") long b_num,
+	                          @RequestParam("file") MultipartFile file, // 여러 파일을 받도록 배열로 변경
+	                          BoardVO boardInfo, 
+	                          HttpSession session, 
+	                          RedirectAttributes redirectAttributes) throws Exception {
 
-		// 파일 처리와 게시글 업데이트 로직
-		boolean updateResult = boardService.boardUpdate(boardInfo, file);
+	    // 파일 처리와 게시글 업데이트 로직
+	    boolean updateResult = boardService.boardUpdate(boardInfo, file); // 여러 파일 처리를 위해 수정
 
-		if(updateResult) {
-			redirectAttributes.addFlashAttribute("message", "글이 수정되었습니다.");
-			mv.setViewName("redirect:/board/boardMain"); // 수정 후 목록 페이지로 리다이렉트
-		} else {
-			mv.addObject("errorMessage", "글 수정 실패");
-			mv.setViewName("/board/boardMain"); // 에러 페이지 뷰 이름
-		}
-
-		return mv;
+	    if(updateResult) {
+	        redirectAttributes.addFlashAttribute("message", "글이 수정되었습니다.");
+	        return "redirect:/board/boardCont?b_num=" + b_num; // 수정된 게시글 상세페이지로 리다이렉트
+	    } else {
+	        redirectAttributes.addFlashAttribute("errorMessage", "글 수정 실패");
+	        return "redirect:/board/boardUpdate?b_num=" + b_num; // 수정 실패 시 수정 페이지로 다시 리다이렉트
+	    }
 	}
+
 
 	//추천액션
 	@PostMapping("/likesUp")

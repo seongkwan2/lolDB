@@ -7,63 +7,75 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- 여기에 CSS 스타일 또는 외부 스타일시트 링크를 추가하세요 -->
 </head>
 <body>
-	<!-- User 랭크 정보 -->
-	<div class="rank_container">
-		<c:forEach items="${SummonerRank}" var="rank">
-			<div class="rank_div">
-				<p>
-					<c:choose>
-						<c:when test="${rank.queueType eq 'RANKED_FLEX_SR'}">5:5 RANK</c:when>
-						<c:otherwise>SOLO RANK</c:otherwise>
-					</c:choose>
-				</p>
-				
-				<!-- 랭크 정보 (랭크 이미지는 Images폴더에 저장된 경로를 통해 이미지를 가져옴) -->
-				<div class="rankImages">
-					<c:choose>
-						<c:when test="${rank.tier eq 'IRON'}">
-							<img src="/images/iron.png" alt="Iron">
-						</c:when>
-						<c:when test="${rank.tier eq 'BRONZE'}">
-							<img src="/images/bronz.png" alt="Bronze">
-						</c:when>
-						<c:when test="${rank.tier eq 'SILVER'}">
-							<img src="/images/silver.png" alt="Silver">
-						</c:when>
-						<c:when test="${rank.tier eq 'GOLD'}">
-							<img src="/images/gold.png" alt="Gold">
-						</c:when>
-						<c:when test="${rank.tier eq 'EMERALD'}">
-							<img src="/images/emerald.png" alt="Emerald">
-						</c:when>
-						<c:when test="${rank.tier eq 'PLATINUM'}">
-							<img src="/images/platinum.png" alt="Platinum">
-						</c:when>
-						<c:when test="${rank.tier eq 'DIAMOND'}">
-							<img src="/images/diamond.png" alt="Diamond">
-						</c:when>
-						<c:when test="${rank.tier eq 'MASTER'}">
-							<img src="/images/master.png" alt="Master">
-						</c:when>
-						<c:when test="${rank.tier eq 'GRANDMASTER'}">
-							<img src="/images/grandmaster.png" alt="Grandmaster">
-						</c:when>
-						<c:when test="${rank.tier eq 'CHALLENGER'}">
-							<img src="/images/challenger.png" alt="Challenger">
-						</c:when>
-						<c:otherwise>
-							<img src="/images/unlank.png" alt="Unranked">
-						</c:otherwise>
-					</c:choose>
-				</div>
-				<p style="font-weight: bold; font-size: 16px;">${rank.tier}
-					${rank.rank}</p>
-				<p>${rank.leaguePoints}LP</p>
-				<p>${rank.wins + rank.losses}전${rank.wins}승${rank.losses}패</p>
-			</div>
-		</c:forEach>
-	</div>
+    <!-- User 랭크 정보 -->
+    <div class="rank_container">
+        <c:if test="${empty SummonerRank}">
+            <!-- SummonerRank 컬렉션이 비어있으면 모두 Unranked 이미지 표시 -->
+            <div class="rank_div" style="text-align: center;">
+                <p style="font-weight: bold; font-size: 16px;">SOLO RANK</p>
+                <img src="/images/unrank.png" alt="Unranked">
+                <p style="font-weight: bold; font-size: 16px;">Unranked</p>
+            </div>
+            <div class="rank_div" style="text-align: center;">
+                <p style="font-weight: bold; font-size: 16px;">5:5 TEAM RANK</p>
+                <img src="/images/unrank.png" alt="Unranked">
+                <p style="font-weight: bold; font-size: 16px;">Unranked</p>
+            </div>
+        </c:if>
+        <c:if test="${not empty SummonerRank}">
+            <!-- 솔로 랭크 및 5:5 랭크 정보가 있는 경우 -->
+            <c:set var="hasFlexRank" value="false"/>
+            <c:forEach items="${SummonerRank}" var="rank">
+                <c:if test="${rank.queueType eq 'RANKED_FLEX_SR'}">
+                    <c:set var="hasFlexRank" value="true"/>
+                </c:if>
+                <div class="rank_div">
+                    <p>
+                        <c:choose>
+                            <c:when test="${rank.queueType eq 'RANKED_FLEX_SR'}">
+                            <p style="font-weight: bold; font-size: 16px;">5:5 RANK</p></c:when>
+                            <c:otherwise><p style="font-weight: bold; font-size: 16px;">SOLO RANK</c:otherwise>
+                        </c:choose>
+                    </p>
+                    <div class="rankImages">
+                        <c:choose>
+                            <c:when test="${not empty rank.tier and rank.tier ne 'UNRANKED'}">
+                                <!-- 랭크에 따른 이미지 표시 -->
+                                <img src="/images/${rank.tier.toLowerCase()}.png" alt="${rank.tier}">
+                            </c:when>
+                            <c:otherwise>
+                                <!-- 랭크 정보가 없거나 UNRANKED일 경우 -->
+                                <img src="/images/unrank.png" alt="Unranked">
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                    <p style="font-weight: bold; font-size: 16px;">
+                        <c:out value="${not empty rank.tier ? rank.tier : 'Unranked'}"/>
+                        <c:out value="${not empty rank.rank ? rank.rank : ''}"/>
+                    </p>
+                    <p>
+                        <c:out value="${not empty rank.leaguePoints ? rank.leaguePoints : '0'}"/>LP
+                    </p>
+                    <p>
+                        <c:out value="${rank.wins + rank.losses}"/>전
+                        <c:out value="${not empty rank.wins ? rank.wins : '0'}"/>승
+                        <c:out value="${not empty rank.losses ? rank.losses : '0'}"/>패
+                    </p>
+                </div>
+            </c:forEach>
+            <!-- 5:5 랭크 게임에 대한 정보가 없는 경우 Unranked 이미지 표시 -->
+            <c:if test="${!hasFlexRank}">
+                <div class="rank_div" style="text-align: center;">
+                <br>
+                    <p style="font-weight: bold; font-size: 16px;">5:5 TEAM RANK</p>
+                    <img src="/images/unrank.png" alt="Unranked"> <!-- 이미지를 숨겨서 높이를 맞춤 -->
+                    <p style="font-weight: bold; font-size: 16px;">Unranked</p>
+                </div>
+            </c:if>
+        </c:if>
+    </div>
 </body>
 </html>

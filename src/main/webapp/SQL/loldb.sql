@@ -28,7 +28,7 @@ CREATE SEQUENCE lol_board_likes_seq START WITH 1 INCREMENT BY 1 NOCACHE;        
 
 --사이트 사용자 테이블
 create table lol_member(
-m_num number primary key,
+m_num number NOT NULL primary key,
 m_id varchar2(30) UNIQUE,
 m_pwd varchar2(200),
 m_name varchar2(10),
@@ -39,7 +39,6 @@ m_state number default 1,  --회원 상태여부(ex: 1은 평범한 상태 0은 
 m_regdate timestamp
 );
 
-SELECT * FROM lol_member;
 
 -- 권한 테이블
 CREATE TABLE lol_member_role (
@@ -51,10 +50,8 @@ INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nex
 INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nextval, 'MANAGER');
 INSERT INTO lol_member_role (role_id, role_name) VALUES (lol_member_role_seq.nextval, 'ADMIN');
 
-SELECT * FROM lol_member_role;
-drop table lol_member_role;
 
--- 권한 관리 테이블
+-- 권한 관리 테이블 (현재 프로젝트에서는 권한 테이블이 필요없음 (기능구현을 안했음))
 CREATE TABLE lol_member_authorities (
   authority_id NUMBER PRIMARY KEY,
   m_num NUMBER,
@@ -62,7 +59,6 @@ CREATE TABLE lol_member_authorities (
   FOREIGN KEY (m_num) REFERENCES lol_member (m_num)
 );
 
-SELECT * FROM lol_member_authorities;
 
 -- 게시판 테이블
 CREATE TABLE lol_board (
@@ -76,7 +72,6 @@ CREATE TABLE lol_board (
   b_likes NUMBER DEFAULT 0 NOT NULL,
   FOREIGN KEY (b_id) REFERENCES lol_member(m_id) ON DELETE SET NULL -- 아이디 삭제 시 게시글이 남아있고 아이디는 NULL로 설정
 );
-select * from lol_board;
 
 
 --게시판 이미지 파일 테이블
@@ -90,26 +85,6 @@ CREATE TABLE lol_board_files (
     f_size NUMBER DEFAULT NULL,                     -- 파일 크기
     FOREIGN KEY (b_num) REFERENCES lol_board(b_num) ON DELETE CASCADE --게시글 삭제시 이미지 파일도 삭제
 );
-
-select * from lol_board_files;
-DELETE FROM lol_board_files WHERE b_num = 25;
-
-DELETE FROM lol_board_files WHERE b_num = 22;
-
-commit;
-SELECT 
-    lb.*, 
-    lbf.f_original_name, 
-    lbf.f_upload_name, 
-    lbf.f_upload_path, 
-    lbf.f_ext, 
-    lbf.f_size
-FROM 
-    lol_board lb
-LEFT JOIN 
-    lol_board_files lbf ON lb.b_num = lbf.b_num;
-
-SELECT * FROM lol_board_files;
 
 
 --게시판 댓글 테이블       --댓글 수정날짜 추가할것
@@ -125,6 +100,8 @@ CREATE TABLE lol_board_reply (
 
 --이미 게시글에 추천을했는지 추적할수 있도록 liks테이블생성
 --사용자가 몇번 게시글에 추천을 했는지 추적가능
+
+--게시판 추천 추적 테이블
 CREATE TABLE lol_board_likes (
     like_id NUMBER PRIMARY KEY,
     b_num NUMBER NOT NULL,
@@ -133,19 +110,16 @@ CREATE TABLE lol_board_likes (
     FOREIGN KEY (b_num) REFERENCES lol_board(b_num) ON DELETE CASCADE,
     FOREIGN KEY (m_id) REFERENCES lol_member(m_id) ON DELETE CASCADE
 );
-select * from lol_board_likes;
---게시글 추천 테스트 쿼리문
-SELECT * FROM lol_board_likes;
-
-SELECT COUNT(*) AS like_count
-FROM lol_board_likes
-WHERE b_num = [대상 게시글 번호] AND liked = 'Y';
-
-
-
-SELECT COUNT(*) FROM lol_board_likes WHERE b_num = :b_num AND m_id = :m_id AND liked = 'Y';
 
 commit;
+
+
+
+
+
+
+
+
 --ㅡㅡㅡㅡㅡㅡㅡㅡㅡ게시판 데이터 추가 (테스트)ㅡㅡㅡ
 --테스트용 댓글 작성
 INSERT INTO lol_board_reply values(lol_board_reply_seq.nextval,'zaq3195','안녕하세요 댓글입니다', sysdate, 3);
@@ -210,6 +184,18 @@ SELECT COUNT(*) FROM lol_board WHERE b_likes >= 30;
         GROUP BY b.b_num, b.b_title, b.b_id, b.b_date, b.b_hits, b.b_likes
         ORDER BY b.b_num asc
         OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
+        
+        SELECT 
+    lb.*, 
+    lbf.f_original_name, 
+    lbf.f_upload_name, 
+    lbf.f_upload_path, 
+    lbf.f_ext, 
+    lbf.f_size
+FROM 
+    lol_board lb
+LEFT JOIN 
+    lol_board_files lbf ON lb.b_num = lbf.b_num;
 
 
 
